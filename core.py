@@ -120,7 +120,6 @@ class Player():
         for i in self.group.values():
             cw+= i.stats.strength
             cw+= round(i.stats.vitality / 2)
-            print(cw)
         self.carryWeight = cw
 
 class StatBlock():
