@@ -1,0 +1,75 @@
+itemDefs:
+
+  rock:
+    label: rock
+    description: a heavy rock of uncertain origin, makes a hammer in a pinch
+    value: 0.5
+    weight: 1
+    rarity: common
+    categories:
+      - natural
+      - mineral
+    tool:
+      hammering: 1
+    weapon:
+      type: melee
+      damage: 1
+      attackTime: 3
+
+  smallRock:
+    label: small rock
+    description: a baby rock of uncertain origin, small enough to knap with
+    value: 0.1
+    weight: 0.2
+    rarity: common
+    categories:
+      - natural
+      - mineral
+    tool:
+      knapping: 1
+    weapon:
+      type: melee
+      damage: 1
+      attackTime: 3
+
+  stickShort:
+    label: short stick
+    description: a short piece of wood
+    value: 0.5
+    weight: 1
+    rarity: common
+    categories:
+      - natural
+      - wooden
+    weapon:
+      type: melee
+      damage: 0.3
+      attackTime: 2
+
+  stickHeavy:
+    label: heavy stick
+    description: a large piece of wood, not quite a log
+    value: 0.5
+    weight: 2
+    rarity: common
+    categories:
+      - natural
+      - wooden
+    weapon:
+      type: melee
+      damage: 2
+      attackTime: 4
+
+  stickLong:
+    label: long stick
+    description: a long piece of wood, not quite a branch
+    value: 0.5
+    weight: 1
+    rarity: common
+    categories:
+      - natural
+      - wooden
+    weapon:
+      type: melee
+      damage: 0.7
+      attackTime: 2

@@ -1,0 +1,185 @@
+itemDefs:
+
+  plantFibres:
+    label: plant fibres
+    description: small pieces of fibrous plant that can be twisted together to make thread or string
+    weight: 0.001
+    value: 0
+    rarity: junk
+
+  string:
+    label: string
+    description: twisted fibres that are stronger than the sum of their parts. used to make heavy fabrics
+    weight: 0.005
+    value: 0.05
+    rarity: common
+    packable:
+      label: spool of string
+      amount: 20
+
+  twine:
+    label: twine
+    description: thick twisted fibres used for heavier fabrics, gardening and more rigorous tying where needed
+    weight: 0.005
+    value: 0.05
+    rarity: common
+    packable:
+      label: spool of twine
+      amount: 20
+
+  rope:
+    label: rope
+    description: thick cordage made of many interwoven strings and fibers. very tough and immensely useful.
+    weight: 1
+    value: 1
+    rarity: uncommon
+
+  thread:
+    label: thread
+    description: lower gauge string used for repairing clothes and stitching wounds if needed.
+    weight: 0.002
+    value: 0.05
+    rarity: common
+    packable:
+      label: spool of thread
+      amount: 50
+
+  cloth:
+    label: cloth
+    description: a woven sheet of string, it's very, very useful for many, many things.
+    weight: 0.05
+    value: 0.3
+    rarity: uncommon
+
+  tarpaulin:
+    label: tarpaulin
+    description: also known as a 'tarp', it is a waterproof plastic weave sheet, that works as a shelter or water-collection tool in a pinch.
+    weight: 0.05
+    value: 0.3
+    rarity: common
+
+  tape:
+    label: tape
+    description: a roll of sellotape, used as an adhesive.
+    weight: 0.1
+    value: 0.3
+    rarity: uncommon
+    packable: #these generate defs as packet!defName
+      label: pack of tape
+      amount: 3
+
+  screw:
+    label: steel screw
+    description: Like a nail mixed with a bolt, screws are pointed and drive into wood to fasten it to another piece. They hold tight and don't need bolts and nuts, but aren't suitable for heavier applications.
+    weight: 0.01
+    value: 0.3
+    rarity: common
+    packable:
+      label: box of steel screws
+      amount: 50
+
+  bolt:
+    label: steel bolt
+    description: A thick, threaded cylinder of steel used to connect large pieces of metal or wood.
+    weight: 0.15
+    value: 1
+    packable:
+      label: pack of steel bolts
+      amount: 20
+
+  washer:
+    label: steel washer
+    description: Placed between bolts and a surface, washers prevent wear and provide a frictionable surface. Used in most recipes that require bolts.
+    weight: 0.02
+    value: 0.1
+    rarity: common
+    packable:
+      label: pack of steel washers
+      amount: 50
+
+  nut:
+    label: steel nut
+    description: Placed on the opposite side of a bolt and the material, nuts keep bolts in place. Used in most recipes that require bolts.
+    weight: 0.03
+    value: 0.3
+    rarity: common
+    packable:
+      label: bag of steel nuts
+      amount: 20
+
+  nail:
+    label: nail
+    description: Hit it on the head, it fastens wood together. Simple as that.
+    weight: 0.01
+    value: 0.2
+    rarity: common
+    packable:
+      label: box of nails
+      amount: 100
+
+  spikeMetal:
+    label: metal spike
+    description: A crude spike of metal with a sharpened point. Not easy to hold like this.
+    weight: 0.1
+    value: 0.5
+    rarity: common
+
+  barbedWire:
+    label: barbed wire
+    description: 1 meter of wire, with spiked metal wrapped around it to injure and deter movement.
+    weight: 0.1
+    value: 0.8
+    rarity: common
+    packable:
+      label: spool of barbed wire
+      amount: 20
+
+  woodenBeam:
+    label: wooden beam
+    description: Wood that's been hewn and shaped into a square beam, useful for supports
+    weight: 8
+    value: 1
+    rarity: common
+
+  woodenPlank:
+    label: two-by-four
+    description: A board of wood commonly used in construction.
+    weight: 5
+    value: 1
+    rarity: common
+
+  woodFragments:
+    label: wood fragments
+    description: Shards of wood from broken handles, planks or trees. Rather useless.
+    weight: 0.01
+
+  dirtyPaper:
+    label: used paper
+    description: paper with pictures or text already on the page, will need to be bleached to be useful. can be read to teach a random skill by a very small amount.
+    weight: 0.001 #weights are all in kG per item
+    value: 0 #per item
+    rarity: junk
+
+  blankPaper:
+    label: blank paper
+    description: either scavenged from the back and front of books, or otherwise bleached, this paper is suitable for writing on.
+    weight: 0.005
+    value: 0.1
+    rarity: common
+    packable:
+      label: ream of paper
+      amount: 250
+
+  rag:
+    label: rag
+    description: a tattered piece of cloth. can be used as a crude bandage in a pinch.
+    value: 0.5
+    weight: 0.1
+    rarity: common
+    categories:
+      - junk
+      - textile
+      - manmade
+    tool:
+      bandaging: 1
+

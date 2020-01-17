@@ -1,0 +1,21 @@
+# LOAD ORDER OF DICTIONARIES
+# items
+data/defs/naturalitems
+data/defs/storage
+data/defs/rawitems
+data/defs/resources
+data/defs/tools
+data/defs/simpletools
+data/defs/nutrition
+data/defs/benches
+data/defs/placers
+# other defs
+data/defs/crates
+data/defs/rarities
+data/defs/chapters
+data/defs/fluids
+data/defs/worktypes
+data/defs/outputTables
+# recipes
+data/crafting/recipes_weapons
+data/crafting/recipes_survival

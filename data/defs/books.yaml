@@ -1,0 +1,89 @@
+itemDefs:
+  ###
+
+  $$magazineBase: &magazineBase # use $$ before a defName to define an abstract def, won't be loaded in game
+    weight: 0.1
+    value: 15
+    rarity: uncommon
+    durability:
+      maxUses: 3
+      repair: False
+    copyable:
+      timeBase: 2h
+      learning: 5
+      cost:
+        $category:
+          writing implement: 15
+        cleanPaper: 15
+    deconstruct:
+      timeBase: 10m
+      output:
+        dirtyPaper: 15
+    readable:
+      xp: 500 #each point of learning ability gives a lv*2% multiplier
+      pages: 15 #calculates time base to read it, approx 1hr per 20 pages rounded up
+
+  magazineAthletics:
+    label: "Athlete's Lifestyle: Live a Fitter Life"
+    description: A magazine about humans exercising, workout routines and diet tips. Some leeani may find this useful information if they need to be fit for their roles. With the obvious differences between leeani and human psysiology, some techniques may need to be adapted.
+    <<: *magazineBase #this pulls in everything from &magazineBase, you can override its defaults with the below
+    readable:
+      teaches: athletics #the skill to teach, see the top for ones
+      xp: 500
+      pages: 15
+
+  magazineShooting:
+    label: "Scientific Method: Hypotheticals & You"
+    description: Containing fairly low-level knowledge about the scientific method and how to take the best approaches to any given problem
+    <<: *magazineBase
+    readable:
+      teaches: researching
+      xp: 500
+      pages: 15
+
+  magazineForaging:
+    label: "Bird and Bush: Nature's Culinary Delights"
+    description: A magazine with plenty of pictures depicting what is and what isn't safe to eat in the forests of England.
+    <<: *magazineBase
+    readable:
+      teaches: foraging
+      xp: 500
+      pages: 15
+
+  magazineShooting:
+    label: "Target Magazine: Eye on the Prey"
+    description: A magazine about guns, bullets and how to use them for hunting. The practical aspects can be applied to defense as well, which leeani may find useful.
+    <<: *magazineBase
+    readable:
+      teaches: shooting
+      xp: 500
+      pages: 15
+
+  magazineForaging:
+    label: "Bird and Bush: Nature's Culinary Delights"
+    description: A magazine with plenty of pictures depicting what is and what isn't safe to eat in the forests of England.
+    <<: *magazineBase
+    readable:
+      teaches: foraging
+      xp: 500
+      pages: 15
+
+  magazineLeadership:
+    label: "Business Journal May 2049: Inspire the Workforce"
+    description: A very boring journal about management tactics, team meetings and best business practice. A certain kind of leeani may find this interesting.
+    <<: *magazineBase
+    readable:
+      teaches: leadership
+      xp: 500
+      pages: 30
+    copyable:
+      timeBase: 2h
+      learning: 5
+      cost:
+        $category:
+          writing implement: 30
+        cleanPaper: 30
+    deconstruct:
+      timeBase: 30m
+      output:
+        dirtyPaper: 30

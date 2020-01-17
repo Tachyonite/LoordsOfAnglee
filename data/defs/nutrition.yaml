@@ -1,0 +1,85 @@
+itemDefs:
+
+  berries:
+    label: wild berries
+    description: a handful of berries, safely edible
+    weight: 0.1
+    categories:
+      - food
+      - raw
+      - vegetarian
+    nutrition:
+      water: 0.05
+      food: 0.1
+
+  nuts:
+    label: wild nuts
+    description: a pocketful of nuts, picked from trees and shrubs
+    weight: 0.1
+    categories:
+      - food
+      - raw
+      - vegetarian
+    nutrition:
+      food: 0.2
+
+  fruits:
+    label: wild fruits
+    description: a basketful of fruits, picked from trees
+    weight: 0.2
+    categories:
+      - food
+      - raw
+      - vegetarian
+    nutrition:
+      food: 0.5
+
+  vegetables:
+    label: wild vegetables
+    description: a basketful of veges, picked from the wilds
+    weight: 0.2
+    categories:
+      - food
+      - raw
+      - vegetarian
+    nutrition:
+      food: 0.5
+
+  cannedFoodBeans:
+    label: canned beans
+    description: a can of beans, sealed in a tin can -- uncooked and probably kinda slimy
+    weight: 0.1
+    categories:
+      - food
+      - raw
+      - vegetarian
+      - manmade
+    nutrition:
+      food: 1
+    litter:
+      - tinCan
+
+  cannedFoodMysteryMeat:
+    label: canned mystery meat
+    description: a can of unidentified meat, sealed in a tin can. kinda gross but whatever.
+    weight: 0.1
+    categories:
+      - food
+      - raw
+      - meat
+      - manmade
+    nutrition:
+      food: 1
+    litter:
+      - tinCan
+
+  rawFishSmall:
+    label: small raw fish
+    description: floppy fish freshly finangled from fluvial flows.
+    weight: 0.2
+    categories:
+      - food
+      - raw
+      - fish
+    nutrition:
+      food: 0.5

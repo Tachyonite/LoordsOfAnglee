@@ -1,0 +1,63 @@
+craftingDefs:
+
+  rainCatcher:
+    label: build rain catcher
+    description: using a tarp and some sticks, set up a catcher to passively collect water
+    ingredients:
+      catcher:
+        - - tarpaulin: 1
+      struts:
+        - - stickLong: 4
+      fastening:
+        - - nail: 4
+          - rope: 2
+    output:
+      rainCatcher: 1
+    tool:
+      hammering: 1
+    timeBase: 30m
+
+  trapGame:
+    label: make game trap
+    description: a jury-rigged spring-loaded trap using nails to catch and kill small game such as rabbits
+    ingredients:
+      trigger:
+        - - string: 1
+          - twine: 3
+      body:
+        - - scrapMetal: 3
+          - castMetal: 2
+          - forgedMetal: 1
+      teeth:
+        - - nail: 10
+          - screw: 10
+          - spikeMetal: 6
+          - barbedWire: 4
+    output:
+      trapGame: 1
+    tool:
+      hammering: 2
+    timeBase: 1h
+
+  trapMan:
+    label: make man trap
+    description: a large jury-rigged spring-loaded trap using nails to injure or disable larger targets
+    ingredients:
+      trigger:
+        - - string: 1
+          - twine: 3
+      body:
+        - - scrapMetal: 3
+          - castMetal: 2
+          - forgedMetal: 1
+      teeth:
+        - - nail: 20
+          - screw: 20
+          - spikeMetal: 12
+          - barbedWire: 8
+    output:
+      trapMan: 1
+    tool:
+      hammering: 2
+    timeBase: 2h
+

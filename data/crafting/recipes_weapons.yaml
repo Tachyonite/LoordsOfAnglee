@@ -1,0 +1,55 @@
+craftingDefs:
+
+  smallRock:
+    label: small rock
+    description: smash a rock into fragments
+    ingredients:
+      rock:
+        - - rock: 1
+    output:
+      smallRock: 4
+    tools:
+      hammering: 1
+    timeBase: 5m
+
+  rockBlade:
+    label: rock blade
+    description: knap a stone to a sharp edge
+    ingredients:
+      blade:
+        - - rock: 1
+    output:
+      rockBlade: 1
+    tools:
+      knapping: 1
+    timeBase: 5m
+
+  pointyStick:
+    label: pointy stick
+    description: sharpen a stick to a fine point
+    ingredients:
+      stick:
+        - - stickLong: 1
+    output:
+      pointyStick: 1
+    tools:
+      cutting: 1
+    timeBase: 5m
+
+  stoneSpear:
+    label: stone spear
+    description: tie a rock blade to a long stick, a fearsome construction
+    ingredients:
+      haft:
+        - - stickLong: 1
+      tip:
+        - - rockBlade: 1
+      fastener:
+        - - rag: 1
+          - rope: 1
+          - tape: 3
+    output:
+      stoneSpear: 1
+    tools:
+      crafting: 1
+    timeBase: 10m

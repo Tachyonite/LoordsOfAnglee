@@ -1,0 +1,43 @@
+itemDefs:
+
+  rockBlade:
+    label: rock blade
+    description: a fragment of rock chipped into a sharpened blade
+    value: 1
+    weight: 0.5
+    rarity: common
+    categories:
+      - tool
+      - primitive
+      - weapon
+    tool:
+      cutting: 1
+      piercing: 1
+      butchering: 1
+    weapon:
+      stab: 1
+      cut: 1
+
+  pointyStick:
+    label: pointy stick
+    description: use this if someone attacks you with a banana
+    value: 0.6
+    weight: 0.9
+    rarity: common
+    categories:
+      - primitive
+      - weapon
+    weapon:
+      stab: 2
+
+  stoneSpear:
+    label: stone spear
+    description: good for stabbing things with, but not much else
+    value: 0.6
+    weight: 1.2
+    rarity: common
+    categories:
+      - primitive
+      - weapon
+    weapon:
+      stab: 2

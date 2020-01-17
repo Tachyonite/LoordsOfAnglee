@@ -1,0 +1,79 @@
+river:
+  label: river
+  description: a flowing stream of water, which can be used for fishing, farming or power generation
+  workMultipliers:
+    scavenger: 1.1
+    forager: 1.2
+    explorer: 0.8
+    fisher: 1.5
+  enableWork:
+    - fisher
+  enableBuildings:
+    - waterWheel
+    - washingArea
+    - irrigator
+  connects: #Probabilities of spawning a connection
+    forest: 0.8
+    river: 1
+    dam: 0.05
+    lake: 0.3
+    #coast: 0.1
+    #town: 0.1
+
+dam:
+  label: dam
+  description: the river here is blocked by a manmade dam that controls the flow downstream. with some work, it could be used as a power generator.
+  workMultipliers:
+    scavenger: 1
+    forager: 0.8
+    explorer: 1.2
+    fisher: 1.3
+  enableWork:
+    - fisher
+  enableBuildings:
+    - damTurbine
+    - washingArea
+    - waterWheel
+    - irrigator
+  connects:
+    river: 1
+    lake: 0.3
+    #coast: 0.1
+    #industrialBuildings: 0.1
+    #town: 0.1
+
+lake:
+  label: lake
+  description: the small waves lap at the rocky shore. this is a good place to fish and get fresh water.
+  workMultipliers:
+    scavenger: 0.5
+    forager: 1.2
+    explorer: 0.8
+    fisher: 1.5
+  enableBuildings:
+    - washingArea
+    - irrigator
+  connects:
+    river: 0.8
+    lake: 0.8
+    #town: 0.1
+    forest: 0.7
+
+forest:
+  label: forest
+  workMultipliers:
+    scavenger: 0.8
+    forager: 1.4
+    explorer: 0.8
+    woodcutter: 1.5
+  enableWork:
+    - lumberfox
+  enableBuildings:
+    - treeHouse
+    - woodCutter
+  connects:
+    forest: 0.7
+    river: 0.3
+    town: 0.1
+    #field: 0.2
+
