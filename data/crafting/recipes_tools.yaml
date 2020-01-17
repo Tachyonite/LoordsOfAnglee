@@ -1,0 +1,23 @@
+craftingDefs:
+
+  fishingRod:
+    label: fishing rod
+    description: tie a piece of string to a stick, and put a sharp hook at the end. you'll be fishing in no time!
+    ingredients:
+      rod:
+        - - stickLong: 1
+      line:
+        - - twine: 4
+          - string: 4
+      hook:
+        - - nail: 2
+          - screw: 2
+          - fishHook: 1
+    output:
+      fishingRod: 1
+    tool:
+      hammering: 1
+    timeBase: 30m
+
+  mallet:
+    la

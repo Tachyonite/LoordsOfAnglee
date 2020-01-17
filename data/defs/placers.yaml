@@ -1,0 +1,40 @@
+itemDefs:
+
+  trapGame:
+    label: trap (game)
+    description: a small trap meant for catching rabbits or other small creatures
+    value: 10
+    weight: 1
+    rarity: uncommon
+    categories:
+      - manmade
+      - hunting
+
+  trapMan:
+    label: trap (bear)
+    description: a larger trap that could snag something as large as a deer...or a human.
+    value: 50
+    weight: 3
+    rarity: rare
+    categories:
+      - manmade
+      - hunting
+
+  rainCatcher:
+    label: rain catcher
+    description: set this up to passively collect water when it rains. has an internal capacity that fills up with water and can be put into other containers.
+    value: 5
+    weight: 5
+    rarity: uncommon
+    diffprop:
+      - "storage['filled']"
+      - "storage['volume']"
+      - "storage['fluid']"
+    categories:
+      - liquid storage
+      - manmade
+    storage:
+      volume: 50
+      quality: 1
+      sealable: False
+      pourable: False

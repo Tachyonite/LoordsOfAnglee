@@ -1,0 +1,112 @@
+itemDefs:
+  woodLathe:
+    label: wood lathe
+    description: A machine which uses a motor to turn wood. A knife or carving tool can be held to the spinning wood to shape it into various things such as handles or chair legs.
+    weight: 100
+    value: 500
+    rarity: epic
+    categories:
+      - workbench
+      - building
+    moveable: False
+    tool:
+      wood turning: 3
+    disassemble:
+      timeBase: 5h
+      output:
+        electricMotor: 2
+        latheParts: 5
+        metalSheet: 2
+        machineCasing: 1
+
+  metalLathe:
+    label: metal lathe
+    description: A high-powered machine using a motor to turn metal (or wood). Specialist tools are needed to carve metal with it, though for wood turning simpler tools will suffice.
+    weight: 200
+    value: 1000
+    rarity: epic
+    moveable: False
+    categories:
+      - workbench
+      - building
+    tool:
+      wood turning: 4
+      metal turning: 3
+    disassemble:
+      timeBase: 8h
+      output:
+        largeMotor: 1
+        latheParts: 10
+        metalSheet: 4
+        machineCasing: 1
+
+  spinningWheel:
+    label: spinning wheel
+    description: Used to spin wool, plant fibers or even plastic into twine, thread and string.
+    weight: 5
+    value: 100
+    categories:
+      - workbench
+      - building
+    rarity: uncommon
+    tool:
+      fibre spinning: 3
+
+
+  handcraftSpot:
+    label: handcraft spot
+    description: A flat area where a leeani can sit down and craft simple items.
+    weight: 0
+    value: 0
+    categories:
+      - workbench
+      - building
+    rarity: common
+    tool:
+      crafting: 1
+
+  workbenchWooden:
+    label: wooden workbench
+    description: A flat wooden surface suited for most crafting applications
+    weight: 40
+    value: 20
+    rarity: uncommon
+    categories:
+      - workbench
+      - building
+    moveable: 'category::cart' #will check for items in your inventory with this category. they still need to pass the weight check
+    tool:
+      crafting: 2
+      heavy crafting: 1
+    disassemble: # I'll change deconstruct to find the items used to craft it and return them depending on tool level used
+      timeBase: 2h
+      output:
+        woodenBeam: 4
+        woodenPlank: 4
+        bolt: 4
+        nail: 20
+        washer: 4
+        nut: 4
+
+  workbenchMetal:
+    label: metal workbench
+    description: A flat metal surface, useful for more intensive crafting or working with chemicals. It's a little bit lighter than the wooden workbench.
+    weight: 30
+    value: 20
+    categories:
+      - workbench
+      - building
+    rarity: uncommon
+    moveable: 'category::cart'
+    tool:
+      crafting: 3
+      heavy crafting: 2
+      chemical crafting: 2
+    disassemble: # I'll change deconstruct to find the items used to craft it and return them depending on tool level used
+      timeBase: 4h
+      output:
+        woodenBeam: 4
+        metalSheet: 2
+        bolt: 8
+        washer: 8
+        nut: 8

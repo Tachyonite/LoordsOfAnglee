@@ -1,0 +1,73 @@
+itemDefs:
+
+  scrapMetal:
+    label: scrap metal
+    description: assorted fragments of metal. you'll find something you want
+    value: 0.7
+    weight: 0.2
+    rarity: common
+    categories:
+      - manmade
+      - raw
+
+  castMetal:
+    label: cast metal
+    description: specially-cast metal poured into a mold to fit a specific shape
+    value: 2
+    weight: 1
+    rarity: uncommon
+    categories:
+      - manmade
+      - raw
+
+  forgedMetal:
+    label: forged metal
+    description: specially-forged metal worked into a specific shape
+    value: 0.7
+    weight: 0.2
+    rarity: common
+    categories:
+      - manmade
+      - raw
+    tool:
+      cutting: 1
+    weapon:
+      type: melee
+      damage: 1
+      attackTime: 2
+
+  clingWrap:
+    label: clingwrap
+    description: a film of plastic used to wrap foods, but could be used to make a string of sorts
+    value: 0.05
+    weight: 0.01
+    rarity: junk
+    categories:
+      - manmade
+      - raw
+      - junk
+    packable:
+      label: roll of clingwrap
+      amount: 20
+
+  plasticShell:
+    label: plastic plate
+    description: a plate of hard plastic, could be used for brittle armour or construction
+    value: 0.2
+    weight: 0.1
+    rarity: common
+    categories:
+      - manmade
+      - raw
+      - junk
+
+  scrapPlastic:
+    label: plastic scraps
+    description: assorted fragments of various plastics, hard shell, flexible, clingwrap...you name it, humanity made it
+    value: 0.2
+    weight: 0.1
+    rarity: junk
+    categories:
+      - manmade
+      - raw
+      - junk

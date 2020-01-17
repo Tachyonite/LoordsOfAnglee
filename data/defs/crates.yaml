@@ -1,0 +1,69 @@
+itemDefs:
+
+  junkCrate:
+    label: taped cardboard box
+    description: a cardboard box sealed with sellotape
+    weight: 1
+    value: 5
+    rarity: junk
+    categories:
+      - crate
+    openable:
+      tools:
+        cutting: 1
+      contents:
+        $junk: 1
+        cardboardBox: 1
+
+  commonCrate:
+    label: wooden crate
+    description: a rather beat up box. if opened, may contain somewhat useful items.
+    weight: 1
+    value: 5
+    rarity: junk
+    categories:
+      - crate
+    openable:
+      tools:
+        prying: 1
+      contents:
+        $common: 1
+        woodCrate: 1
+
+crateDefs:
+
+  junk:
+    label: cardboard box
+    weight: 100
+    items:
+      tinCan:
+        weight: 20
+        amount: 1~3
+      plasticBottle:
+        weight: 15
+        amount: 1~2
+      scrapPlastic:
+        weight: 10
+        amount: 1~5
+      rag:
+        weight: 10
+        amount: 1~10
+      nail:
+        weight: 10
+        amount: 1~10
+      dirtyPaper:
+        weight: 10
+        amount: 10~25
+      cleanPaper:
+        weight: 4
+        amount: 5~15
+      jug:
+        weight: 11
+        amount: 1~2
+      packable!tape:
+        weight: 2
+        amount: 1
+
+  common:
+    label: wooden crate
+    weight: 80

@@ -1,0 +1,25 @@
+tableDefs: #Values are multiplied by a formula using the skill of the character
+  scavenger:
+    contents:
+      scrapMetal: 0~3
+      scrapPlastic: 0~5
+      tinCan: 0~2
+      plasticBottle: 0~2
+      plasticJug3L: -2~1
+      rag: 0~2
+  forager:
+    contents:
+      ~water: 0~8 #denotes a fluid
+      berries: 0~5
+      nuts: 0~5
+      fruits: 0~2
+      vegetables: 0~2
+  explorer:
+    contents:
+      cannedFoodBeans: -1~1
+      cannedFoodMysteryMeat: -1~1
+      scrapMetal: 0~3
+      scrapPlastic: 0~5
+      plasticJug: -2~1
+      ~water: 0~8
+      $crate: -2~1

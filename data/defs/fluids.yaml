@@ -1,0 +1,72 @@
+fluidDefs:
+
+  air:
+    label: air
+    weight: 0
+    value: 0
+
+  water:
+    label: water
+    weight: 1 #weight is per litre
+    value: 1
+    nutrition:
+      water: 1
+
+  juice:
+    label: fruit juice
+    weight: 1.1
+    value: 2
+    nutrition:
+      water: 0.8
+      food: 0.2
+
+  ink:
+    label: ink
+    description: a black fluid used to write words on paper. Can't be used directly, but recharges pens and quills. Must be kept in a sealed container.
+    weight: 1
+    value: 50 #per litre
+    fillPriority: smallest #will look for a small container as opposed to a large one, if not set defaults to largest
+    # very useful for small-volume items that you only want vials of as opposed to litres of
+    sealed: True
+
+  bleach:
+    label: bleach
+    description: a clear, watery fluid that is NOT WATER. useful for removing colours, inks and stains from clothing or paper
+    weight: 1.2 #kg/L, g/L doesn't matter. praise the metric system
+    value: 5
+
+  glue:
+    label: glue
+    description: a sticky bonding agent for all your stick-things-to-other-things needs. must be kept in a sealed container.
+    weight: 1.2 #kg/L, g/L doesn't matter. praise the metric system
+    value: 8
+    sealed: True
+    fillPriority: smallest
+
+  wineRed:
+    label: red wine
+    description: a rich red alcoholic beverage, it's very fancy and some leeani may like it a lot.
+    weight: 0.9
+    value: 20
+    nutrition:
+      water: -0.1 #dehydrating
+      alcohol: 10%
+    morale: 10 #out of 100
+
+  sodaLemonade:
+    label: lemonade
+    description: a fizzy drink made from lemons and lots of sugar that leaves a tingle on the tongue
+    weight: 1
+    value: 5
+    nutrition:
+      water: 1
+    morale: 5
+
+  sodaCola:
+    label: cola
+    description: a fizzy drink made from...who knows...that leaves a tingle on the tongue
+    weight: 1
+    value: 5
+    nutrition:
+      water: 1
+    morale: 7

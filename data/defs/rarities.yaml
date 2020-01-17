@@ -1,0 +1,18 @@
+# If a rarity is not set in here, it may appear out of order and be uncoloured.
+
+rarityDefs:
+  junk:
+    color: light grey
+    order: 0
+  common:
+    color: white
+    order: 1
+  uncommon:
+    color: cyan
+    order: 2
+  rare:
+    color: red
+    order: 3
+  epic:
+    color: purple
+    order: 4

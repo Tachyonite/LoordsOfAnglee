@@ -1,0 +1,78 @@
+workDefs:
+  idle:
+    label: idle
+    labelDo: idling
+    description: "Idle leeani are not currently doing anything. They do, however, keep an eye out for dangers approaching the group."
+    timeBase: 1h #hours
+
+  scavenger:
+    label: scavenger
+    labelDo: scavenging
+    timeBase: 5h #hours
+    description: "Scavengers are responsible for finding scrap, old machines, toolboxes and crates, and very carefully taking them apart. Scavenging takes 5 hours."
+    skills:
+      utility: 2
+      strength: 1
+    outputTables:
+      scavenger: 3
+
+  forager:
+    label: forager
+    labelDo: foraging
+    description: "Foragers will find various natural foodstuffs, as well as water for the group. They may find the occasional bit of scrap. Foraging takes 5 hours."
+    timeBase: 5h #hours
+    skills:
+      learning: 2
+      perception: 1
+    outputTables:
+      forager: 3
+
+  explorer:
+    label: explorer
+    labelDo: exploring
+    description: "Explorers track the way ahead, looking for hideouts, foxholes and most importantly, rare loot. Exploring takes 8 hours."
+    timeBase: 8h #hours
+    skills:
+      vitality: 2
+      perception: 1
+    outputTables:
+      explorer: 2
+
+  negotiator:
+    label: negotiator
+    labelDo: negotiating
+    description: "Negotiators can talk to others, ease tensions, trade items and perceive intentions. Negotiating takes 2 hours."
+    timeBase: 2h #hours
+    skills:
+      eloquence: 2
+      learning: 1
+
+  researcher:
+    label: researcher
+    labelDo: researching
+    description: "Researchers examine scrap, put it back together, or come up with new ways to build things -- and then record their findings. This takes 8 hours."
+    timeBase: 8h #hours
+    skills:
+      learning: 2
+      eloquence: 1
+
+  crafter:
+    label: crafter
+    labelDo: crafting
+    description: "Crafters take scrap and natural resources and make known items out of them. Crafters work for 8 hours, where they spend time building things that are queued. More crafters do not speed up production, but they can craft multiple things at once."
+    timeBase: 8h #hours
+    goesAfk: False
+    skills:
+      utility: 2
+      learning: 1
+
+  hunter:
+    label: hunter
+    labelDo: hunting
+    description: "Hunters kill small and large animals, can fish at rivers, and set traps. Hunting takes 8 hours."
+    timeBase: 8h #hours
+    skills:
+      strength: 2
+      perecption: 1
+    outputTables:
+      - hunter

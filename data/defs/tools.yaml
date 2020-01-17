@@ -1,0 +1,372 @@
+itemDefs:
+
+  $$chargeBase: &chargeBase
+    diffprop:
+      - 'durability["uses"]' #added via code to any items with durability
+      - 'durability["maxUses"]'
+    categories:
+      - tool
+      - manmade
+
+  fileSmall:
+    label: small file
+    description: A tiny file that's perfect for detail jobs, but rather inefficient for large projects.
+    weight: 0.5
+    value: 10
+    rarity: uncommon
+    <<: *chargeBase
+    tool:
+      fine filing: 4
+      wood filing: 1
+    durability:
+      maxUses: 100
+      repair: False
+
+  fileRasp:
+    label: wood rasp
+    description: A flat piece of metal with a large regular pattern, used to shape wood very quickly.  Can't be used on metal, and not for detail jobs, but very effective on shaping wood.
+    weight: 0.5
+    value: 10
+    rarity: uncommon
+    <<: *chargeBase
+    tool:
+      wood filing: 4
+    durability:
+      maxUses: 300
+      repair: False
+
+  fileWood:
+    label: wood file
+    description: A flat piece of metal with a regular pattern, used to shape wood. Can be used on metal but not as efficiently. Gets blunt after some time, in which it becomes useless.
+    weight: 0.6
+    value: 10
+    rarity: uncommon
+    <<: *chargeBase
+    tool:
+      wood filing: 3
+      metal filing: 1
+      fine filing: 1
+    durability:
+      maxUses: 200
+      repair: False
+
+  fileMetal:
+    label: metal file
+    description: A flat piece of metal with a regular pattern, hardened to shape metal. Can also be used to shape wood.
+    weight: 1
+    value: 10
+    rarity: uncommon
+    <<: *chargeBase
+    tool:
+      wood filing: 2
+      metal filing: 3
+    durability:
+      maxUses: 150
+      repair: False
+
+  fileSet:
+    label: set of files
+    description: A set of 10 files, each used for a different purpose. Some are large, some are small. No matter what you need to file, this set will be here for you. Uses can be recharged by adding more files.
+    weight: 2
+    value: 50
+    rarity: rare
+    <<: *chargeBase
+    tool:
+      wood filing: 3
+      metal filing: 3
+      fine filing: 3
+    durability:
+      maxUses: 500
+      repair:
+        fileSmall:
+          amount: 1
+          uses: 50
+        fileMetal:
+          amount: 1
+          uses: 100
+        fileWood:
+          amount: 1
+          uses: 150
+        fileRasp:
+          amount: 1
+          uses: 200
+
+  wrench:
+    label: combination wrench
+    description: a tool with a wide-mouthed end and a closed end, made for bolt turning. Can't be used for precision jobs.
+    weight: 1
+    value: 10
+    rarity: uncommon
+    <<: *chargeBase
+    tool:
+      bolt turning: 3
+    durability:
+      maxUses: 200
+      repair: False
+
+  wrenchAdjustable:
+    label: adjustable wrench
+    description: A wrench with a sliding mouth, can be used to do turn bolts of all sizes, though it's less efficient at turning small bolts than a socket set.
+    weight: 1
+    value: 10
+    rarity: uncommon
+    <<: *chargeBase
+    tool:
+      bolt turning: 3
+      fine bolt turning: 1
+    durability:
+      maxUses: 150
+      repair: False
+
+  socketSet:
+    label: socket set
+    description: A 20-piece set of sockets that come with ratchets and all manner of bolt turning tools. Your one-stop shop for bolt turning.
+    weight: 5
+    value: 100
+    rarity: rare
+    <<: *chargeBase
+    tool:
+      bolt turning: 3
+      fine bolt turning: 3
+      screwdriving: 2
+    durability:
+      maxUses: 500
+      repair: False
+
+  crowbar: #itemDef, how it's referred to in the code
+    label: crowbar
+    description: A bent rod of metal with a flat tip for prying open nailed crates and shut doors
+    weight: 1.5
+    value: 10
+    rarity: uncommon
+    <<: *chargeBase
+    tool:
+      prying: 3
+      hammering: 1
+    durability:
+      maxUses: 50
+      repair:
+        scrapMetal:
+          amount: 1
+          uses: 20 #the uses repaired per scrap metal used
+          # will probably add a worktable requirement like a blowtorch or something
+
+  handChisel:
+    label: hand chisel
+    description: A sharpened, flat piece of metal that's used to shave off shards of wood from a final product
+    weight: 0.5
+    value: 10
+    rarity: uncommon
+    <<: *chargeBase
+    tool:
+      chiselling: 2
+    durability:
+      maxUses: 100
+      repair: False
+
+  handDrill:
+    label: hand drill
+    description: slow to use, but still workable. a hand drill is useful for...drilling holes if you have no electricity. It uses a few small components in its construction and hence can be repaired.
+    weight: 1.5
+    value: 10
+    rarity: uncommon
+    <<: *chargeBase
+    tool:
+      drilling: 1
+    durability:
+      maxUses: 100
+      repair: False
+
+  electricDrill:
+    label: electric drill
+    description: Much faster but needs to be powered
+    weight: 1.5
+    value: 10
+    rarity: uncommon
+    <<: *chargeBase
+    tool:
+      drilling: 1
+    durability:
+      maxUses: 100
+      repair: False
+
+
+  hammer:
+    label: claw hammer
+    description: a hammer with a claw at one end with a wooden stick to hold. used for many practical applications requiring percussive maintanence
+    value: 5
+    weight: 0.8
+    rarity: uncommon
+    <<: *chargeBase
+    durability:
+      maxUses: 100
+      repair: False
+    categories:
+      - tool
+      - manmade
+    tool:
+      hammering: 2
+      fine hammering: 1
+      nail pulling: 2
+    disassemble:
+      time: 10 #in minutes
+      tool:
+        hammering: 1
+      items:
+        shortStick: 1
+        scrapMetal: 1
+
+  hammerSmall:
+    label: ball-peen hammer
+    description: a small hammer with a ball at one end. usually used for finer applications, chiseling and punching
+    value: 4
+    weight: 0.5
+    rarity: uncommon
+    <<: *chargeBase
+    durability:
+      maxUses: 100
+      repair: False
+    categories:
+      - tool
+      - manmade
+    tool:
+      hammering: 1
+      fine hammering: 2
+    disassemble:
+      time: 10 #in minutes
+      tool:
+        fine hammering: 1
+      items:
+        shortStick: 1
+        scrapMetal: 1
+
+  screwdriver:
+    label: screwdriver
+    description: a metal rod with a wooden handle and a bit for turning screws
+    value: 5
+    weight: 0.8
+    rarity: uncommon
+    <<: *chargeBase
+    durability:
+      maxUses: 100
+      repair: False
+    tool:
+      screw driving: 2
+      fine screw driving: 1
+    disassemble:
+      time: 10 #in minutes
+      tool:
+        hammering: 1
+      items:
+        shortStick: 1
+        scrapMetal: 1
+
+  hacksaw:
+    label: hacksaw
+    description: a metal-framed saw with a band that runs between both ends, can cut through wood and metal
+    value: 10
+    weight: 1.5
+    rarity: uncommon
+    durability:
+      maxUses: 100
+      repair: False
+    <<: *chargeBase
+    tool:
+      wood sawing: 2
+      metal sawing: 1
+    disassemble:
+      time: 10m #in minutes
+      tool:
+        hammering: 1
+      items:
+        scrapMetal: 3
+
+  sawWood:
+    label: wood saw
+    description: a flexible saw made for cutting through wood really well. useless on harder materials like metal
+    value: 10
+    weight: 1.5
+    rarity: uncommon
+    <<: *chargeBase
+    durability:
+      maxUses: 100
+      repair: False
+    tool:
+      wood sawing: 3
+    disassemble:
+      time: 10m #in minutes
+      tool:
+        hammering: 1
+      items:
+        scrapMetal: 2
+        woodFragments: 1
+
+
+  pen:
+    label: ballpoint pen
+    description: a writing instrument with a tiny ball bearing that both keeps ink in the pen from drying and dispenses it by rolling on paper. An important component for writing. Does not break from use, but can be recharged with ink
+    weight: 0.05
+    value: 8
+    rarity: common
+    <<: *chargeBase
+    durability:
+      maxUses: 250
+      repair: ink
+      repairUnit: mL #for fluids only, makes sure that the fluid only uses /1000 of normal amount
+      breaks: False #if this isn't set we assume the tool breaks
+    tool:
+      writing: 3
+      piercing: 1
+    categories:
+      - writing implement #these will determine other things later
+
+  pencil:
+    label: lead pencil
+    description: actually contains graphite. Important tool for writing, but cannot be recharged once used.
+    weight: 0.05
+    value: 5
+    rarity: common
+    <<: *chargeBase
+    durability:
+      maxUses: 100
+      repair: False #cannot be repaired, otherwise specify an itemDef
+    tool:
+      writing: 3
+      piercing: 1
+    categories:
+      - writing implement
+
+  fishHook:
+    label: fish hook
+    description: a sharp, bent piece of metal which is often used to attach to fishing line to catch fish
+    weight: 0.02
+    value: 1
+    rarity: common
+
+  fishingRod: #itemDef, how it's referred to in the code
+    label: fishing rod
+    description: a straight, flexible stick with a string tied to one end, and a suitable hook at the end of that string. catches fish while consuming bait.
+    weight: 1.5
+    value: 10
+    rarity: uncommon
+    <<: *chargeBase
+    tool:
+      fishing: 2
+    durability:
+      maxUses: 70
+      repair:
+        longStick:
+          amount: 1
+          uses: 50
+        string:
+          amount: 2
+          uses: 20
+        fishHook:
+          amount: 1
+          uses: 20
+        nail:
+          amount: 1
+          uses: 5
+        screw:
+          amount: 1
+          uses: 5

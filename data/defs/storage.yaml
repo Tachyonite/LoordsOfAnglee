@@ -1,0 +1,122 @@
+itemDefs:
+
+  tinCan:
+    label: tin can
+    description: contrary to the name, it's aluminium. can be used to store and boil water but can't be resealed
+    value: 0.7
+    weight: 0.05
+    rarity: common
+    categories:
+      - junk
+      - manmade
+    diffprop:
+      - "storage['filled']"
+      - "storage['volume']"
+      - "storage['fluid']"
+    storage:
+      volume: 0.5
+      quality: 2
+      sealable: False
+    disassemble:
+      time: 5 #in minutes
+      tool:
+        cutting: 1
+      items:
+        scrapMetal: 1
+
+  plasticBottle:
+    label: plastic bottle
+    description: a shaped plastic bottle with a lid for sealability.
+    value: 0.7
+    weight: 0.02
+    rarity: junk
+    diffprop:
+      - "storage['filled']"
+      - "storage['volume']"
+      - "storage['fluid']"
+    categories:
+      - junk
+      - liquid storage
+      - manmade
+    storage:
+      volume: 1
+      quality: 1
+      sealable: True
+
+  plasticJug3L:
+    label: plastic 3L jug
+    description: a large plastic jug with a lid for sealability.
+    value: 0.1
+    weight: 0.05
+    rarity: common
+    diffprop:
+      - "storage['filled']"
+      - "storage['volume']"
+      - "storage['fluid']"
+    categories:
+      - junk
+      - liquid storage
+      - manmade
+    storage:
+      volume: 3
+      quality: 1
+      sealable: True
+
+  plasticJug5L:
+    label: plastic 5L jug
+    description: a very large plastic jug with a lid for sealability.
+    value: 0.1
+    weight: 0.08
+    rarity: common
+    diffprop:
+      - "storage['filled']"
+      - "storage['volume']"
+      - "storage['fluid']"
+    categories:
+      - junk
+      - liquid storage
+      - manmade
+    storage:
+      volume: 5
+      quality: 1
+      sealable: True
+
+  plasticJug18L:
+    label: plastic 18L jug
+    description: a real big boi of a jug, these would normally be mounted on top of water coolers.
+    value: 0.1
+    weight: 0.05
+    rarity: uncommon
+    diffprop:
+      - "storage['filled']"
+      - "storage['volume']"
+      - "storage['fluid']"
+    categories:
+      - junk
+      - liquid storage
+      - manmade
+    storage:
+      volume: 18
+      quality: 2
+      sealable: True
+
+  metalDrum200L:
+    label: 200L drum
+    description: a few of these will end any liquid storage issues you have. with a massive capacity, ability to be sealed and high-quality storage rating, drums are perfect for long-term storage.
+    value: 20
+    weight: 12
+    rarity: rare
+    diffprop:
+      - "storage['filled']"
+      - "storage['volume']"
+      - "storage['fluid']"
+    categories:
+      - junk
+      - liquid storage
+      - manmade
+    storage:
+      volume: 200
+      quality: 2
+      sealable: True
+
+
