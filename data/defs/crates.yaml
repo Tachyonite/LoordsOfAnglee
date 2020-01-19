@@ -63,7 +63,3 @@ crateDefs:
       packable!tape:
         weight: 2
         amount: 1
-
-  common:
-    label: wooden crate
-    weight: 80

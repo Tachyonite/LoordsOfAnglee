@@ -23,3 +23,13 @@ tableDefs: #Values are multiplied by a formula using the skill of the character
       plasticJug: -2~1
       ~water: 0~8
       $crate: -2~1
+  hunter:
+    contents:
+      rawVenison: -1~2
+      rawRabbit: -1~4
+      rawPoultry: -1~3
+  woodcutter:
+    contents:
+      hardwood: -1~2
+      softwood: 0~5
+      stickLong: 1~3

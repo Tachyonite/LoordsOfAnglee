@@ -6,7 +6,7 @@ from core import Find, Player, Leeani, game
 
 from math import ceil
 
-def generateActionList(context):
+def generateActionList(context,player):
 
     actions = []
 
@@ -20,6 +20,7 @@ def generateActionList(context):
 
 
         actions.append(NextHourAction())
+        actions[1].exploreArea(player=player)
 
     return actions
 
@@ -135,6 +136,10 @@ class ForageWorkAction(WorkAction):
 class ExploreWorkAction(WorkAction):
     def __init__(self):
         super().__init__(Translate('action_explore'), Translate('action_explore_desc'),"explorer")
+    def exploreArea(self,player):
+        self.linked = player.location.linked[0]
+        self.name = "{} {}".format(Translate('action_explore'),self.linked.label.title())
+
 
 class CraftingWorkAction(WorkAction):
     def __init__(self):
@@ -379,6 +384,11 @@ class ViewInventoryAction(Action):
                 p("{}: {}/{}kg".format(Translate('carry_weight'), str(round(tab[2])), player.carryWeight))
             print()
             print()
+            p("Days of food: {}".format(player.inventory.calcFoodDays(player.group)))
+            p("Days of water: {}".format(player.inventory.calcWaterDays(player.group)))
+            print()
+            print()
+
             p("{} {}/{}".format(Translate('page'), page + 1, maxpage + 1))
             p("d | {}".format(Translate('next_page')))
             p("a | {}".format(Translate('prev_page')))
@@ -419,6 +429,9 @@ class ViewDetailInventoryAction(Action):
                                    str(player.carryWeight)) + tc.w)
         else:
             p("{}: {}/{}kg".format(Translate('carry_weight'), str(round(tab[4])), player.carryWeight))
+        print()
+        p("Days of food: {}".format(player.inventory.calcFoodDays(player.group)))
+        p("Days of water: {}".format(player.inventory.calcWaterDays(player.group)))
         print()
         p("{} {}/{}".format(Translate('page'), page + 1, maxpage + 1))
         p("w | {}".format(Translate('up_item')))

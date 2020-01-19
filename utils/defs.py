@@ -196,6 +196,18 @@ class Rarity():
     def getColor(self):
         return self.color
 
+
+class Location():
+    def __init__(self, defName, object):
+        self.defName = defName
+        self.linked = []
+        for k, v in object.items():
+            setattr(self,k,v)
+
+    def generateLinked(self,game):
+        self.linked.append(game.locationDefs[random.choices(population=list(self.connects.keys()),weights=list(self.connects.values()),k=random.randrange(1,3))[0]])
+
+
 class Chapter():
     def __init__(self, defName, object):
         self.defName = defName

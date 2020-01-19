@@ -60,8 +60,8 @@ itemDefs:
       - tinCan
 
   cannedFoodMysteryMeat:
-    label: canned mystery meat
-    description: a can of unidentified meat, sealed in a tin can. kinda gross but whatever.
+    label: canned Spummo
+    description: a can of unidentified, possibly-pork-based meat, sealed in a tin can. kinda gross but whatever.
     weight: 0.1
     categories:
       - food
@@ -83,3 +83,57 @@ itemDefs:
       - fish
     nutrition:
       food: 0.5
+
+  rawFish:
+    label: raw fish
+    description: floppy fish freshly finangled from fluvial flows.
+    weight: 0.5
+    categories:
+      - food
+      - raw
+      - fish
+    nutrition:
+      food: 1
+
+  rawFishLarge:
+    label: large raw fish
+    description: floppy fish freshly finangled from fluvial flows.
+    weight: 1
+    categories:
+      - food
+      - raw
+      - fish
+    nutrition:
+      food: 2
+
+  rawRabbit:
+    label: raw rabbit
+    description: a small prey beast of the fields
+    weight: 1
+    categories:
+      - food
+      - raw
+      - meat
+    nutrition:
+      food: 1
+
+  rawPoultry:
+    label: raw poultry
+    description: a hunted bird, plucked and ready to be cooked. inedible raw, due to pathogen concerns.
+    weight: 1
+    categories:
+      - food
+      - raw
+      - meat
+      - dangerous
+
+  rawVenison:
+    label: raw venison
+    description: floppy fish freshly finangled from fluvial flows.
+    weight: 1
+    categories:
+      - food
+      - raw
+      - meat
+    nutrition:
+      food: 1

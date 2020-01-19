@@ -4,6 +4,7 @@ import tabulate as tb
 import colorama as cr
 import cursor
 import yaml
+import math
 
 
 from utils.defs import *
@@ -98,8 +99,10 @@ class Player():
         self.tableLength = 30
         self.carryWeight = 0
         self.queuedCrafts = {}
+        self.location = None
+        self.groupStatus = "Nomads"
     def SpawnLeeani(self):
-        temp = Leeani()
+        temp = Leeani(self)
         self.group[temp.fullName] = temp
         del temp
     def Group(self):
@@ -228,15 +231,27 @@ class Creature():
 
 
 class Leeani(Creature):
-    def __init__(self):
+    def __init__(self,player):
         super().__init__("leeani",35)
         self.hp = 10
         self.job = Find.WorkTypeByName("idle")
         self.afk = False
         self.jobAssignedHour = 0
         self.jobTimeLeft = 0
+        self.player = player
     def rollWorkResults(self):
         if hasattr(self.job,'outputTables'):
+            mult = 0.5
+            if self.job.defName in self.player.location.workMultipliers:
+                mult = self.player.location.workMultipliers[self.job.defName]
+            if self.job.defName == "explorer" and self.job.defName in self.player.location.linked[0].workMultipliers:
+                mult = self.player.location.linked[0].workMultipliers[self.job.defName]
+
+            mult += (list(self.job.skills.values())[0] ** self.stats.dictFormat[list(self.job.skills.keys())[0]]) / 50
+            mult += (list(self.job.skills.values())[1] ** self.stats.dictFormat[list(self.job.skills.keys())[1]]) / 50
+
+            mult /= 2
+            mult = round(mult,2)
             for k,v in self.job.outputTables.items():
                 f = False
                 for i in range(v):
@@ -250,8 +265,8 @@ class Leeani(Creature):
                             p("- Found a {}!".format(crate.label))
                         elif found[0].startswith("~"):
                             item = game.fluidDefs[found[0][1:]]
-                            amt = found[1]
-                            p("- Found {}L of {}".format(amt, item.label))
+                            amt = math.ceil(found[1] * mult)
+                            p("- Found {}L of {} ({}x)".format(amt, item.label,mult))
                             remainder = player.inventory.addFluid(item, amt)
                             if remainder == amt:
                                 p(" ! However, there was no container to accept it.")
@@ -260,8 +275,8 @@ class Leeani(Creature):
                         else:
                             item = found[0]
                             idef = game.itemDefs[item]
-                            amt = found[1]
-                            p("- Found {} x{}".format(idef.label,int(amt)))
+                            amt = math.ceil(found[1] * mult)
+                            p("- Found {} x{} ({}x)".format(idef.label,int(amt),mult))
                             player.inventory.addItem(item,amt)
                 if not f:
                     p("x {} didn't find anything.".format("He" if self.gender == "Male" else "She"))
@@ -575,15 +590,27 @@ class Inventory():
         return (tb.tabulate(tman[page],headers,tablefmt='orgtbl'),len(table),totalWeight)
 
     def calcNutrition(self):
-        runningTotal = 0
-        runningNutrition = [Find.ItemDef(x)['nutrition'] for x in self.contents.items() if hasattr(Find.ItemDef(x),'nutrition')]
-        for i in runningNutrition:
-            if 'food' in list(i.keys()):
-                runningTotal += i['food']
-        return runningTotal
+        runningFood = 0
+        runningWater = 0
+        for k,v in self.contents.items():
+            items = list(v)
+            if hasattr(items[0],'storage') and items[0].storage['filled']:
+                if hasattr(items[0].storage['fluid'],'nutrition') and items[0].storage['fluid'].nutrition:
+                    if 'water' in list(items[0].storage['fluid'].nutrition.keys()):
+                        runningWater += items[0].storage['fluid'].nutrition['water'] * items[0].storage['filled']
+                    if 'food' in list(items[0].storage['fluid'].nutrition.keys()):
+                        runningFood += items[0].storage['fluid'].nutrition['food'] * items[0].storage['filled']
+            if hasattr(items[0],'nutrition') and items[0].nutrition:
+                if 'food' in list(items[0].nutrition.keys()):
+                    runningFood += items[0].nutrition['food'] * len(items)
+                if 'water' in list(items[0].nutrition.keys()):
+                    runningWater += items[0].nutrition['water'] * len(items)
+        return (runningWater,runningFood)
 
     def calcFoodDays(self,group):
-        return self.calcNutrition() / len(group)
+        return round(self.calcNutrition()[1] / len(group),2)
+    def calcWaterDays(self,group):
+        return round(self.calcNutrition()[0] / len(group),2)
 
 
 

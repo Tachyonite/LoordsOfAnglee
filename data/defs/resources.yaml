@@ -1,5 +1,19 @@
 itemDefs:
 
+  hardwood:
+    label: hardwood
+    description: a heavy wood that has been growing for possibly hundreds of years, now it's been cut down and can be used for sturdy construction
+    weight: 0.5
+    value: 2
+    rarity: common
+
+  softwood:
+    label: softwood
+    description: wood from a fast-growing three that's easier to shape but not as durable as hardwood
+    weight: 0.3
+    value: 1
+    rarity: common
+
   plantFibres:
     label: plant fibres
     description: small pieces of fibrous plant that can be twisted together to make thread or string

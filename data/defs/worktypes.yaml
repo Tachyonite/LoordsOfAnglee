@@ -8,8 +8,8 @@ workDefs:
   scavenger:
     label: scavenger
     labelDo: scavenging
-    timeBase: 5h #hours
-    description: "Scavengers are responsible for finding scrap, old machines, toolboxes and crates, and very carefully taking them apart. Scavenging takes 5 hours."
+    timeBase: 4h #hours
+    description: "Scavengers are responsible for finding scrap, old machines, toolboxes and crates, and very carefully taking them apart. Scavenging takes 4 hours."
     skills:
       utility: 2
       strength: 1
@@ -19,8 +19,8 @@ workDefs:
   forager:
     label: forager
     labelDo: foraging
-    description: "Foragers will find various natural foodstuffs, as well as water for the group. They may find the occasional bit of scrap. Foraging takes 5 hours."
-    timeBase: 5h #hours
+    description: "Foragers will find various natural foodstuffs, as well as water for the group. They may find the occasional bit of scrap. Foraging takes 4 hours."
+    timeBase: 4h #hours
     skills:
       learning: 2
       perception: 1
@@ -76,3 +76,25 @@ workDefs:
       perecption: 1
     outputTables:
       - hunter
+
+  lumberfox:
+    label: lumberfox
+    labelDo: woodcutting
+    description: "Lumberfoxes cut wood and bring it back to the group. Woodcutting takes 4 hours."
+    timeBase: 4h #hours
+    skills:
+      strength: 2
+      vitality: 1
+    outputTables:
+      - woodcutter
+
+  looter:
+    label: looter
+    labelDo: looting
+    description: "Looters enter buildings forcefully and take whatever isn't bolted down. It's risky, as it will deplete resources in an area quickly, and is not very subtle. It takes 4 hours."
+    timeBase: 4h #hours
+    skills:
+      utility: 2
+      perception: 1
+    outputTables:
+      - looter
