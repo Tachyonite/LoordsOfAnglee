@@ -197,3 +197,12 @@ itemDefs:
     tool:
       bandaging: 1
 
+  canTag:
+    label: can tag
+    description: the bit on a soda can that you press down to open it with. in neo-society, a popular sub-currency.
+    value: 1
+    weight: 0.1
+    rarity: common
+    categories:
+      - currency
+

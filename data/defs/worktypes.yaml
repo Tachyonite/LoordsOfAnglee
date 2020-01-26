@@ -8,8 +8,8 @@ workDefs:
   scavenger:
     label: scavenger
     labelDo: scavenging
-    timeBase: 4h #hours
-    description: "Scavengers are responsible for finding scrap, old machines, toolboxes and crates, and very carefully taking them apart. Scavenging takes 4 hours."
+    timeBase: 8h #hours
+    description: "Scavengers are responsible for finding scrap, old machines, toolboxes and crates, and very carefully taking them apart. Scavenging takes 8 hours."
     skills:
       utility: 2
       strength: 1
@@ -19,8 +19,8 @@ workDefs:
   forager:
     label: forager
     labelDo: foraging
-    description: "Foragers will find various natural foodstuffs, as well as water for the group. They may find the occasional bit of scrap. Foraging takes 4 hours."
-    timeBase: 4h #hours
+    description: "Foragers will find various natural foodstuffs, as well as water for the group. They may find the occasional bit of scrap. Foraging takes 8 hours."
+    timeBase: 8h #hours
     skills:
       learning: 2
       perception: 1
@@ -69,16 +69,27 @@ workDefs:
   hunter:
     label: hunter
     labelDo: hunting
-    description: "Hunters kill small and large animals, can fish at rivers, and set traps. Hunting takes 8 hours."
+    description: "Hunters kill small and large animals, and set traps. Hunting takes 8 hours."
     timeBase: 8h #hours
     skills:
       strength: 2
       perecption: 1
     outputTables:
-      - hunter
+      hunter: 2
+
+  fisher:
+    label: fisher
+    labelDo: fishing
+    description: "Fishers...can fish at rivers. Fishing takes 8 hours."
+    timeBase: 8h #hours
+    skills:
+      utility: 2
+      vitality: 1
+    outputTables:
+      fisher: 2
 
   lumberfox:
-    label: lumberfox
+    label: lumberfoxe
     labelDo: woodcutting
     description: "Lumberfoxes cut wood and bring it back to the group. Woodcutting takes 4 hours."
     timeBase: 4h #hours
@@ -86,15 +97,16 @@ workDefs:
       strength: 2
       vitality: 1
     outputTables:
-      - woodcutter
+      woodcutter: 2
 
   looter:
     label: looter
     labelDo: looting
     description: "Looters enter buildings forcefully and take whatever isn't bolted down. It's risky, as it will deplete resources in an area quickly, and is not very subtle. It takes 4 hours."
     timeBase: 4h #hours
+    destructive: True
     skills:
       utility: 2
       perception: 1
     outputTables:
-      - looter
+      looter: 6

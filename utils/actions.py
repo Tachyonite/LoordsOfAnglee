@@ -10,15 +10,25 @@ def generateActionList(context,player):
 
     actions = []
 
+    actionsToWork = {
+        "fisher":"FisherWorkAction()",
+        "hunter":"HunterWorkAction()",
+        "scavenger":"ScavengerWorkAction()",
+        "looter":"LooterWorkAction()",
+        "lumberfox":"LumberfoxWorkAction()"
+    }
+
+
     if context == "nomad_day":
 
         actions.append(ForageWorkAction())
         actions.append(ExploreWorkAction())
+        if hasattr(player.location,'enableWork'):
+            for i in player.location.enableWork:
+                actions.append(eval(actionsToWork[i]))
         actions.append(ViewDetailInventoryAction())
         actions.append(ViewCraftsAction())
         actions.append(ViewCharAction())
-
-
         actions.append(NextHourAction())
         actions[1].exploreArea(player=player)
 
@@ -40,6 +50,16 @@ class BlankAction(Action):
     def perform(self):
         pass
 
+class RelocateAction(Action):
+    def __init__(self, name, desc):
+        super().__init__(name, desc)
+
+    def perform(self):
+        p("Relocating will drop any non-sealed containers, and any items that are not moveable.")
+        p("You won't be able to return to this location.")
+        p("Proceed? y/n")
+        msvcrt.getch()
+
 class NextHourAction(Action):
     def __init__(self):
         super().__init__(name=Translate('next_hour_action'),description=Translate('next_hour_action'))
@@ -57,6 +77,7 @@ class NextHourAction(Action):
                     else:
                         p("{} returned from {}".format(lee.fullName, lee.job.labelDo))
                         lee.afk = False
+                lee.satisfyNutrition()
             msvcrt.getch()
         else: # AN HOUR PASSES
             for lee in player.group.values():
@@ -128,10 +149,24 @@ class WorkAction(Action):
                 lee.jobAssignedHour = player.hour
                 lee.jobTimeLeft = self.workType.timeCost() - 1
 
-
 class ForageWorkAction(WorkAction):
     def __init__(self):
         super().__init__(Translate('action_forage'), Translate('action_forage_desc'),"forager")
+class FisherWorkAction(WorkAction):
+    def __init__(self):
+        super().__init__(Translate('action_fisher'), Translate('action_fisher_desc'),"fisher")
+class HunterWorkAction(WorkAction):
+    def __init__(self):
+        super().__init__(Translate('action_hunter'), Translate('action_hunter_desc'),"hunter")
+class ScavengerWorkAction(WorkAction):
+    def __init__(self):
+        super().__init__(Translate('action_scavenger'), Translate('action_scavenger_desc'),"scavenger")
+class LooterWorkAction(WorkAction):
+    def __init__(self):
+        super().__init__(Translate('action_looter'), Translate('action_looter_desc'),"looter")
+class LumberfoxWorkAction(WorkAction):
+    def __init__(self):
+        super().__init__(Translate('action_lumberfox'), Translate('action_lumberfox_desc'),"lumberfox")
 
 class ExploreWorkAction(WorkAction):
     def __init__(self):
@@ -383,12 +418,9 @@ class ViewInventoryAction(Action):
             else:
                 p("{}: {}/{}kg".format(Translate('carry_weight'), str(round(tab[2])), player.carryWeight))
             print()
-            print()
             p("Days of food: {}".format(player.inventory.calcFoodDays(player.group)))
             p("Days of water: {}".format(player.inventory.calcWaterDays(player.group)))
             print()
-            print()
-
             p("{} {}/{}".format(Translate('page'), page + 1, maxpage + 1))
             p("d | {}".format(Translate('next_page')))
             p("a | {}".format(Translate('prev_page')))

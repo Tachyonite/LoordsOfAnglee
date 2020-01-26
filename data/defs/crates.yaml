@@ -35,6 +35,7 @@ crateDefs:
   junk:
     label: cardboard box
     weight: 100
+    itemDef: junkCrate
     items:
       tinCan:
         weight: 20
@@ -57,7 +58,7 @@ crateDefs:
       cleanPaper:
         weight: 4
         amount: 5~15
-      jug:
+      plasticJug3L:
         weight: 11
         amount: 1~2
       packable!tape:
