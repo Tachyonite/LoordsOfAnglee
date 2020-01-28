@@ -4,6 +4,7 @@ import tabulate as tb
 import colorama as cr
 import cursor
 import yaml
+import math
 
 
 from utils.defs import *
@@ -97,9 +98,12 @@ class Player():
         self.hour = 0
         self.tableLength = 30
         self.carryWeight = 0
+        self.carried = 0
         self.queuedCrafts = {}
+        self.location = None
+        self.groupStatus = "Nomads"
     def SpawnLeeani(self):
-        temp = Leeani()
+        temp = Leeani(self)
         self.group[temp.fullName] = temp
         del temp
     def Group(self):
@@ -118,10 +122,23 @@ class Player():
     def calcCarryWeight(self):
         cw = 0
         for i in self.group.values():
-            cw+= i.stats.strength
-            cw+= round(i.stats.vitality / 2)
-            print(cw)
+            cw+= round(i.stats.strength * 1.5)
+            cw+= round(i.stats.vitality)
+
+        for k,v in self.inventory.contents.items():
+            if hasattr(v[0],'carryweight'):
+                for i in v:
+                    cw += i.carryweight
+
         self.carryWeight = cw
+    def calcCarried(self):
+        self.carried = sum([sum([vv.getWeight() for vv in v]) for v in self.inventory.contents.values()])
+    def calcCarriable(self,itemweight):
+        self.calcCarried()
+        if self.carried + itemweight <= self.carryWeight:
+            return True
+        else:
+            return False
 
 class StatBlock():
     def __init__(self,statlist):
@@ -229,43 +246,174 @@ class Creature():
 
 
 class Leeani(Creature):
-    def __init__(self):
+    def __init__(self,player):
         super().__init__("leeani",35)
         self.hp = 10
         self.job = Find.WorkTypeByName("idle")
         self.afk = False
         self.jobAssignedHour = 0
         self.jobTimeLeft = 0
+        self.player = player
     def rollWorkResults(self):
         if hasattr(self.job,'outputTables'):
+            mult = 0.5
+            if self.job.defName in self.player.location.workMultipliers:
+                mult = self.player.location.workMultipliers[self.job.defName]
+            if self.job.defName == "explorer" and self.job.defName in self.player.location.linked[0].workMultipliers:
+                mult = self.player.location.linked[0].workMultipliers[self.job.defName]
+
+            mult += (self.stats.dictFormat[list(self.job.skills.keys())[0]] ** list(self.job.skills.values())[0]) / 30
+            mult += (self.stats.dictFormat[list(self.job.skills.keys())[1]] ** list(self.job.skills.values())[1]) / 30
+
+            mult /= 2
+            if player.location.looted and self.job.defName != "explorer": mult /= 10
+            mult = round(mult,2)
+
             for k,v in self.job.outputTables.items():
                 f = False
                 for i in range(v):
                     found = game.tableDefs[k].rollTable(v)
+                    if found[1] > 0 and self.job.defName != "explorer":
+                        if player.location.looted: found[1] -= 1
                     if found[1] > 0:
                         f = True
-                        if found[0].startswith("$"):
+                        if found[0].startswith("$") and not player.location.looted:
                             items = list(game.crateDefs.keys())
                             weights = [vv.weight for vv in game.crateDefs.values()]
                             crate = game.crateDefs[random.choices(items,weights)[0]]
                             p("- Found a {}!".format(crate.label))
+                            if player.calcCarriable(game.itemDefs[crate.itemDef].weight):
+                                player.inventory.addItem(game.itemDefs[crate.itemDef], 1)
+                            else:
+                                print("However, it was too heavy for your leeani to carry!")
                         elif found[0].startswith("~"):
                             item = game.fluidDefs[found[0][1:]]
-                            amt = found[1]
-                            p("- Found {}L of {}".format(amt, item.label))
-                            remainder = player.inventory.addFluid(item, amt)
-                            if remainder == amt:
-                                p(" ! However, there was no container to accept it.")
-                            elif amt - remainder < amt:
-                                p(" ! Only {}L could be put into containers.".format(amt - remainder))
+                            amt = math.ceil(found[1] * mult)
+                            p("- Found {}L of {} ({}x)".format(amt, item.label,mult))
+                            if player.calcCarriable(item.getWeight() * amt):
+                                remainder = player.inventory.addFluid(item, amt)
+                                if remainder == amt:
+                                    p(" ! However, there was no container to accept it.")
+                                elif amt - remainder < amt:
+                                    p(" ! Only {}L could be put into containers.".format(amt - remainder))
+                            else:
+                                ileft = round((player.carryWeight - player.carried) / item.getWeight())
+                                remainder = player.inventory.addFluid(item, ileft)
+                                p(" ! You can only carry {}L of it.".format(amt - remainder))
                         else:
                             item = found[0]
                             idef = game.itemDefs[item]
-                            amt = found[1]
-                            p("- Found {} x{}".format(idef.label,int(amt)))
-                            player.inventory.addItem(item,amt)
+                            amt = math.ceil(found[1] * mult)
+                            p("- Found {} x{} ({}x)".format(idef.labelResolved(),int(amt),mult))
+                            if player.calcCarriable(idef.getWeight() * amt):
+                                player.inventory.addItem(item,amt)
+                            else:
+                                ileft = (player.carryWeight - player.carried) / idef.getWeight()
+                                player.inventory.addItem(item, ileft)
                 if not f:
                     p("x {} didn't find anything.".format("He" if self.gender == "Male" else "She"))
+        if hasattr(self.job,'destructive') and self.job.destructive:
+            if not random.randint(0,2):
+                p(tc.f+"x {}'s looting depleted the resources in this area! Resources will be harder to find here now.".format(self.fn)+tc.w)
+                player.location.looted = True
+    def satisfyNutrition(self):
+        neededFoodNutrition = 1
+        neededWaterNutrition = 1
+        eaten = 0
+        drank = 0
+        haveEaten = {}
+        haveDrank = {}
+        while eaten < neededFoodNutrition or drank < neededWaterNutrition:
+            waterItems = []
+            foodItems = []
+            waterLiquids = []
+            foodLiquids = []
+            for k, v in self.player.inventory.contents.items():
+                items = list(v)
+                for item in items:
+                    if hasattr(item, 'storage') and item.storage['filled']:
+                        if hasattr(item.storage['fluid'], 'nutrition') and item.storage['fluid'].nutrition:
+                            if 'water' in list(item.storage['fluid'].nutrition.keys()):
+                                waterLiquids.append(item)
+                            if 'food' in list(item.storage['fluid'].nutrition.keys()):
+                                foodLiquids.append(item)
+                    if hasattr(item, 'nutrition') and item.nutrition:
+                        if 'food' in list(item.nutrition.keys()):
+                            foodItems.append(item)
+                        if 'water' in list(item.nutrition.keys()):
+                            waterItems.append(item)
+            if not waterItems and not waterLiquids:
+                p("{} couldn't find anything to drink.".format(self.fn))
+                return False
+            if not foodItems and not foodLiquids:
+                p("{} couldn't find anything to eat.".format(self.fn))
+                return False
+            waterItems.sort(key=lambda x: x.nutrition['water'],reverse=True)
+            waterLiquids.sort(key=lambda x: x.storage['fluid'].nutrition['water'],reverse=True)
+            foodItems.sort(key=lambda x: x.nutrition['food'],reverse=True)
+            foodLiquids.sort(key=lambda x: x.storage['fluid'].nutrition['food'],reverse=True)
+            drink = next(iter(waterLiquids + waterItems))
+            eat = next(iter(foodItems + foodLiquids))
+            if drank < neededWaterNutrition:
+                if hasattr(drink,'storage'):
+                    drinkNutritionPerLitre = drink.storage['fluid'].nutrition['water']
+                    # = 2
+                    toConsume = round(drinkNutritionPerLitre / neededWaterNutrition)
+
+                    if drink.storage['filled'] >= toConsume:
+                        drink.storage['filled'] -= toConsume
+                    else:
+                        toConsume = drink.storage['filled']
+                        drink.storage['filled'] = 0
+                    try:
+                        haveDrank[drink.storage['fluid'].label] += toConsume
+                    except KeyError:
+                        haveDrank[drink.storage['fluid'].label] = toConsume
+
+                    drank += toConsume * drinkNutritionPerLitre
+                else:
+                    if self.player.inventory.testItem(drink.defName,1, remove=True):
+                        drank += drink.nutrition['water']
+                        try:
+                            haveDrank[drink.label] += 1
+                        except KeyError:
+                            haveDrank[drink.label] = 1
+            if eaten < neededFoodNutrition:
+                if hasattr(eat,'storage'):
+                    eatNutritionPerLitre = eat.storage['fluid'].nutrition['food']
+                    # = 2
+                    toConsume = round(eatNutritionPerLitre / neededFoodNutrition)
+
+                    if eat.storage['filled'] >= toConsume:
+                        eat.storage['filled'] -= toConsume
+                    else:
+                        toConsume = eat.storage['filled']
+                        eat.storage['filled'] = 0
+                    try:
+                        haveEaten[eat.storage['fluid'].label] += toConsume * eatNutritionPerLitre
+                    except KeyError:
+                        haveEaten[eat.storage['fluid'].label] = toConsume * eatNutritionPerLitre
+                    eaten += toConsume * eatNutritionPerLitre
+                else:
+                    if self.player.inventory.testItem(eat.defName,1,remove=True):
+                        eaten += eat.nutrition['food']
+                        try:
+                            haveEaten[eat.label] += 1
+                        except KeyError:
+                            haveEaten[eat.label] = 1
+                        '''
+                        if eat.nutrition['food'] > (neededFoodNutrition - eaten):
+                            leftover = game.itemDefs["leftovers"]
+                            leftoversAmt = round((eat.nutrition['food'] - (neededFoodNutrition - eaten)) / leftover.nutrition['food'])
+                            self.player.inventory.addItem("leftovers",leftoversAmt)
+                        '''
+        p("{} ate {}".format(self.fn,", ".join(["{} x{}".format(k,v) for k,v in haveEaten.items()])))
+        if eaten < neededFoodNutrition:
+            p("There was nothing else to eat, but {} is still hungry.".format(self.fn))
+        p("{} drank {}".format(self.fn,", ".join(["{} x{}".format(k,v) for k,v in haveDrank.items()])))
+        if drank < neededWaterNutrition:
+            p("There was nothing else to drink, but {} is still thirsty.".format(self.fn))
+
 
 class Inventory():
     def __init__(self):
@@ -318,12 +466,12 @@ class Inventory():
 
     def testItem(self, item, amount,remove=False):
         try:
-            if self.contents[item] + amount < 0:
+            if len(self.contents[item]) + amount < 0:
                 return False
             else:
+                if remove:
+                    self.removeItem(item, amount)
                 return True
-            if remove:
-                self.removeItem(item,amount)
         except KeyError:
             return False
 
@@ -525,14 +673,14 @@ class Inventory():
             tabItem = game.itemDefs[k]
             if hasattr(tabItem,'diffprop'):
                 for i in v:
-                    label = Find.ColorByRarity(i.rarity) + i.labelResolved() + tc.w
+                    label = Find.ColorByRarity(i.rarity) + i.labelResolved(len(v)) + tc.w
                     try:
                         preloadLabels[label].append(i)
                     except KeyError:
                         preloadLabels[label] = [i]
             else:
                 tp = {
-                    'tbLabel': Find.ColorByRarity(tabItem.rarity) + tabItem.labelResolved() + tc.w,
+                    'tbLabel': Find.ColorByRarity(tabItem.rarity) + tabItem.labelResolved(len(v)) + tc.w,
                     'amt': len(v),
                     'weight': "{0:.2f}".format(tabItem.weight * len(v)),
                     'value': "{0:.2f}".format(tabItem.value * len(v)),
@@ -576,15 +724,28 @@ class Inventory():
         return (tb.tabulate(tman[page],headers,tablefmt='orgtbl'),len(table),totalWeight)
 
     def calcNutrition(self):
-        runningTotal = 0
-        runningNutrition = [Find.ItemDef(x)['nutrition'] for x in self.contents.items() if hasattr(Find.ItemDef(x),'nutrition')]
-        for i in runningNutrition:
-            if 'food' in list(i.keys()):
-                runningTotal += i['food']
-        return runningTotal
+        runningFood = 0
+        runningWater = 0
+        for k,v in self.contents.items():
+            items = list(v)
+            for item in items:
+                if hasattr(item,'storage') and item.storage['filled']:
+                    if hasattr(item.storage['fluid'],'nutrition') and item.storage['fluid'].nutrition:
+                        if 'water' in list(item.storage['fluid'].nutrition.keys()):
+                            runningWater += item.storage['fluid'].nutrition['water'] * item.storage['filled']
+                        if 'food' in list(item.storage['fluid'].nutrition.keys()):
+                            runningFood += item.storage['fluid'].nutrition['food'] * item.storage['filled']
+                if hasattr(item,'nutrition') and item.nutrition:
+                    if 'food' in list(item.nutrition.keys()):
+                        runningFood += item.nutrition['food']
+                    if 'water' in list(item.nutrition.keys()):
+                        runningWater += item.nutrition['water']
+        return (runningWater,runningFood)
 
     def calcFoodDays(self,group):
-        return self.calcNutrition() / len(group)
+        return round(self.calcNutrition()[1] / len(group),2)
+    def calcWaterDays(self,group):
+        return round(self.calcNutrition()[0] / len(group),2)
 
 
 

@@ -13,6 +13,7 @@ attrs = {
     'fluidDefs' : "Fluid",
     'workDefs' : "Work",
     'tableDefs' : "Table",
+    "locationDefs" : "Location"
 }
 
 def loadDef(itemloader,properties):

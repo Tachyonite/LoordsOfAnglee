@@ -16,6 +16,7 @@ data/defs/chapters
 data/defs/fluids
 data/defs/worktypes
 data/defs/outputTables
+data/defs/locations
 # recipes
 data/crafting/recipes_weapons
 data/crafting/recipes_survival

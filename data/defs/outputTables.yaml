@@ -20,6 +20,56 @@ tableDefs: #Values are multiplied by a formula using the skill of the character
       cannedFoodMysteryMeat: -1~1
       scrapMetal: 0~3
       scrapPlastic: 0~5
-      plasticJug: -2~1
+      plasticJug3L: -2~1
       ~water: 0~8
       $crate: -2~1
+  looter:
+    contents:
+      cannedFoodBeans: -1~3
+      cannedFoodMysteryMeat: -1~3
+      scrapMetal: 0~8
+      scrapPlastic: 0~5
+      plasticJug3L: -2~2
+      plasticJug5L: -2~1
+      plasticJug18L: -5~1
+      cloth: -2~1
+      tarpaulin: -3~1
+      screw: -2~8
+      bolt: -2~5
+      nail: -2~5
+      washer: -2~8
+      nut: -2~5
+      woodFragments: 0~10
+      rag: 0~3
+  scavenger:
+    contents:
+      cannedFoodBeans: -1~1
+      cannedFoodMysteryMeat: -1~1
+      scrapMetal: 0~8
+      scrapPlastic: 0~5
+      plasticJug3L: -2~1
+      cloth: -2~1
+      tarpaulin: -3~1
+      screw: -2~8
+      bolt: -2~5
+      nail: -2~5
+      washer: -2~8
+      nut: -2~5
+      woodFragments: 0~10
+      rag: 0~3
+  hunter:
+    contents:
+      rawVenison: -1~2
+      rawRabbit: -1~4
+      rawPoultry: -1~3
+  fisher:
+    contents:
+      rawSmallFish: -1~4
+      rawMediumFish: -1~2
+      rawLargeFish: -1~1
+      ~water: 0~4
+  woodcutter:
+    contents:
+      hardwood: -1~2
+      softwood: 0~5
+      stickLong: 1~3

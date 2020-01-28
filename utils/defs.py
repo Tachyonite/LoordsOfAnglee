@@ -40,13 +40,13 @@ class Item():
         self.value = int(self.value * unpackAmount)
         self.weight = int(self.weight * unpackAmount)
 
-    def labelResolved(self):
+    def labelResolved(self,invamt=1):
         if hasattr(self, 'diffprop'):
             props = self.getDiffprop()
             if hasattr(self,'tool'):
                 return "{} ({}%)".format(self.label, round(props[0]/props[1] * 100))
             if len(props) == 3 and props[2]:
-                return "{} ({})({}/{})".format(self.label, props[2].label, props[0], props[1])
+                return "{} ({} {}/{})".format(self.label, props[2].label, props[0], props[1])
             else:
                 return "{} ({}/{})".format(self.label,props[0],props[1])
 
@@ -60,7 +60,7 @@ class Item():
             if len(self.diffprop) == 2:
                 return self.label + "({}/{})".format(eval(self.diffprop[0]),eval(self.diffprop[1]))
             elif len(self.diffprop) == 3:
-                return self.label + "({})({}/{})".format(eval(self.diffprop[2]),eval(self.diffprop[0]),eval(self.diffprop[1]))
+                return self.label + "({} {}/{})".format(eval(self.diffprop[2]),eval(self.diffprop[0]),eval(self.diffprop[1]))
         else:
             return self.label
 
@@ -196,6 +196,20 @@ class Rarity():
     def getColor(self):
         return self.color
 
+
+class Location():
+    def __init__(self, defName, object):
+        self.defName = defName
+        self.linked = []
+        self.looted = False
+        self.intel = 0
+        for k, v in object.items():
+            setattr(self,k,v)
+
+    def generateLinked(self,game):
+        self.linked.append(game.locationDefs[random.choices(population=list(self.connects.keys()),weights=list(self.connects.values()),k=random.randrange(1,3))[0]])
+
+
 class Chapter():
     def __init__(self, defName, object):
         self.defName = defName
@@ -250,7 +264,7 @@ class Table():
             item = random.choice(list(self.contents.keys()))
             vals = self.contents[item].split("~")
             amt = random.randint(int(vals[0]),int(vals[1]))
-            return (item,amt)
+            return [item,amt]
 
 
 class Fluid():
@@ -273,6 +287,9 @@ class Fluid():
                 return 0
         else:
             return 0
+
+    def getWeight(self):
+        return self.weight
 
     def fillContainer(self,container,litres):
         '''
