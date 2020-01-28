@@ -86,18 +86,6 @@ itemDefs:
       - tinCan
       - canTag
 
-
-  rawFishSmall:
-    label: small raw fish
-    description: floppy fish freshly finangled from fluvial flows.
-    weight: 0.2
-    categories:
-      - food
-      - raw
-      - fish
-    nutrition:
-      food: 0.5
-
   rawFish:
     label: raw fish
     description: floppy fish freshly finangled from fluvial flows.
@@ -108,17 +96,6 @@ itemDefs:
       - fish
     nutrition:
       food: 1
-
-  rawFishLarge:
-    label: large raw fish
-    description: floppy fish freshly finangled from fluvial flows.
-    weight: 1
-    categories:
-      - food
-      - raw
-      - fish
-    nutrition:
-      food: 2
 
   rawRabbit:
     label: raw rabbit
@@ -143,11 +120,57 @@ itemDefs:
 
   rawVenison:
     label: raw venison
-    description: floppy fish freshly finangled from fluvial flows.
+    description: meat from a deer or
     weight: 1
     categories:
       - food
       - raw
+      - meat
+    nutrition:
+      food: 1
+
+
+  cookedFish:
+    label: cooked fish
+    description: floppy fish freshly finangled from fluvial flows, flamed.
+    weight: 0.5
+    categories:
+      - food
+      - cooked
+      - fish
+    nutrition:
+      food: 1
+
+
+  cookedRabbit:
+    label: cooked rabbit
+    description: a small prey beast of the fields, skinned and cooked
+    weight: 0.5
+    categories:
+      - food
+      - cooked
+      - meat
+    nutrition:
+      food: 1
+
+  cookedPoultry:
+    label: cooked poultry
+    description: a portion of delectable bird meat
+    weight: 0.5
+    categories:
+      - food
+      - cooked
+      - meat
+    nutrition:
+      food: 1
+
+  cookedVenison:
+    label: cooked venison
+    description: meat from a stag or deer, cooked and gamey.
+    weight: 0.5
+    categories:
+      - food
+      - cooked
       - meat
     nutrition:
       food: 1

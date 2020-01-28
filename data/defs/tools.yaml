@@ -153,13 +153,14 @@ itemDefs:
 
   handChisel:
     label: hand chisel
-    description: A sharpened, flat piece of metal that's used to shave off shards of wood from a final product
+    description: A sharpened, flat piece of metal that's used to shave off shards of wood from a final product. Can also be used to cut things very inefficiently.
     weight: 0.5
     value: 10
     rarity: uncommon
     <<: *chargeBase
     tool:
       chiselling: 2
+      cutting: 1
     durability:
       maxUses: 100
       repair: False

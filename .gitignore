@@ -3,3 +3,7 @@ __pycache__
 utils\__pycache__
 *.pyc
 *.pyc
+utils/__pycache__/defs.cpython-38.pyc
+*.pyc
+__pycache__/core.cpython-38.pyc
+utils/__pycache__/defs.cpython-38.pyc

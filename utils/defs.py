@@ -1,6 +1,7 @@
 import random
 
 from utils.helpers import p
+from utils.helpers import tc
 
 class Item():
     def __init__(self, defName, object):
@@ -11,8 +12,10 @@ class Item():
         self.weight = 0
         self.rarity = 'common'
         self.property = None
+        self.moveable = True
         self.nutrition = None
         self.object = dict(object)
+
         for k, v in self.object.items():
             setattr(self, k, v)
         if hasattr(self,'storage'):
@@ -22,8 +25,7 @@ class Item():
         if hasattr(self, 'durability'):
             self.durability['uses'] = self.durability['maxUses']
 
-
-
+        self.rarityLabel = tc.rarity[self.rarity] + self.label + tc.w
         '''
         try:
             self.t = rarity(self.rarity) + self.label + rarity("reset")
@@ -226,10 +228,15 @@ class Crate():
         self.defName = defName
         for k, v in object.items():
             setattr(self,k,v)
-    def generateContents(self):
-        self.contents = random.choices(population=self.possibleContents,weights=self.weights,k=random.randrange(3,5))
-    def provideContents(self):
-        self.generateContents()
+    def generateContents(self,game):
+        self.contents = {}
+        for k,v in self.items.items():
+            pop = [[kk,1/1+game.itemDefs[kk].value] for kk in game.itemDefs.keys() if game.itemDefs[kk].moveable and game.itemDefs[kk].rarity == k and not hasattr(game.itemDefs[kk],'isCrate') and game.itemDefs[kk].weight < self.maxContentsWeight]
+            if pop:
+                self.contents[k] = random.choices(population=[i[0] for i in pop],weights=[i[1] for i in pop],k=v)
+        return self.contents
+    def provideContents(self,game):
+        self.generateContents(game)
         return self.contents
 
 class Work():

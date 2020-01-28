@@ -19,13 +19,13 @@ workDefs:
   forager:
     label: forager
     labelDo: foraging
-    description: "Foragers will find various natural foodstuffs, as well as water for the group. They may find the occasional bit of scrap. Foraging takes 8 hours."
-    timeBase: 8h #hours
+    description: "Foragers will find various natural foodstuffs, as well as water for the group. They may find the occasional bit of scrap. Foraging takes 4 hours."
+    timeBase: 4h #hours
     skills:
       learning: 2
       perception: 1
     outputTables:
-      forager: 3
+      forager: 2
 
   explorer:
     label: explorer

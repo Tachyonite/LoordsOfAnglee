@@ -1,13 +1,13 @@
 opening_title: "LOORDS OF ANGLEE"
 title: |-1
   XX::::::::::::::::::::::::::::::::::::::::::::::::::::XX
-  ::                                                    ::
-  ::                  _   _   _   _   __                ::
-  ::              |  / \ / \ |_] | \ [_                 ::
-  ::              |_ \_/ \_/ | \ |_/ __]                ::
-  ::                                                    ::
-  ::                  OF       ANGLEE                   ::
-  ::                                                    ::
+  ::====================================================::
+  ::||                _   _   _   _   __              ||::
+  ::||            |  / \ / \ |_] | \ [_               ||::
+  ::||            |_ \_/ \_/ | \ |_/ __]              ||::
+  ::||                                                ||::
+  ::||                OF       ANGLEE                 ||::
+  ::====================================================::
   XX::::::::::::::::::::::::::::::::::::::::::::::::::::XX
 
 splash:
@@ -33,12 +33,12 @@ learning: "Learning"
 perception: "Perception"
 eloquence: "Eloquence"
 strength: "Strength"
-vitality_short: "Vtl"
-utility_short: "Utl"
-learning_short: "Lrn"
-perception_short: "Per"
-eloquence_short: "Elo"
-strength_short: "Str"
+vitality_short: "VIT"
+utility_short: "UTL"
+learning_short: "LRN"
+perception_short: "PER"
+eloquence_short: "ELO"
+strength_short: "STR"
 
 work_header: "Work"
 job_choose_string: "ASSIGN YOUR {}S"
@@ -67,6 +67,9 @@ action_looter: "Loot"
 action_looter_desc: "Loot"
 action_lumberfox: "Logging"
 action_lumberfox_desc: "Logging"
+
+relocate_action: "Relocate"
+relocate_action_desc: "Relocate"
 
 view_character_action: "Group Info"
 view_inventory_action: "Inventory"

@@ -1,4 +1,5 @@
 import tabulate as tb
+import random
 
 from utils.helpers import *
 from utils.translator import Translate
@@ -29,6 +30,8 @@ def generateActionList(context,player):
         actions.append(ViewDetailInventoryAction())
         actions.append(ViewCraftsAction())
         actions.append(ViewCharAction())
+        if player.location.linked[0].intel == 100:
+            actions.append(RelocateAction())
         actions.append(NextHourAction())
         actions[1].exploreArea(player=player)
 
@@ -51,14 +54,27 @@ class BlankAction(Action):
         pass
 
 class RelocateAction(Action):
-    def __init__(self, name, desc):
-        super().__init__(name, desc)
-
-    def perform(self):
-        p("Relocating will drop any non-sealed containers, and any items that are not moveable.")
+    def __init__(self):
+        super().__init__(name=Translate('relocate_action'),description=Translate('relocate_action'))
+    def perform(self,player):
+        p("You'll be moving to the {}.".format(player.location.linked[0].label))
+        p("Relocating will empty any non-sealed containers, and any items that are not moveable.")
         p("You won't be able to return to this location.")
+        p("These things will be left behind:")
+        for k, v in player.inventory.contents.items():
+            if not game.itemDefs[k].movable:
+                p(" - " + v[0].label)
         p("Proceed? y/n")
-        msvcrt.getch()
+        act = getch()
+        if act == "y":
+            p("Everyone is packing up and getting ready to move to the {}.".format(player.location.linked[0].label))
+            self.checkWorldEvents()
+            p("Press any key to continue.")
+            msvcrt.getch()
+            player.location = player.location.linked[0]
+            player.location.generateLinked(game)
+    def checkWorldEvents(self):
+        pass
 
 class NextHourAction(Action):
     def __init__(self):
@@ -68,19 +84,28 @@ class NextHourAction(Action):
             p("Everyone's back for the night. They will keep their assigned jobs and do them as many times as they can in the day unless you change them when they next come back.")
             for lee in player.group.values():
                 if lee.afk:
-                    if lee.jobTimeLeft == 0:
-
-                        p("{} returned from {}".format(lee.fullName, lee.job.labelDo))
+                    if lee.jobTimeLeft <= 0:
+                        p(tc.c+"{} returned from {}".format(lee.fullName, lee.job.labelDo)+tc.w)
+                        if lee.job.defName == "explorer":
+                            gainedIntel = lee.stats.learning + random.randint(0,5)
+                            player.location.linked[0].intel += gainedIntel
+                            if player.location.linked[0].intel > 100: player.location.linked[0].intel = 100
+                            p("+ Scouted {}% on the  {}".format(gainedIntel,player.location.linked[0].label))
                         lee.rollWorkResults()
                         lee.afk = False
 
                     else:
-                        p("{} returned from {}".format(lee.fullName, lee.job.labelDo))
+                        p(tc.y+"{} returned early from {} {}".format(lee.fullName, lee.job.labelDo,lee.jobTimeLeft)+tc.w)
                         lee.afk = False
                 lee.satisfyNutrition()
             msvcrt.getch()
         else: # AN HOUR PASSES
+            textDisp = False
             for lee in player.group.values():
+
+                if lee.job == "crafter":
+                    lee.calculateCrafts()
+
                 if not lee.afk:
                     if lee.job == Find.WorkTypeByName("idle"):
                         pass
@@ -90,13 +115,20 @@ class NextHourAction(Action):
                             lee.afk = True
 
                 else:
+                    lee.jobTimeLeft -= 1
                     if lee.jobTimeLeft == 0:
-                        p("{} returned from {}".format(lee.fullName, lee.job.labelDo))
+                        textDisp = True
+                        p(tc.c+"{} returned from {}".format(lee.fullName, lee.job.labelDo)+tc.w)
+                        if lee.job.defName == "explorer":
+                            gainedIntel = lee.stats.learning + random.randint(0,5)
+                            player.location.linked[0].intel += gainedIntel
+                            if player.location.linked[0].intel > 100: player.location.linked[0].intel = 100
+                            p("+ Scouted {}% on the {}".format(gainedIntel,player.location.linked[0].label))
                         lee.rollWorkResults()
                         lee.afk = False
-                        msvcrt.getch()
-                    else:
-                        lee.jobTimeLeft -= 1
+            if textDisp:
+                msvcrt.getch()
+
 
 
 
@@ -214,14 +246,14 @@ class ListJobAssignAction(Action):
             p("There are {} hours left in the day.{}".format(tc.f + str(player.dayLength - player.hour) if player.dayLength - player.hour < workType.timeCost() else tc.w + str(player.dayLength - player.hour),tc.w))
             if 8 - player.hour < workType.timeCost():
                 p("They may return with less resources than expected.")
-            p("{0} favours {1}»» and {2}»".format(workType.labelDo.title(),tc.y + f2.title() + tc.w,tc.y + f1.title() + tc.w))
+            p("{0} favours {1}» and {2}›".format(workType.labelDo.title(),tc.y + f2.title() + tc.w,tc.y + f1.title() + tc.w))
             p(Translate('assignment_suggestion'))
 
             for i,skill in enumerate(iter(favoured)):
                 if skill == f1:
-                    headers[i + 3] = tc.y + headers[i + 3] + tc.w + "»"
+                    headers[i + 3] = tc.y + headers[i + 3] + tc.w + "›"
                 if skill == f2:
-                    headers[i + 3] = tc.y + headers[i + 3] + tc.w + "»»"
+                    headers[i + 3] = tc.y + headers[i + 3] + tc.w + "»"
         table = [[
             value.fullName,
             value.hp
@@ -371,12 +403,13 @@ class ViewCraftsAction(Action):
                     offset = selectedItemIndex + o
                     print(tc.bg_w + "\033[{};{}H>".format(len(tab[3][page]) + o - 1, 1) + tc.bg_b)
                     print("\033[{};{}H|".format(o, 1))
+
             elif act == "+":
 
                 try:
-                    player.queuedCrafts[tab[2][page][selectedItemIndex][2].defName] += 1
+                    player.queuedCrafts[tab[4][page][selectedItemIndex].defName] += 1
                 except KeyError:
-                    player.queuedCrafts[tab[2][page][selectedItemIndex][2].defName] = 1
+                    player.queuedCrafts[tab[4][page][selectedItemIndex].defName] = 1
                 u()
                 tab = player.inventory.craftTabulate(selectedItemIndex, page=page)
                 offset = selectedItemIndex + o
@@ -384,8 +417,8 @@ class ViewCraftsAction(Action):
                 print(tc.bg_w +"\033[{};{}H>".format(offset, 1) + tc.bg_b)
             elif act == "-":
 
-                if tab[3][page][selectedItemIndex][3] > 0:
-                    player.queuedCrafts[tab[2][page][selectedItemIndex][2].defName] -= 1
+                if player.queuedCrafts[tab[4][page][selectedItemIndex].defName] > 0:
+                    player.queuedCrafts[tab[4][page][selectedItemIndex].defName] -= 1
                     u()
                     offset = selectedItemIndex + o
                     tab = player.inventory.craftTabulate(selectedItemIndex, page=page)
@@ -470,6 +503,7 @@ class ViewDetailInventoryAction(Action):
         p("s | {}".format(Translate('down_item')))
         p("d | {}".format(Translate('next_page')))
         p("a | {}".format(Translate('prev_page')))
+        p(tc.f+"x | {}".format(Translate('drop_item'))+tc.w)
         p("# | {}".format(Translate('page_number')))
         p("? | {}".format(Translate('simple_mode')))
         print()
@@ -545,11 +579,22 @@ class ViewDetailInventoryAction(Action):
                     offset = selectedItemIndex + o
                     print(tc.bg_w + "\033[{};{}H>".format(len(tab[3][page]) + o-1, 1) + tc.bg_b)
                     print("\033[{};{}H|".format(o, 1))
+            elif act == "x":
+                player.inventory.removeItem(tab[2][page][selectedItemIndex].defName,1)
+                offset = selectedItemIndex + o
+                tab = player.inventory.nameTabulate(selectedItemIndex, page=page, sort="rarity")
+                u()
+                print(tab[0], "\n")
+                print(tc.bg_w + "\033[{};{}H>".format(offset, 1) + tc.bg_b)
             elif act == "u" and hasattr(tab[2][page][selectedItemIndex],'openable'):
                 selItem = tab[2][page][selectedItemIndex]
-                player.inventory.removeItem(selItem.defName,1)
                 for k,v in selItem.openable['contents'].items():
-                    player.inventory.addItem(k,v)
+                    if k.startswith("$"):
+                        for vv in range(v):
+                            player.inventory.openCrate(selItem)
+                            player.inventory.removeItem(game.crateDefs[k[1:]].crateItemDef,1)
+                    else:
+                        player.inventory.addItem(k,v)
                 tab = player.inventory.nameTabulate(selectedItemIndex, page=page, sort="rarity")
                 u()
                 print(tab[0], "\n")

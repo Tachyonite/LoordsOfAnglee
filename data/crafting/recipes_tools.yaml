@@ -19,5 +19,7 @@ craftingDefs:
       hammering: 1
     timeBase: 30m
 
-  mallet:
-    la
+  campfire:
+    label: campfire
+    description: dig a hole, put some wood in and set it on fire. easy enough, right?
+    ingredients:

@@ -22,6 +22,7 @@ locationDefs:
       lake: 0.3
       #coast: 0.1
       town: 0.1
+      field: 0.2
     vignette: |-1
                                               \
                                              //\
@@ -57,12 +58,12 @@ locationDefs:
       town: 0.1
     vignette: |-1
 
-        \
-       //\                                 _____
-       //\                                 |_|_|
-      __|#,_         ___         ____,###,_|_|_|_
-      \\\___\========[O]========///
-      \~~~~~~~~~~~~~~~~~~~~~~///
+        \                                  ].[
+       //\                                 _|____
+       //\                                 |_|_||
+      __|#,_         ___         ____,###,_|E|_||_
+      \\\___\========[O]========///  "' """"" '""
+      \~~~~~~~~~~~~~~~~~~~~~~///      // "''"'\\
 
   lake:
     label: lake
@@ -75,18 +76,48 @@ locationDefs:
     enableBuildings:
       - washingArea
       - irrigator
+    enableWork:
+      - fisher
     connects:
       river: 0.8
       lake: 0.8
       town: 0.1
       forest: 0.7
+      field: 0.2
     vignette: |-1
 
         \
        //\
-       //\                                   ,,##,,..___
-      __|#,_                               _//
-      \\\___\~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/ //
+       //\                               ..,,_,##,,..___
+      __|#,_                              \\//""'"'''""
+      \\\___\~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/ //"'''\\  \
+
+  coast:
+    label: coast
+    description: waves crash along the sandy beaches. doing anything other than fishing here might be difficult, as will be finding freshwater which is limited to small streams that flow to the ocean.
+    workMultipliers:
+      scavenger: 0.5
+      forager: 0.5
+      explorer: 0.5
+      fisher: 2
+    enableBuildings:
+      - washingArea
+      - fishingPier
+    enableWork:
+      - fisher
+    connects:
+      river: 0.3
+      coast: 0.8
+      town: 0.2
+      forest: 0.7
+      field: 0.2
+    vignette: |-1
+
+        \
+       //\
+       //\
+      __|#,_
+      \\\___\\`=..,.,.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   forest:
     label: forest
@@ -102,17 +133,42 @@ locationDefs:
       - treeHouse
       - woodCutter
     connects:
-      forest: 0.7
+      forest: 0.3
       river: 0.3
       town: 0.1
-      #field: 0.2
+      field: 0.5
     vignette: |-1
                                            /
                           \       \       //\
                  /       //\     //\     ///\
                 //\     ///\     //\     ///\
         _##     //\     ///\    __|##,,___||__     ##
-      __####...__|##,,___||__##//_           \\\__/###..
+      __####...__|##,,___||__##//_  ""''"''" \\\__/###..
+       ..,,"''"'"" .," "'" ''"''  .//,,.\\.,, ""''" "'
+  field:
+    label: field
+    description: Wild grains and dense grasses grow where crops once used to. Even so, there is an abundance of wild food and pockets of water from watering holes and silos to be had.
+    workMultipliers:
+      forager: 2
+      explorer: 0.8
+    enableWork:
+      - lumberfox
+    enableBuildings:
+      - grainFarm
+      - vegeFarm
+      - chickenFarm
+    connects:
+      forest: 0.5
+      river: 0.3
+      town: 0.3
+      field: 0.2
+    vignette: |-1
+         /                                                  \
+        //\                                                //\
+        //\                                    #,,         //\
+      ,.,|##..,o..,o,.\_=|==|==|==|==@@=|==|==|####|==|==\,_|,.,.
+      o  .    ..    """'"'""""'''"'"@@@@"''"""@@""'"""'"""'""
+                      """""""'"'""'"''''''''""'""''""''""'"
 
 
   town:
@@ -133,7 +189,7 @@ locationDefs:
       townCenter: 0.5
       town: 0.5
       forest: 0.3
-      #field: 0.2
+      field: 0.2
     vignette: |-1
                                              ####
                     _____[]__              #######     _____[]__
@@ -141,7 +197,7 @@ locationDefs:
            //      | |_| |_| | /___^___/\     \|      | |_| |_|\_\___
          __.|##..__|_|[|_|_|_|_|_|[_|_|_|__._.||#._.__|_|[|_|_||==| |
        //   -  -  -  -  -  -  -  -  -  ---//       //---  -  -  -  -
-        """"""""""""""""""""""""""""""""""/===/   /""""""""""""""""""
+        ""'''''"''"""''""'""'''""'''''''"/===/   /"''"'''''"""''''""
 
   townCenter:
     label: town center
@@ -159,15 +215,14 @@ locationDefs:
       - refurbWorkshop
       - refurbOffice
     connects:
-      town: 0.5_______
+      town: 0.5
       river: 0.2
       forest: 0.3
-      #field: 0.2
     vignette: |-1
 
                     _=_=_____                        __=_=____
-            \      |________||  ___=_=______________|________||
+            \      |__YAPS__||  ___=_=______________|__VVCO_||
            //      |_|_|_|_|_| /___^___[[[___^___/  |_|_|_|_|\_\___
          __.|##..__|_|[|_|_|_|_|[][][][][][][][]|___|_|[|_|_||___| |
-       //   -  -  -  -  -  -  -  -  -  ---//       //---  -  -  -  -
-        """"""""""""""""""""""""""""""""""/===/   /""""""""""""""""""
+       //   -  -  -  -  -  -  -  -  -  ---//   O   //---  -  -  -  -
+        "''''''"''"''""'"'""""''"""''"'''"/===/   /"''""'""''""''""'"

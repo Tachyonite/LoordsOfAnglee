@@ -6,21 +6,19 @@ itemDefs:
     weight: 1
     value: 5
     rarity: junk
-    categories:
-      - crate
+    isCrate: True
     openable:
       tools:
         cutting: 1
       contents:
         $junk: 1
-        cardboardBox: 1
 
   commonCrate:
     label: wooden crate
     description: a rather beat up box. if opened, may contain somewhat useful items.
-    weight: 1
-    value: 5
-    rarity: junk
+    weight: 2
+    value: 10
+    rarity: common
     categories:
       - crate
     openable:
@@ -28,39 +26,53 @@ itemDefs:
         prying: 1
       contents:
         $common: 1
-        woodCrate: 1
+
+  uncommonCrate:
+    label: metal lockbox
+    description: a rather beat up box. if opened, may contain somewhat useful items.
+    weight: 5
+    value: 40
+    rarity: common
+    categories:
+      - crate
+    openable:
+      tools:
+        prying: 2
+      contents:
+        $uncommon: 1
 
 crateDefs:
 
   junk:
     label: cardboard box
-    weight: 100
-    itemDef: junkCrate
+    weight: 150
+    crateItemDef: junkCrate
+    maxContentsWeight: 1
     items:
-      tinCan:
-        weight: 20
-        amount: 1~3
-      plasticBottle:
-        weight: 15
-        amount: 1~2
-      scrapPlastic:
-        weight: 10
-        amount: 1~5
-      rag:
-        weight: 10
-        amount: 1~10
-      nail:
-        weight: 10
-        amount: 1~10
-      dirtyPaper:
-        weight: 10
-        amount: 10~25
-      cleanPaper:
-        weight: 4
-        amount: 5~15
-      plasticJug3L:
-        weight: 11
-        amount: 1~2
-      packable!tape:
-        weight: 2
-        amount: 1
+      epic: 0
+      rare: 0
+      uncommon: 1
+      common: 4
+      junk: 5
+  common:
+    label: wooden crate
+    weight: 50
+    crateItemDef: commonCrate
+    maxContentsWeight: 2
+    items:
+      epic: 0
+      rare: 1
+      uncommon: 2
+      common: 4
+      junk: 3
+  uncommon:
+    label: metal lockbox
+    weight: 50
+    crateItemDef: uncommonCrate
+    maxContentsWeight: 5
+    items:
+      epic: 1
+      rare: 2
+      uncommon: 4
+      common: 3
+      junk: 1

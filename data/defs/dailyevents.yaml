@@ -1,1 +1,3 @@
 eventDefs:
+  wandererJoins:
+    label: wanderer

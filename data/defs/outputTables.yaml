@@ -45,18 +45,18 @@ tableDefs: #Values are multiplied by a formula using the skill of the character
     contents:
       cannedFoodBeans: -1~1
       cannedFoodMysteryMeat: -1~1
-      scrapMetal: 0~8
-      scrapPlastic: 0~5
+      scrapMetal: 0~3
+      scrapPlastic: 0~3
       plasticJug3L: -2~1
-      cloth: -2~1
-      tarpaulin: -3~1
-      screw: -2~8
-      bolt: -2~5
-      nail: -2~5
-      washer: -2~8
-      nut: -2~5
-      woodFragments: 0~10
-      rag: 0~3
+      cloth: -3~1
+      tarpaulin: -4~1
+      screw: -2~2
+      bolt: -2~2
+      nail: -2~2
+      washer: -2~2
+      nut: -2~2
+      woodFragments: 0~5
+      rag: 0~2
   hunter:
     contents:
       rawVenison: -1~2
@@ -64,12 +64,12 @@ tableDefs: #Values are multiplied by a formula using the skill of the character
       rawPoultry: -1~3
   fisher:
     contents:
-      rawSmallFish: -1~4
-      rawMediumFish: -1~2
-      rawLargeFish: -1~1
+      rawFish: 0~4
       ~water: 0~4
   woodcutter:
     contents:
       hardwood: -1~2
       softwood: 0~5
       stickLong: 1~3
+      stickShort: 1~3
+      stickHeavy: 1~3

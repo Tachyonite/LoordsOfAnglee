@@ -110,6 +110,13 @@ class tc:  # text colours
         "red" : f,
         "purple" : h
     }
+    rarity = {
+        "junk" : lg,
+        "common" : w,
+        "uncommon" : c,
+        "rare" : f,
+        "epic" : h
+    }
 
 class dv:
     ds = "".join(["-" * 25])  # dash
