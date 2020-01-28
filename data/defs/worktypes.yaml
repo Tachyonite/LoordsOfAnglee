@@ -51,6 +51,7 @@ workDefs:
     label: researcher
     labelDo: researching
     description: "Researchers examine scrap, put it back together, or come up with new ways to build things -- and then record their findings. This takes 8 hours."
+    goesAfk: False
     timeBase: 8h #hours
     skills:
       learning: 2
@@ -59,8 +60,8 @@ workDefs:
   crafter:
     label: crafter
     labelDo: crafting
-    description: "Crafters take scrap and natural resources and make known items out of them. Crafters work for 8 hours, where they spend time building things that are queued. More crafters do not speed up production, but they can craft multiple things at once."
-    timeBase: 8h #hours
+    description: "Crafters take scrap and natural resources and make known items out of them. Crafters work for 12 hours, where they spend time building things that are queued. More crafters do not speed up production, but they can craft multiple things at once. Since crafters don't leave the campsite, they can be reassigned at any time."
+    timeBase: 12h #hours
     goesAfk: False
     skills:
       utility: 2
