@@ -132,8 +132,12 @@ class Item():
 class Craft():
     def __init__(self, defName, object):
         self.defName = defName
-        for k, v in object.items():
+        self.object = dict(object)
+        for k, v in self.object.items():
             setattr(self,k,v)
+        self.progress = 0
+        self.favourite = False
+
 
     def tryGet(self, attr):
         try:

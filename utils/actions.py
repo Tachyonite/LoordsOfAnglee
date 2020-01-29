@@ -103,7 +103,7 @@ class NextHourAction(Action):
             textDisp = False
             for lee in player.group.values():
 
-                if lee.job == "crafter":
+                if lee.job == Find.WorkTypeByName("crafter"):
                     lee.calculateCrafts()
 
                 if not lee.afk:
@@ -317,6 +317,7 @@ class ViewCraftsAction(Action):
         p("s | {}".format(Translate('down_item')))
         p("d | {}".format(Translate('next_page')))
         p("a | {}".format(Translate('prev_page')))
+        p("f | {}".format(Translate('favourite_item')))
         p("# | {}".format(Translate('page_number')))
         p("+ | {}".format(Translate('add_craft')))
         p("- | {}".format(Translate('remove_craft')))
@@ -403,7 +404,14 @@ class ViewCraftsAction(Action):
                     offset = selectedItemIndex + o
                     print(tc.bg_w + "\033[{};{}H>".format(len(tab[3][page]) + o - 1, 1) + tc.bg_b)
                     print("\033[{};{}H|".format(o, 1))
-
+            elif act == "f":
+                isfav = tab[4][page][selectedItemIndex].favourite
+                tab[4][page][selectedItemIndex].favourite = not isfav
+                u()
+                tab = player.inventory.craftTabulate(selectedItemIndex, page=page)
+                offset = selectedItemIndex + o
+                print(tab[0], "\n")
+                print(tc.bg_w + "\033[{};{}H>".format(offset, 1) + tc.bg_b)
             elif act == "+":
 
                 try:

@@ -1,5 +1,18 @@
 itemDefs:
 
+  campfire:
+    label: campfire
+    description: a circle of rocks around a shallow pit containing fuel. good for cooking.
+    value: 0
+    weight: 0
+    rarity: common
+    tool:
+      cooking: 1
+    categories:
+      - manmade
+      - cooking
+    moveable: False
+
   trapGame:
     label: trap (game)
     description: a small trap meant for catching rabbits or other small creatures
@@ -9,6 +22,7 @@ itemDefs:
     categories:
       - manmade
       - hunting
+    placeable: True
 
   trapMan:
     label: trap (bear)
@@ -19,6 +33,7 @@ itemDefs:
     categories:
       - manmade
       - hunting
+    placeable: True
 
   rainCatcher:
     label: rain catcher
@@ -26,6 +41,7 @@ itemDefs:
     value: 5
     weight: 5
     rarity: uncommon
+    moveable: True #If placeable is true, it will only be moved if it is unplaced.
     diffprop:
       - "storage['filled']"
       - "storage['volume']"
@@ -38,3 +54,4 @@ itemDefs:
       quality: 1
       sealable: False
       pourable: False
+    placeable: True

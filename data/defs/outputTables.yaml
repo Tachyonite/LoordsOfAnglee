@@ -14,6 +14,15 @@ tableDefs: #Values are multiplied by a formula using the skill of the character
       nuts: 0~5
       fruits: 0~2
       vegetables: 0~2
+      stickShort: -1~3
+      stickLong: -2~1
+      stickHeavy: -3~1
+      rock: -2~2
+      rockSmall: -2~3
+  rockhound:
+    contents:
+      rock: 0~4
+      smallRock: 0~6
   explorer:
     contents:
       cannedFoodBeans: -1~1

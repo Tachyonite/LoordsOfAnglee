@@ -1,5 +1,20 @@
 craftingDefs:
 
+  campfire:
+    label: build campfire
+    description: arrange some rocks around a hole and fill it with fuel
+    ingredients:
+      rocks:
+        - - rock: 5
+      fuel:
+        - - woodFragments: 10
+          - stickShort: 6
+          - softwood: 3
+          - hardwood: 2
+    output:
+      campfire: 1
+
+
   rainCatcher:
     label: build rain catcher
     description: using a tarp and some sticks, set up a catcher to passively collect water

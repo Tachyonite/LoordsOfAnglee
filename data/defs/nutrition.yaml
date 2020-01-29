@@ -87,7 +87,7 @@ itemDefs:
       - canTag
 
   rawFish:
-    label: raw fish
+    label: raw fish (m)
     description: floppy fish freshly finangled from fluvial flows.
     weight: 0.5
     categories:
@@ -183,3 +183,12 @@ itemDefs:
       - food
     nutrition:
       food: 0.2
+
+  leftoverMeal
+    label: bubble-and-squeak
+    description: leftover bits of meat or vegetables from someone's eyes being bigger than their stomach, cooked into a whole meal.
+    weight: 0.5
+    categories:
+      - food
+    nutrition:
+      food: 1
