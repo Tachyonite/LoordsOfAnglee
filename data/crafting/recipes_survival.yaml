@@ -13,6 +13,7 @@ craftingDefs:
           - hardwood: 2
     output:
       campfire: 1
+    timeBase: 30m
 
 
   rainCatcher:

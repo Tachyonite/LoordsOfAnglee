@@ -55,3 +55,7 @@ itemDefs:
       sealable: False
       pourable: False
     placeable: True
+    perDay:
+      chance: 30
+      resources:
+        ~water: 0~3

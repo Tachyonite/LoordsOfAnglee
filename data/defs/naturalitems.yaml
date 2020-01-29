@@ -16,7 +16,7 @@ itemDefs:
       damage: 1
       attackTime: 3
 
-  smallRock:
+  rockSmall:
     label: small rock
     description: a baby rock of uncertain origin, small enough to knap with
     value: 0.1

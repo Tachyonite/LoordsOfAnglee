@@ -106,7 +106,7 @@ class Player():
         self.group = {}
         self.day = 1
         self.dayLength = 12
-        self.hour = 0
+        self.hour = 1
         self.tableLength = 30
         self.carryWeight = 0
         self.carried = 0
@@ -128,7 +128,7 @@ class Player():
 
     def addTime(self):
         if self.hour == self.dayLength:
-            self.hour = 0
+            self.hour = 1
             self.day += 1
             return False
         else:
@@ -436,8 +436,8 @@ class Leeani(Creature):
                             weights = [vv.weight for vv in game.crateDefs.values()]
                             crate = game.crateDefs[random.choices(items, weights)[0]]
                             p("- Found a {}!".format(crate.label))
-                            if player.calcCarriable(game.itemDefs[crate.itemDef].weight):
-                                player.inventory.addItem(game.itemDefs[crate.itemDef], 1)
+                            if player.calcCarriable(game.itemDefs[crate.crateItemDef].weight):
+                                player.inventory.addItem(game.itemDefs[crate.crateItemDef], 1)
                             else:
                                 print("However, it was too heavy for your leeani to carry!")
                         elif found[0].startswith("~"):
@@ -739,7 +739,7 @@ class Inventory():
             time.sleep(maxspeed - (speed - .05))
         print("\033[{};{}H".format(len(conOut) + 4, 1))
         amt = round((1/ 1 + prize.value) * 10)
-        p("The crate contains: {} x{}!".format(prize.rarityLabel,amt))
+        p("The crate contains: {}".format(prize.rarityLabel,1))
         player.inventory.addItem(prize.defName,1)
         p("Press any key to continue...")
         msvcrt.getch()
@@ -892,7 +892,11 @@ class Inventory():
             if x != selectedItemIndex:
                 tman[page][x][0] = tc.b + "." + tman[page][x][0]
         '''
-        return (tb.tabulate(tman[page], headers, tablefmt='orgtbl'), len(table), defTable, tman, totalWeight)
+        try:
+            return (tb.tabulate(tman[page], headers, tablefmt='orgtbl'), len(table), defTable, tman, totalWeight)
+        except:
+            print("Inventory is empty. Maybe get some stuff?")
+            return False
 
     def tabulate(self, page=0, sort=False):
         table = []

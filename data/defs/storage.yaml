@@ -131,11 +131,11 @@ itemDefs:
       - manmade
 
   dufflebag:
-    label: schoolbag
+    label: duffle bag
     description: a canvas shoulder-slung bag used for carrying clothes and in some cases weapons. in this case, it'll do for carrying some extra weight. increases carry weight by 30kg.
     value: 40
     weight: 0.8
-    rarity: common
+    rarity: uncommon
     carryweight: 30 #kg
     categories:
       - carry capacity

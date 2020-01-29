@@ -302,6 +302,34 @@ itemDefs:
         scrapMetal: 2
         woodFragments: 1
 
+  knifeKitchen:
+    label: kitchen knife
+    description: a sharp blade set onto a plastic handle. most of them are rusted by now, but this one is in decent condition.
+    value: 8
+    weight: 0.6
+    rarity: uncommon
+    <<: *chargeBase
+    durability:
+      maxUses: 100
+      repair: False
+    tool:
+      piercing: 2
+      cutting: 2
+      butchering: 2
+
+  knifeButcher:
+    label: butcher's cleaver
+    description: a rectangular blade set onto a hardwood handle, can cleave through meat or pretty much anything really...
+    value: 30
+    weight: 1
+    rarity: rare
+    <<: *chargeBase
+    durability:
+      maxUses: 200
+      repair: False
+    tool:
+      cutting: 3
+      butchering: 4
 
   pen:
     label: ballpoint pen

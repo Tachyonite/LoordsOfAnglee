@@ -53,8 +53,8 @@ craftingDefs:
     timeBase: 15m
 
   leftoverMeal:
-    label: make bubble-and-squeak
-    description: combine a bunch of leftovers into a single meal and reheat them. traditional British meal, maybe a new leeani tradition?
+    label: make vuffelsqueek
+    description: combine a bunch of leftovers into a single meal and reheat them. based on a traditional British meal
     ingredients:
       leftovers:
         - - leftovers: 5

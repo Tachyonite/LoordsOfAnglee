@@ -84,7 +84,7 @@ class NextHourAction(Action):
             p("Everyone's back for the night. They will keep their assigned jobs and do them as many times as they can in the day unless you change them when they next come back.")
             for lee in player.group.values():
                 if lee.afk:
-                    if lee.jobTimeLeft <= 0:
+                    if lee.jobTimeLeft <= 2:
                         p(tc.c+"{} returned from {}".format(lee.fullName, lee.job.labelDo)+tc.w)
                         if lee.job.defName == "explorer":
                             gainedIntel = lee.stats.learning + random.randint(0,5)
@@ -519,9 +519,15 @@ class ViewDetailInventoryAction(Action):
         print()
         print("..|")
         maxwidth = max([len(i.labelResolved()) for i in tab[2][page]]) + 18
-        player.inventory.displayItemDetailsXY(tab[2][page][selectedItemIndex], tab[3][page][selectedItemIndex][1], 1, maxwidth)
+        try:
+            player.inventory.displayItemDetailsXY(tab[2][page][selectedItemIndex], tab[3][page][selectedItemIndex][1], 1, maxwidth)
+        except IndexError:
+            player.inventory.displayItemDetailsXY(tab[2][page][-1], tab[3][page][-1][1],
+                                                  1, maxwidth)
+            selectedItemIndex = len(tab[2][page]) - 1
+        print("\033[{};{}H ".format(len(tab[2][page]) + 4, 1))
         print("\033[{};{}H".format(len(tab[2][page]) + 15, 1))
-
+        return selectedItemIndex
 
     def perform(self,player):
         u()
@@ -529,12 +535,17 @@ class ViewDetailInventoryAction(Action):
         page = 0
         selectedItemIndex = 0
         tab = player.inventory.nameTabulate(selectedItemIndex, page=page, sort="rarity")
+        if not tab:
+            u()
+            p("Nothing in the inventory! Maybe get some items and then come back.")
+            msvcrt.getch()
+            return
         minpage = 0
         maxpage = ceil(tab[1] / player.tableLength) - 1
 
         print(tab[0])
         while act:
-            self.inv(player,tab,page,selectedItemIndex,maxpage)
+            selectedItemIndex = self.inv(player,tab,page,selectedItemIndex,maxpage)
             print(tc.bg_w + "\033[{};{}H>".format(selectedItemIndex+ 2 + 2, 1) + tc.bg_b)
             act = getch()
             o = 4
@@ -549,7 +560,6 @@ class ViewDetailInventoryAction(Action):
                     if selectedItemIndex > len(tab[3][page]) - 1:
                         selectedItemIndex = len(tab[3][page]) - 1
                     offset = selectedItemIndex + o
-
                     tab = player.inventory.nameTabulate(selectedItemIndex, page=page, sort="rarity")
                     u()
                     print(tab[0], "\n")
@@ -591,6 +601,11 @@ class ViewDetailInventoryAction(Action):
                 player.inventory.removeItem(tab[2][page][selectedItemIndex].defName,1)
                 offset = selectedItemIndex + o
                 tab = player.inventory.nameTabulate(selectedItemIndex, page=page, sort="rarity")
+                if not tab:
+                    u()
+                    p("Nothing in the inventory! Maybe get some items and then come back.")
+                    msvcrt.getch()
+                    return
                 u()
                 print(tab[0], "\n")
                 print(tc.bg_w + "\033[{};{}H>".format(offset, 1) + tc.bg_b)
@@ -603,6 +618,7 @@ class ViewDetailInventoryAction(Action):
                             player.inventory.removeItem(game.crateDefs[k[1:]].crateItemDef,1)
                     else:
                         player.inventory.addItem(k,v)
+                        player.inventory.removeItem(selItem.defName, 1)
                 tab = player.inventory.nameTabulate(selectedItemIndex, page=page, sort="rarity")
                 u()
                 print(tab[0], "\n")

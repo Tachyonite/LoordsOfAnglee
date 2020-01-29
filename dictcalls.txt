@@ -20,3 +20,5 @@ data/defs/locations
 # recipes
 data/crafting/recipes_weapons
 data/crafting/recipes_survival
+data/crafting/recipes_food
+data/crafting/recipes_tools

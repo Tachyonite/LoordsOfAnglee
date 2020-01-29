@@ -49,6 +49,7 @@ itemDefs:
     label: canned beans
     description: a can of beans, sealed in a tin can -- uncooked and probably kinda slimy
     weight: 0.1
+    rarity: uncommon
     categories:
       - food
       - raw
@@ -63,6 +64,7 @@ itemDefs:
     label: canned Spummo
     description: a can of unidentified, possibly-pork-based meat, sealed in a tin can. kinda gross but whatever.
     weight: 0.1
+    rarity: uncommon
     categories:
       - food
       - raw
@@ -77,6 +79,7 @@ itemDefs:
     label: Cola-Soda
     description: a soda can full of delicious, super-sugary drink. kinda gross but whatever.
     weight: 0.1
+    rarity: uncommon
     categories:
       - drink
       - manmade
@@ -168,6 +171,7 @@ itemDefs:
     label: cooked venison
     description: meat from a stag or deer, cooked and gamey.
     weight: 0.5
+    rarity: uncommon
     categories:
       - food
       - cooked
@@ -184,8 +188,8 @@ itemDefs:
     nutrition:
       food: 0.2
 
-  leftoverMeal
-    label: bubble-and-squeak
+  leftoverMeal:
+    label: vuffelsqueek
     description: leftover bits of meat or vegetables from someone's eyes being bigger than their stomach, cooked into a whole meal.
     weight: 0.5
     categories:

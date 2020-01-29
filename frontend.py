@@ -36,8 +36,8 @@ player.SpawnLeeani()
 player.SpawnLeeani()
 player.SpawnLeeani()
 player.SpawnLeeani()
-for i in range(300):
-    player.inventory.addItem(random.choice(list(game.itemDefs.keys())), 1)
+# for i in range(300):
+#     player.inventory.addItem(random.choice(list(game.itemDefs.keys())), 1)
 player.inventory.addItem('berries',20)
 player.inventory.addItem('plasticBottle',5)
 player.inventory.addItem('plasticJug3L',2)

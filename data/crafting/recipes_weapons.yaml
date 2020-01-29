@@ -1,13 +1,13 @@
 craftingDefs:
 
-  smallRock:
+  rockSmall:
     label: small rock
     description: smash a rock into fragments
     ingredients:
       rock:
         - - rock: 1
     output:
-      smallRock: 4
+      rockSmall: 4
     tools:
       hammering: 1
     timeBase: 5m
