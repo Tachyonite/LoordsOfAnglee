@@ -62,7 +62,7 @@ class RelocateAction(Action):
         p("You won't be able to return to this location.")
         p("These things will be left behind:")
         for k, v in player.inventory.contents.items():
-            if not game.itemDefs[k].movable:
+            if not game.itemDefs[k].moveable:
                 p(" - " + v[0].label)
         p("Proceed? y/n")
         act = getch()
