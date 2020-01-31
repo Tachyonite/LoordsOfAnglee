@@ -656,7 +656,7 @@ class Inventory():
     def findToolCapacity(self, capacity, level):
 
         toolDefs = Find.DefsByToolUtility(capacity)
-        invDefs = [t for t in toolDefs if t.tool[capacity] > level and t.defName in self.contents.keys()]
+        invDefs = [t for t in toolDefs if t.tool[capacity] >= level and t.defName in self.contents.keys()]
 
         return invDefs
 

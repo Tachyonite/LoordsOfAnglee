@@ -265,7 +265,7 @@ class ListJobAssignAction(Action):
         ] + value.stats.getWorkFormatted(workType) + [value.job.labelDo] for key,value in group.items()]
         tableView.append(["[[BACK]]"])
         for i,x in enumerate(iter(tableView)): #type: int, list
-            x.insert(0,i)
+            x.insert(0,i+1)
             if "idling" not in x and i != len(tableView)-1:
                 for z in x:
                     zz = x[x.index(z)]

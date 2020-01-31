@@ -63,8 +63,8 @@ as tool:
     if hasattr(item, 'openable'):
         details += \
 """
-u | unpack
-"""
+{}u | unpack{}
+""".format(tc.y,tc.w)
         if 'tool' in item.openable:
             for k, v in item.openable['tools'].items():
                 details += \
