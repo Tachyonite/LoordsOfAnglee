@@ -1,0 +1,10 @@
+setDefs:
+  normal:
+    contents:
+      berries: 20
+      plasticBottle: 5
+      plasticJug3L: 2
+      hacksaw: 1
+      cannedFoodBeans: 3
+      cannedFoodMysteryMeat: 3
+      junkCrate: 3

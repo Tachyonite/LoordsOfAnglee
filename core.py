@@ -114,6 +114,7 @@ class Player():
         self.craftsInProgress = {}
         self.location = None
         self.groupStatus = "Nomads"
+        self.chapter = "nomad"
 
     def SpawnLeeani(self):
         temp = Leeani(self)
@@ -273,8 +274,10 @@ class Creature():
         return "".join(random.choice(list(faceInfo[x])) + "\n" for x in
                        ["ears", "eyes", "cheeks", "nose", "expressions", "necks"])
 
+
 class GetOutOfLoop(Exception):
     pass
+
 
 class Leeani(Creature):
     def __init__(self, player):
@@ -287,7 +290,7 @@ class Leeani(Creature):
         self.player = player
         self.craftWorkingOn = None
 
-    def calculateCrafts(self,wwO=None,madeThisHour=None,done=False,dontshort=False,makeableQueue=None):
+    def calculateCrafts(self, wwO=None, madeThisHour=None, done=False, dontshort=False, makeableQueue=None):
         if not madeThisHour:
             madeThisHour = {}
         if not makeableQueue:
@@ -297,9 +300,9 @@ class Leeani(Creature):
         makeable = {}
         if not self.craftWorkingOn and not done:
             if not qcrafts: return
-            for k,v in qcrafts.items():
+            for k, v in qcrafts.items():
                 for i in range(v):
-                    canDo = inv.collateIngredientsAndCheck(game.craftingDefs[k],i+1)
+                    canDo = inv.collateIngredientsAndCheck(game.craftingDefs[k], i + 1)
                     canTool = inv.collateTools(game.craftingDefs[k])
                     if canDo:
                         if canDo == 1:
@@ -329,7 +332,8 @@ class Leeani(Creature):
             except KeyError:
                 self.player.craftsInProgress[key] = 1
             self.craftWorkingOn = iMC(iMake.defName, dict(iMake.object))
-            self.calculateCrafts(wwO=self.craftWorkingOn, madeThisHour=madeThisHour,dontshort=True,makeableQueue=makeable)
+            self.calculateCrafts(wwO=self.craftWorkingOn, madeThisHour=madeThisHour, dontshort=True,
+                                 makeableQueue=makeable)
         elif not done:
             if not makeableQueue:
                 self.craftWorkingOn = None
@@ -370,9 +374,11 @@ class Leeani(Creature):
                         self.craftWorkingOn = None
                         done2 = True
                     if qcrafts:
-                        self.calculateCrafts(wwO=self.craftWorkingOn,madeThisHour=madeThisHour,done=False,dontshort=False,makeableQueue=makeableQueue)
+                        self.calculateCrafts(wwO=self.craftWorkingOn, madeThisHour=madeThisHour, done=False,
+                                             dontshort=False, makeableQueue=makeableQueue)
                     else:
-                        self.calculateCrafts(wwO=self.craftWorkingOn,madeThisHour=madeThisHour,done=done2,dontshort=False,makeableQueue=makeableQueue)
+                        self.calculateCrafts(wwO=self.craftWorkingOn, madeThisHour=madeThisHour, done=done2,
+                                             dontshort=False, makeableQueue=makeableQueue)
                 elif makePerHour == 1:
                     try:
                         madeThisHour[self.craftWorkingOn.defName] += 1
@@ -384,29 +390,24 @@ class Leeani(Creature):
                     self.craftWorkingOn.progress += (1 / 1 + makePerHour) - 1
         if done:
             if madeThisHour:
-                for k,v in madeThisHour.items():
-                    p("{} made {} x{}".format(self.fn,k,v))
+                for k, v in madeThisHour.items():
+                    p("{} made {} x{}".format(self.fn, k, v))
             msvcrt.getch()
 
-
-
-    def finishCraft(self,craft):
+    def finishCraft(self, craft):
         inv = self.player.inventory
-        for k,v in craft.ingredients.items():
+        for k, v in craft.ingredients.items():
             for andInput in v:
                 try:
                     for orInput in andInput:
                         for ingredient, amount in orInput.items():
-                            if inv.testItem(ingredient,amount):
-                                inv.removeItem(ingredient,amount)
+                            if inv.testItem(ingredient, amount):
+                                inv.removeItem(ingredient, amount)
                                 raise GetOutOfLoop
                 except:
                     continue
-        for k,v in craft.output.items():
-            inv.addItem(k,v)
-
-
-
+        for k, v in craft.output.items():
+            inv.addItem(k, v)
 
     def rollWorkResults(self):
         if hasattr(self.job, 'outputTables'):
@@ -713,7 +714,7 @@ class Inventory():
             cc = game.crateDefs[k[1:]]
             contents = cc.provideContents(game)
         conOut = []
-        for k,v in contents.items():
+        for k, v in contents.items():
             for i in v:
                 conOut.append(game.itemDefs[i])
         maxspeed = 0.5 + (random.randrange(-20, 20) / 100)
@@ -738,9 +739,9 @@ class Inventory():
             ticker += 1
             time.sleep(maxspeed - (speed - .05))
         print("\033[{};{}H".format(len(conOut) + 4, 1))
-        amt = round((1/ 1 + prize.value) * 10)
-        p("The crate contains: {}".format(prize.rarityLabel,1))
-        player.inventory.addItem(prize.defName,1)
+        amt = round((1 / 1 + prize.value) * 10)
+        p("The crate contains: {}".format(prize.rarityLabel, 1))
+        player.inventory.addItem(prize.defName, 1)
         p("Press any key to continue...")
         msvcrt.getch()
 
@@ -792,7 +793,7 @@ class Inventory():
             queuedAmt = self.checkCraft(tabItem.defName)
             if not queuedAmt: queuedAmt = 1
             canDo = self.collateIngredientsAndCheck(obj)
-            canDoQueue = self.collateIngredientsAndCheck(obj,queuedAmt)
+            canDoQueue = self.collateIngredientsAndCheck(obj, queuedAmt)
             canTool = self.collateTools(obj)
             txt = ""
             if canDo or obj.favourite:
@@ -823,8 +824,9 @@ class Inventory():
             defTable.append([tabItem.rarity] + [tabItem.labelResolved()] + [tabItem] + [canDo] + [canTool])
             craftTable.append(obj)
             table.append(
-                [Find.ColorByRarity(tabItem.rarity) + color + txt + tabItem.labelResolved() + tc.w, round(obj.timeCost(), 2),
-                 str(int(obj.timeCost(1))) + "/hr", "{}{}{}".format(qcolor,self.checkCraft(tabItem.defName),tc.w)])
+                [Find.ColorByRarity(tabItem.rarity) + color + txt + tabItem.labelResolved() + tc.w,
+                 round(obj.timeCost(), 2),
+                 str(int(obj.timeCost(1))) + "/hr", "{}{}{}".format(qcolor, self.checkCraft(tabItem.defName), tc.w)])
         tman = list(Sort.Paginate(table, player.tableLength))
         defTable = list(Sort.Paginate(defTable, player.tableLength))
         craftTable = list(Sort.Paginate(craftTable, player.tableLength))
@@ -879,7 +881,7 @@ class Inventory():
                 headers[0] = tc.y + headers[0] + " *" + tc.w
                 table = Sort.ListByRarity(table, 0)
                 defTable.sort(key=lambda x: (
-                sorted(game.rarityDefs.keys(), reverse=True)[list(game.rarityDefs.keys()).index(x[0])], x[1]))
+                    sorted(game.rarityDefs.keys(), reverse=True)[list(game.rarityDefs.keys()).index(x[0])], x[1]))
                 defTable = [row[2] for row in defTable]
             else:
                 headers[sort] = tc.y + headers[sort] + " *" + tc.w
@@ -985,9 +987,6 @@ class Inventory():
 
 #######################################################################################################################
 
-game = GameProperties()
-player = Player()
-
 cr.init(autoreset=False)
 tb.PRESERVE_WHITESPACE = True
 cursor.hide()
@@ -997,3 +996,7 @@ with open("data/names.yaml") as STREAM:
 
 with open("data/fexgen.yaml") as STREAM:
     faceInfo = yaml.safe_load(STREAM)
+
+game = GameProperties()
+player = Player()
+

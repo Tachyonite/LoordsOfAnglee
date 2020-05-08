@@ -51,6 +51,11 @@ elsewhere_key: "assigned elsewhere"
 bonus_key: "work bonus"
 penalty_key: "work penalty"
 
+# Saveload ####################
+
+save_game_prompt: "Choose a name for the save file."
+load_game_prompt: "Choose the load file."
+
 # Actions ################
 
 action_forage: "Forage"

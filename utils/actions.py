@@ -1,13 +1,17 @@
 import tabulate as tb
 import random
+import glob
 
 from utils.helpers import *
 from utils.translator import Translate
-from core import Find, Player, Leeani, game
+from core import Find, Player, Leeani
+
+from utils.saveLoad import saveAllInformation
+from utils.saveLoad import loadAllInformation
 
 from math import ceil
 
-def generateActionList(context,player):
+def generateActionList(context,player,game):
 
     actions = []
 
@@ -26,12 +30,15 @@ def generateActionList(context,player):
         actions.append(ExploreWorkAction())
         if hasattr(player.location,'enableWork'):
             for i in player.location.enableWork:
-                actions.append(eval(actionsToWork[i]))
+                if player.inventory.collateTools(i):
+                    actions.append(eval(actionsToWork[i]))
         actions.append(ViewDetailInventoryAction())
         actions.append(ViewCraftsAction())
         actions.append(ViewCharAction())
+
         if player.location.linked[0].intel == 100:
             actions.append(RelocateAction())
+        actions.append(SaveGameAction(player=player,game=game))
         actions.append(NextHourAction())
         actions[1].exploreArea(player=player)
 
@@ -52,6 +59,56 @@ class BlankAction(Action):
 
     def perform(self):
         pass
+
+class NewGameAction(Action):
+    def __init__(self, name, desc):
+        super().__init__(name, desc)
+
+    def perform(self, player, game):
+        u()
+        print(Find.ChapterDef("nomad").getVignette())
+        print()
+        p(Find.ChapterDef("nomad").getDescription())
+        player.SpawnLeeani()
+        player.SpawnLeeani()
+        player.SpawnLeeani()
+        player.SpawnLeeani()
+        player.SpawnLeeani()
+        # for i in range(300):
+        #     player.inventory.addItem(random.choice(list(game.itemDefs.keys())), 1)
+        game.setDefs["normal"].add(player)
+        player.location = random.choice(list(game.locationDefs.values()))
+        player.location.generateLinked(game)
+
+class SaveGameAction(Action):
+    def __init__(self,player,game):
+        super().__init__(name="Save Game", description="Save Game")
+
+    def perform(self,player,game):
+        u()
+        p(Translate("save_game_prompt"))
+        savename  = input("  ")
+        saveAllInformation(savename,player,game)
+        print(player.location)
+
+
+class LoadGameAction(Action):
+    def __init__(self):
+        super().__init__(name="Load Game", description="Load Game")
+
+    def perform(self,playerold,gameold):
+        global player
+        global game
+        table = glob.glob("saves/*.dat")
+        print(tb.tabulate([[i+1,x.replace(".dat","")] for i,x in enumerate(table)],headers=["#","filename"], tablefmt="simple"))
+        print("--")
+        gamesave = a(Translate("load_game_prompt"),table)+1
+        player, game = loadAllInformation(table[gamesave-1])
+        print(game.chapterDefs[player.chapter].getVignette())
+        print()
+        p(game.chapterDefs[player.chapter].getDescription())
+        return player, game
+
 
 class RelocateAction(Action):
     def __init__(self):
@@ -97,6 +154,9 @@ class NextHourAction(Action):
                     else:
                         p(tc.y+"{} returned early from {} {}".format(lee.fullName, lee.job.labelDo,lee.jobTimeLeft)+tc.w)
                         lee.afk = False
+                else:
+                    if lee.job != Find.WorkTypeByName("idle"):
+                        p(tc.c + "{} stopped {} for tonight".format(lee.fullName, lee.job.labelDo) + tc.w)
                 lee.satisfyNutrition()
             msvcrt.getch()
         else: # AN HOUR PASSES
@@ -147,7 +207,7 @@ class ListAction(Action):
     def __init__(self, name, desc):
         super().__init__(name, desc)
 
-    def perform(self, actions, headers, player=False):
+    def perform(self, actions, headers, player=False,game=False):
         alphas = getAlphas(actions)
         table = [[alphas[i],x.name] for i,x in enumerate(actions)]
         print(tb.tabulate(table, headers, "simple"))
@@ -155,11 +215,15 @@ class ListAction(Action):
         ac = a(Translate('choose_string'),table)
         acTodo = actions[ac]
         if 'group' in acTodo.perform.__code__.co_varnames:
-            acTodo.perform(player.group)
+            return acTodo.perform(player.group)
+        elif 'player' in acTodo.perform.__code__.co_varnames and 'game' in acTodo.perform.__code__.co_varnames:
+            return acTodo.perform(player,game)
+        elif 'playerold' in acTodo.perform.__code__.co_varnames and 'gameold' in acTodo.perform.__code__.co_varnames:
+            return acTodo.perform(player,game)
         elif 'player' in acTodo.perform.__code__.co_varnames:
-            acTodo.perform(player)
+            return acTodo.perform(player)
         else:
-            acTodo.perform()
+            return acTodo.perform()
 
 class WorkAction(Action):
     def __init__(self, name, description, workName):
@@ -292,15 +356,6 @@ class ListJobAssignAction(Action):
         except KeyError:
             return False
         return lee
-
-class NewGameAction(Action):
-    def __init__(self, name, desc):
-        super().__init__(name, desc)
-    def perform(self):
-        u()
-        print(Find.ChapterDef("nomad").getVignette())
-        print()
-        p(Find.ChapterDef("nomad").getDescription())
 
 class ViewCraftsAction(Action):
     def __init__(self):

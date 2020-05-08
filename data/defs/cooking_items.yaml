@@ -1,0 +1,10 @@
+itemDefs:
+
+  cookingPot:
+    label: cooking pot
+    description: a metal pot that can hold liquids for cooking. used for more than basic recipes which can't simply be cooked over a direct fire
+    rarity: uncommon
+    value: 5
+    tool:
+      boiling: 2
+      cooking pot: 2

@@ -72,6 +72,8 @@ workDefs:
     labelDo: hunting
     description: "Hunters kill small and large animals, and set traps. Hunting takes 8 hours."
     timeBase: 8h #hours
+    toolsRequired:
+      hunting: 1
     skills:
       strength: 2
       perecption: 1
@@ -82,6 +84,8 @@ workDefs:
     label: fisher
     labelDo: fishing
     description: "Fishers...can fish at rivers. Fishing takes 8 hours."
+    toolsRequired:
+      fishing: 1
     timeBase: 8h #hours
     skills:
       utility: 2

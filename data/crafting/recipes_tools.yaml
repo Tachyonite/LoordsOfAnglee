@@ -8,7 +8,8 @@ craftingDefs:
         - - stickLong: 1
       line:
         - - twine: 4
-          - string: 4
+          - string: 2
+          - fishingWire: 1
       hook:
         - - nail: 2
           - screw: 2
@@ -16,6 +17,6 @@ craftingDefs:
     output:
       fishingRod: 1
     tool:
-      hammering: 1
+      fishing: 2
     timeBase: 30m
 

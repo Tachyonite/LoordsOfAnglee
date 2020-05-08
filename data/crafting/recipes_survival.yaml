@@ -15,7 +15,6 @@ craftingDefs:
       campfire: 1
     timeBase: 30m
 
-
   rainCatcher:
     label: build rain catcher
     description: using a tarp and some sticks, set up a catcher to passively collect water

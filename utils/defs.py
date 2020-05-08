@@ -48,7 +48,7 @@ class Item():
             if hasattr(self,'tool'):
                 return "{} ({}%)".format(self.label, round(props[0]/props[1] * 100))
             if len(props) == 3 and props[2]:
-                return "{} ({} {}/{})".format(self.label, props[2].label, props[0], props[1])
+                return "{} of {} ({}/{})".format(self.label, props[2].label, props[0], props[1])
             else:
                 return "{} ({}/{})".format(self.label,props[0],props[1])
 
@@ -128,6 +128,16 @@ class Item():
                 return False
         except AttributeError:
             return False
+
+class Set():
+    def __init__(self, defName, object):
+        self.defName = defName
+        self.object = dict(object)
+        for k, v in self.object.items():
+            setattr(self, k, v)
+    def add(self,player):
+        for k,v in self.contents.items():
+            player.inventory.addItem(k,v)
 
 class Craft():
     def __init__(self, defName, object):
