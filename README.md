@@ -20,12 +20,12 @@ Note, any time you see something like !drop_item!, don't worry, it just means th
 
 Different leeani are good at different things. You'll want to select who you send for which tasks based on their VULPES skills.
 
-V - Vitality: How fit the leeani is, for things like endurance running, and determines their max HP and damage reduction. (max HP and DR not in yet)
-U - Utility: How focused a leeani is on a given task, as well as a measure of how practically handy they are.
-L - Learning: The raw brainpower of this leeani, better for researching and knowledge of which berries are good to eat.
-P - Perception: Measures the keeness of a leeani's eyes, useful for hunting or spotting shiny things from a distance.
-E - Eloquence: How silver the leeani's tongue is. Makes negotiating and researching easier, and raises the trade bonus. (note, trade is not in yet)
-S - Strength: Does your leeani even lift? Quantifies their raw maahsels, useful for high-intensity work such as woodcutting or mining.
+V - Vitality: How fit the leeani is, for things like endurance running, and determines their max HP and damage reduction. (max HP and DR not in yet)  
+U - Utility: How focused a leeani is on a given task, as well as a measure of how practically handy they are.  
+L - Learning: The raw brainpower of this leeani, better for researching and knowledge of which berries are good to eat.  
+P - Perception: Measures the keeness of a leeani's eyes, useful for hunting or spotting shiny things from a distance.  
+E - Eloquence: How silver the leeani's tongue is. Makes negotiating and researching easier, and raises the trade bonus. (note, trade is not in yet)  
+S - Strength: Does your leeani even lift? Quantifies their raw maahsels, useful for high-intensity work such as woodcutting or mining.  
 
 Each job has two stats it benefits from, a 'major' stat and a 'minor' stat. This affects things like how many resources they gain from a job, or how quickly they work, and how many distinct items they can bring back. Workers will go 'away' after you assign them and press 'next hour', and you won't be able to reassign them until they come back. Bear in mind, they will keep going out and coming back throughout the day depending on the time it takes to do their job.
 
