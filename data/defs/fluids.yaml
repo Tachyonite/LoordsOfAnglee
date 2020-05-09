@@ -12,6 +12,12 @@ fluidDefs:
     nutrition:
       water: 1
 
+  saltWater:
+    label: salt water
+    description: must be purified before it can be used
+    weight: 1 #weight is per litre
+    value: 0.5
+
   juice:
     label: fruit juice
     weight: 1.1

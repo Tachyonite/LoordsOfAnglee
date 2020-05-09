@@ -25,7 +25,7 @@ class Item():
         if hasattr(self, 'durability'):
             self.durability['uses'] = self.durability['maxUses']
 
-        self.rarityLabel = tc.rarity[self.rarity] + self.label + tc.w
+        self.rarityLabel = tc.rarity[self.rarity] + self.labelResolved() + tc.w
         '''
         try:
             self.t = rarity(self.rarity) + self.label + rarity("reset")
@@ -45,13 +45,17 @@ class Item():
     def labelResolved(self,invamt=1):
         if hasattr(self, 'diffprop'):
             props = self.getDiffprop()
+
             if hasattr(self,'tool'):
                 return "{} ({}%)".format(self.label, round(props[0]/props[1] * 100))
             if len(props) == 3 and props[2]:
                 return "{} of {} ({}/{})".format(self.label, props[2].label, props[0], props[1])
             else:
                 return "{} ({}/{})".format(self.label,props[0],props[1])
-
+        if hasattr(self, 'isCrate') and self.isCrate:
+            return "{}□{} ".format(tc.y,tc.rarity[self.rarity])+ self.label
+        if hasattr(self, 'moveable') and not self.moveable:
+            return self.label + " {}▼{}".format(tc.f,tc.rarity[self.rarity])
         else:
             return self.label
 
@@ -223,7 +227,7 @@ class Location():
             setattr(self,k,v)
 
     def generateLinked(self,game):
-        self.linked.append(game.locationDefs[random.choices(population=list(self.connects.keys()),weights=list(self.connects.values()),k=random.randrange(1,3))[0]])
+        self.linked = set(game.locationDefs[i] for i in random.choices(population=list(self.connects.keys()),weights=list(self.connects.values()),k=random.randint(2,3)))
 
 
 class Chapter():

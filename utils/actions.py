@@ -27,7 +27,8 @@ def generateActionList(context,player,game):
     if context == "nomad_day":
 
         actions.append(ForageWorkAction())
-        actions.append(ExploreWorkAction())
+        for i in player.location.linked:
+            actions.append(ExploreWorkAction(i))
         if hasattr(player.location,'enableWork'):
             for i in player.location.enableWork:
                 if player.inventory.collateTools(i):
@@ -35,12 +36,14 @@ def generateActionList(context,player,game):
         actions.append(ViewDetailInventoryAction())
         actions.append(ViewCraftsAction())
         actions.append(ViewCharAction())
-
-        if player.location.linked[0].intel == 100:
-            actions.append(RelocateAction())
+        for i in player.location.linked:
+            if i.intel == 100:
+                actions.append(RelocateAction(i))
         actions.append(SaveGameAction(player=player,game=game))
         actions.append(NextHourAction())
-        actions[1].exploreArea(player=player)
+        for i in actions:
+            if hasattr(i,"location"):
+                i.exploreArea(player=player)
 
     return actions
 
@@ -89,7 +92,9 @@ class SaveGameAction(Action):
         p(Translate("save_game_prompt"))
         savename  = input("  ")
         saveAllInformation(savename,player,game)
-        print(player.location)
+
+    def performAuto(self,player,game):
+        saveAllInformation("autosave",player,game)
 
 
 class LoadGameAction(Action):
@@ -111,10 +116,11 @@ class LoadGameAction(Action):
 
 
 class RelocateAction(Action):
-    def __init__(self):
-        super().__init__(name=Translate('relocate_action'),description=Translate('relocate_action'))
+    def __init__(self,location):
+        self.location = location
+        super().__init__(name=Translate('relocate_action')+"to {}".format(self.location.label),description=Translate('relocate_action'))
     def perform(self,player):
-        p("You'll be moving to the {}.".format(player.location.linked[0].label))
+        p("You'll be moving to the {}.".format(self.location.label))
         p("Relocating will empty any non-sealed containers, and any items that are not moveable.")
         p("You won't be able to return to this location.")
         p("These things will be left behind:")
@@ -124,11 +130,11 @@ class RelocateAction(Action):
         p("Proceed? y/n")
         act = getch()
         if act == "y":
-            p("Everyone is packing up and getting ready to move to the {}.".format(player.location.linked[0].label))
+            p("Everyone is packing up and getting ready to move to the {}.".format(self.location.label))
             self.checkWorldEvents()
             p("Press any key to continue.")
             msvcrt.getch()
-            player.location = player.location.linked[0]
+            player.location = self.location
             player.location.generateLinked(game)
     def checkWorldEvents(self):
         pass
@@ -136,7 +142,8 @@ class RelocateAction(Action):
 class NextHourAction(Action):
     def __init__(self):
         super().__init__(name=Translate('next_hour_action'),description=Translate('next_hour_action'))
-    def perform(self,player):
+    def perform(self,player,game):
+        p("...")
         if not player.addTime(): # THE DAY IS OVER
             p("Everyone's back for the night. They will keep their assigned jobs and do them as many times as they can in the day unless you change them when they next come back.")
             for lee in player.group.values():
@@ -145,10 +152,10 @@ class NextHourAction(Action):
                         p(tc.c+"{} returned from {}".format(lee.fullName, lee.job.labelDo)+tc.w)
                         if lee.job.defName == "explorer":
                             gainedIntel = lee.stats.learning + random.randint(0,5)
-                            player.location.linked[0].intel += gainedIntel
-                            if player.location.linked[0].intel > 100: player.location.linked[0].intel = 100
-                            p("+ Scouted {}% on the  {}".format(gainedIntel,player.location.linked[0].label))
-                        lee.rollWorkResults()
+                            player.location.linked[lee.exploreLinkedIndex].intel += gainedIntel
+                            if player.location.linked[lee.exploreLinkedIndex].intel > 100: player.location.linked[lee.exploreLinkedIndex].intel = 100
+                            p("+ Scouted {}% on the  {}".format(gainedIntel,player.location.linked[lee.exploreLinkedIndex].label))
+                        lee.rollWorkResults(player,game)
                         lee.afk = False
 
                     else:
@@ -158,6 +165,7 @@ class NextHourAction(Action):
                     if lee.job != Find.WorkTypeByName("idle"):
                         p(tc.c + "{} stopped {} for tonight".format(lee.fullName, lee.job.labelDo) + tc.w)
                 lee.satisfyNutrition()
+            SaveGameAction(player,game).performAuto(player,game)
             msvcrt.getch()
         else: # AN HOUR PASSES
             textDisp = False
@@ -181,10 +189,10 @@ class NextHourAction(Action):
                         p(tc.c+"{} returned from {}".format(lee.fullName, lee.job.labelDo)+tc.w)
                         if lee.job.defName == "explorer":
                             gainedIntel = lee.stats.learning + random.randint(0,5)
-                            player.location.linked[0].intel += gainedIntel
-                            if player.location.linked[0].intel > 100: player.location.linked[0].intel = 100
-                            p("+ Scouted {}% on the {}".format(gainedIntel,player.location.linked[0].label))
-                        lee.rollWorkResults()
+                            lee.location.intel += gainedIntel
+                            if lee.location.intel > 100: lee.location.intel = 100
+                            p("+ Scouted {}% on the {}".format(gainedIntel,lee.location.label))
+                        lee.rollWorkResults(player,game)
                         lee.afk = False
             if textDisp:
                 msvcrt.getch()
@@ -244,6 +252,9 @@ class WorkAction(Action):
                 lee.job = self.workType
                 lee.jobAssignedHour = player.hour
                 lee.jobTimeLeft = self.workType.timeCost() - 1
+                print(lee.job)
+                if lee.job.label == "explorer" and hasattr(self,"location"):
+                    lee.location = self.location
 
 class ForageWorkAction(WorkAction):
     def __init__(self):
@@ -265,11 +276,11 @@ class LumberfoxWorkAction(WorkAction):
         super().__init__(Translate('action_lumberfox'), Translate('action_lumberfox_desc'),"lumberfox")
 
 class ExploreWorkAction(WorkAction):
-    def __init__(self):
+    def __init__(self,location):
+        self.location = location
         super().__init__(Translate('action_explore'), Translate('action_explore_desc'),"explorer")
     def exploreArea(self,player):
-        self.linked = player.location.linked[0]
-        self.name = "{} {}".format(Translate('action_explore'),self.linked.label.title())
+        self.name = "{} {}".format(Translate('action_explore'),self.location.label.title())
 
 
 class CraftingWorkAction(WorkAction):
@@ -376,7 +387,6 @@ class ViewCraftsAction(Action):
         p("# | {}".format(Translate('page_number')))
         p("+ | {}".format(Translate('add_craft')))
         p("- | {}".format(Translate('remove_craft')))
-        print(selectedItemIndex)
         print()
         p(tc.c+"e | {}".format(Translate('assign_crafter'))+tc.w)
         print()
@@ -393,7 +403,7 @@ class ViewCraftsAction(Action):
         act = True
         page = 0
         selectedItemIndex = 0
-        tab = player.inventory.craftTabulate(selectedItemIndex,page=page)
+        tab = player.inventory.craftTabulate(player, selectedItemIndex,page=page)
         if not tab:
             print("No recipes available yet. Find more resources or research more.")
             print("Press any key to continue.")
@@ -463,7 +473,7 @@ class ViewCraftsAction(Action):
                 isfav = tab[4][page][selectedItemIndex].favourite
                 tab[4][page][selectedItemIndex].favourite = not isfav
                 u()
-                tab = player.inventory.craftTabulate(selectedItemIndex, page=page)
+                tab = player.inventory.craftTabulate(player, selectedItemIndex, page=page)
                 offset = selectedItemIndex + o
                 print(tab[0], "\n")
                 print(tc.bg_w + "\033[{};{}H>".format(offset, 1) + tc.bg_b)
@@ -474,7 +484,7 @@ class ViewCraftsAction(Action):
                 except KeyError:
                     player.queuedCrafts[tab[4][page][selectedItemIndex].defName] = 1
                 u()
-                tab = player.inventory.craftTabulate(selectedItemIndex, page=page)
+                tab = player.inventory.craftTabulate(player, selectedItemIndex, page=page)
                 offset = selectedItemIndex + o
                 print(tab[0], "\n")
                 print(tc.bg_w +"\033[{};{}H>".format(offset, 1) + tc.bg_b)
@@ -484,7 +494,7 @@ class ViewCraftsAction(Action):
                     player.queuedCrafts[tab[4][page][selectedItemIndex].defName] -= 1
                     u()
                     offset = selectedItemIndex + o
-                    tab = player.inventory.craftTabulate(selectedItemIndex, page=page)
+                    tab = player.inventory.craftTabulate(player, selectedItemIndex, page=page)
                     print(tab[0], "\n")
                     print(tc.bg_w + "\033[{};{}H>".format(offset, 1) + tc.bg_b)
             else:
@@ -584,7 +594,7 @@ class ViewDetailInventoryAction(Action):
         print("\033[{};{}H".format(len(tab[2][page]) + 15, 1))
         return selectedItemIndex
 
-    def perform(self,player):
+    def perform(self,player,game):
         u()
         act = True
         page = 0

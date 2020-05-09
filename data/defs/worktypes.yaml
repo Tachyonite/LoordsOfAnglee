@@ -66,6 +66,8 @@ workDefs:
     skills:
       utility: 2
       learning: 1
+    effectiveItems:
+      toolBelt: 0.3
 
   hunter:
     label: hunter
@@ -79,6 +81,8 @@ workDefs:
       perecption: 1
     outputTables:
       hunter: 2
+    effectiveItems:
+      stoneSpear: 0.2
 
   fisher:
     label: fisher
@@ -92,6 +96,8 @@ workDefs:
       vitality: 1
     outputTables:
       fisher: 2
+    effectiveItems:
+      fishingRod: 0.5
 
   lumberfox:
     label: lumberfoxe
@@ -103,6 +109,8 @@ workDefs:
       vitality: 1
     outputTables:
       woodcutter: 2
+    effectiveItems: #measured in percent, these tools boost the resources gained, but costs durability of the item.
+      scrapAxe: 0.1 #a 10% bonus
 
   looter:
     label: looter

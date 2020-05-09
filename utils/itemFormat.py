@@ -1,5 +1,9 @@
 from utils.helpers import *
 
+def clearSidebar():
+    s = [" "*50]
+    return
+
 def itemFormat(item,itemDef,amount,**kwargs):
     details = \
 """
@@ -70,6 +74,10 @@ as tool:
                 details += \
 """- {}: {}
 """.format(k, v)
+    if hasattr(item, 'moveable') and not item.moveable:
+        details += \
+"""{}▼{} item can't be taken with you
+""".format(tc.f, tc.w)
     details += \
 """
 """ * 18
@@ -83,14 +91,14 @@ def craftFormat(craft,formText,outItem,canDo=0,canTool=()):
 --------------
 {}
 --------------
-costs:                                                                                            
-{}
-makes: {}                                                                                         
+costs:                                                                                                                                                                    
+{}                                                             
+makes: {}                                                                                                             
 """.format(craft.label,
                      "\n".join(tw.wrap(craft.description.lower(), 40)), formText,amount)
     if hasattr(craft, 'tools'):
         details += \
-"""
+"""                                                                                                        
 --------------                                                                                    
 tools:                                                                                            
 """
@@ -106,17 +114,16 @@ tools:
             count+=1
     if canDo == 2 and (not canTool or all(canTool)):
         details +=\
-"""
+"""                                                                                                               
 craftable now: yes
 """.format(tc.c,tc.w)
     else:
         details += \
-"""
+"""                                                                                                                     
 craftable now: {}no{}
 """.format(tc.f, tc.w)
     details += \
 """ 
-
 """*20
     return details
 

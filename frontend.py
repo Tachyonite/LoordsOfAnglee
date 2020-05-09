@@ -7,14 +7,15 @@ from core import *
 
 colorama.init(autoreset=True)
 
-def displayDay(day,hour):
+def displayDay(player):
     u()
     print(player.location.vignette)
     print("")
     p(tc.c+"{}".format(player.groupStatus+tc.w))
     p("Day {} | {} (Hour {}/{})".format(player.day,player.formTime(),player.hour,player.dayLength))
     p("{}: {}".format(player.location.label.capitalize(),player.location.description.capitalize()))
-    p("A {} is close by ({}% scouted).".format(player.location.linked[0].label,player.location.linked[0].intel))
+    for i in player.location.linked:
+        p("A {} is close by ({}% scouted).".format(i.label,i.intel))
     listAction.perform(actions=generateActionList("nomad_day",player=player,game=game), headers=["", ""], player=player,game=game)
 
 u()
@@ -34,7 +35,5 @@ if r:
     player, game = r
 input(Translate('choose_string'))
 player.calcCarryWeight()
-print(player.inventory.contents)
-input()
 while True:
-    displayDay(player.day,player.hour)
+    displayDay(player)

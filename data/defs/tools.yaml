@@ -372,6 +372,13 @@ itemDefs:
     value: 1
     rarity: common
 
+  toolBelt:
+    label: toolbelt
+    description: a belt that goes around the waist to hold tools in. useful for crafters and boosts their efficiency when equipped.
+    weight: 1
+    value: 5
+    rarity: rare
+
   fishingRod: #itemDef, how it's referred to in the code
     label: fishing rod
     description: a straight, flexible stick with a string tied to one end, and a suitable hook at the end of that string. catches fish while consuming bait.

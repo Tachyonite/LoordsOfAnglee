@@ -16,7 +16,35 @@ craftingDefs:
           - fishHook: 1
     output:
       fishingRod: 1
-    tool:
-      fishing: 2
     timeBase: 30m
 
+  scrapAxe:
+    label: scrap axe
+    description: sharpen some bits of scrap metal and fashion them into some form of an axe. not too effective at cutting wood but it'll do.
+    ingredients:
+      head:
+        - - scrapMetal: 2
+      handle:
+        - - stickHeavy: 1
+      binding:
+        - - rope: 1
+          - tape: 2
+          - rag: 2
+    output:
+      scrapAxe: 1
+    tool:
+      hammering: 1
+    timeBase: 30m
+
+  scrapMallet:
+    label: scrap mallet
+    description: a heavy block of wood made from scrap lumber that's affixed to a handle. good for hammering things better than a rock.
+    ingredients:
+      head:
+        - - scrapWood: 2
+      handle:
+        - - heavyStick: 1
+      binding:
+        - - tape: 3
+          - glue: 1
+    timeBase: 30m

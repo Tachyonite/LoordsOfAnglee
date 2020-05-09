@@ -289,6 +289,7 @@ class Leeani(Creature):
         self.jobTimeLeft = 0
         self.player = player
         self.craftWorkingOn = None
+        self.location = None
 
     def calculateCrafts(self, wwO=None, madeThisHour=None, done=False, dontshort=False, makeableQueue=None):
         if not madeThisHour:
@@ -391,7 +392,7 @@ class Leeani(Creature):
         if done:
             if madeThisHour:
                 for k, v in madeThisHour.items():
-                    p("{} made {} x{}".format(self.fn, k, v))
+                    p("{} made {} x{}".format(self.fn, game.itemDefs[k].labelResolved(), v))
             msvcrt.getch()
 
     def finishCraft(self, craft):
@@ -409,14 +410,13 @@ class Leeani(Creature):
         for k, v in craft.output.items():
             inv.addItem(k, v)
 
-    def rollWorkResults(self):
+    def rollWorkResults(self,player,game):
         if hasattr(self.job, 'outputTables'):
             mult = 0.5
             if self.job.defName in self.player.location.workMultipliers:
                 mult = self.player.location.workMultipliers[self.job.defName]
-            if self.job.defName == "explorer" and self.job.defName in self.player.location.linked[0].workMultipliers:
-                mult = self.player.location.linked[0].workMultipliers[self.job.defName]
-
+            if self.job.defName == "explorer" and self.job.defName in self.location.workMultipliers:
+                mult = self.location.workMultipliers[self.job.defName]
             mult += (self.stats.dictFormat[list(self.job.skills.keys())[0]] ** list(self.job.skills.values())[0]) / 30
             mult += (self.stats.dictFormat[list(self.job.skills.keys())[1]] ** list(self.job.skills.values())[1]) / 30
 
@@ -720,7 +720,7 @@ class Inventory():
         maxspeed = 0.5 + (random.randrange(-20, 20) / 100)
         speed = maxspeed
         bleed = 0
-        ticker = 0
+        ticker = random.randint(0,len(conOut)-1)
         p("Opening crate...")
         print()
         print("  " + "\n  ".join([x.rarityLabel for x in conOut]))
@@ -758,14 +758,18 @@ class Inventory():
                     canDo = self.testAmount(key, amount, returnAmt=False)
                     if canDo:
                         color = tc.c
-                    outStr = color + "{}".format(Find.ItemDef(key).label) + tc.w + " x{} ({})".format(amount,
+
+                    outStr = color + "{}".format(game.itemDefs[key].label.replace(" ","\xa0")) + tc.w + "\xa0x{}\xa0({})".format(amount,
                                                                                                       self.testAmount(
                                                                                                           key, amount,
                                                                                                           returnAmt=True))
                     orItems.append(outStr)
                 orItems = " OR ".join(orItems)
-            items = "{}: ".format(i) + orItems + " " * 50
-            midStr.append(items)
+            items = "{}: ".format(i) + orItems
+            out = []
+            for i in tw.wrap(items,100):
+                out.append("{:<100}".format(i))
+            midStr.append("\n   ".join(out))
         return " └ " + "\n └ ".join(midStr)
 
     def getOutput(self, craft):
@@ -774,14 +778,14 @@ class Inventory():
 
         return " + ".join(["{} ({})".format(game.itemDefs[k].label, v) for k, v in outputs.items()])
 
-    def checkCraft(self, defName):
+    def checkCraft(self, player, defName):
         try:
             a = player.queuedCrafts[defName]
             return a
         except KeyError:
             return 0
 
-    def craftTabulate(self, selectedItemIndex, page=0, sort=False):
+    def craftTabulate(self, player, selectedItemIndex, page=0, sort=False):
         table = []
         defTable = []
         craftTable = []
@@ -790,7 +794,7 @@ class Inventory():
 
         for craft, obj in game.craftingDefs.items():
             tabItem = game.itemDefs[obj.defName]
-            queuedAmt = self.checkCraft(tabItem.defName)
+            queuedAmt = self.checkCraft(player, tabItem.defName)
             if not queuedAmt: queuedAmt = 1
             canDo = self.collateIngredientsAndCheck(obj)
             canDoQueue = self.collateIngredientsAndCheck(obj, queuedAmt)
@@ -820,13 +824,13 @@ class Inventory():
                         qcolor = tc.f
             else:
                 qcolor = tc.f
-            if not self.checkCraft(tabItem.defName): qcolor = tc.lg
+            if not self.checkCraft(player, tabItem.defName): qcolor = tc.lg
             defTable.append([tabItem.rarity] + [tabItem.labelResolved()] + [tabItem] + [canDo] + [canTool])
             craftTable.append(obj)
             table.append(
                 [Find.ColorByRarity(tabItem.rarity) + color + txt + tabItem.labelResolved() + tc.w,
                  round(obj.timeCost(), 2),
-                 str(int(obj.timeCost(1))) + "/hr", "{}{}{}".format(qcolor, self.checkCraft(tabItem.defName), tc.w)])
+                 str(int(obj.timeCost(1))) + "/hr", "{}{}{}".format(qcolor, self.checkCraft(player, tabItem.defName), tc.w)])
         tman = list(Sort.Paginate(table, player.tableLength))
         defTable = list(Sort.Paginate(defTable, player.tableLength))
         craftTable = list(Sort.Paginate(craftTable, player.tableLength))
