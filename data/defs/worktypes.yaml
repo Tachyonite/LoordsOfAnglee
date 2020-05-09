@@ -112,6 +112,20 @@ workDefs:
     effectiveItems: #measured in percent, these tools boost the resources gained, but costs durability of the item.
       scrapAxe: 0.1 #a 10% bonus
 
+  rockhunter:
+    label: rockfoxe
+    labelDo: rockhunting
+    description: "Rockfoxes look for useful rocks and shinies to work with. Rockhunting takes 4 hours."
+    timeBase: 4h #hours
+    skills:
+      perception: 2
+      strength: 1
+    outputTables:
+      woodcutter: 2
+    effectiveItems:
+      scrapPick: 0.2
+      scrapShovel: 0.1
+
   looter:
     label: looter
     labelDo: looting

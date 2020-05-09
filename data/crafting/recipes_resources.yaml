@@ -8,3 +8,5 @@ craftingDefs:
         - - cloth: 1
     output:
       rag: 3
+    tool:
+      cutting: 1

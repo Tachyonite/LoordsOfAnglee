@@ -141,7 +141,7 @@ class Player():
         for i in self.group.values():
             cw += round(i.stats.strength * 1.5)
             cw += round(i.stats.vitality)
-
+        self.inventory.clearNulls()
         for k, v in self.inventory.contents.items():
             if hasattr(v[0], 'carryweight'):
                 for i in v:
@@ -622,6 +622,12 @@ class Inventory():
                 return amount
         return amount
 
+    def clearNulls(self):
+        keys = list(self.contents.keys())
+        for k in keys:
+            if not self.contents[k]:
+                self.contents.pop(k)
+
     def testAmount(self, item, amount, returnAmt=False):
         try:
             if len(self.contents[item]) >= amount:
@@ -793,7 +799,7 @@ class Inventory():
         headers = ["craft", "time", "craft per hr", "queued"]
 
         for craft, obj in game.craftingDefs.items():
-            tabItem = game.itemDefs[obj.defName]
+            tabItem = game.craftingDefs[obj.defName]
             queuedAmt = self.checkCraft(player, tabItem.defName)
             if not queuedAmt: queuedAmt = 1
             canDo = self.collateIngredientsAndCheck(obj)
@@ -825,10 +831,10 @@ class Inventory():
             else:
                 qcolor = tc.f
             if not self.checkCraft(player, tabItem.defName): qcolor = tc.lg
-            defTable.append([tabItem.rarity] + [tabItem.labelResolved()] + [tabItem] + [canDo] + [canTool])
+            defTable.append([tabItem.rarity] + [tabItem.label] + [tabItem] + [canDo] + [canTool])
             craftTable.append(obj)
             table.append(
-                [Find.ColorByRarity(tabItem.rarity) + color + txt + tabItem.labelResolved() + tc.w,
+                [Find.ColorByRarity(tabItem.rarity) + color + txt + tabItem.label + tc.w,
                  round(obj.timeCost(), 2),
                  str(int(obj.timeCost(1))) + "/hr", "{}{}{}".format(qcolor, self.checkCraft(player, tabItem.defName), tc.w)])
         tman = list(Sort.Paginate(table, player.tableLength))
@@ -846,6 +852,8 @@ class Inventory():
         preloadLabels = {}
         for k, v in self.contents.items():
             tabItem = game.itemDefs[k]
+            if len(v) == 0:
+                continue
             if hasattr(tabItem, 'diffprop'):
                 for i in v:
                     label = Find.ColorByRarity(i.rarity) + i.labelResolved() + tc.w
@@ -911,6 +919,8 @@ class Inventory():
         preloadLabels = {}
         for k, v in self.contents.items():
             tabItem = game.itemDefs[k]
+            if len(v) == 0:
+                continue
             if hasattr(tabItem, 'diffprop'):
                 for i in v:
                     label = Find.ColorByRarity(i.rarity) + i.labelResolved(len(v)) + tc.w

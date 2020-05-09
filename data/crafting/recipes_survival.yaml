@@ -9,8 +9,10 @@ craftingDefs:
       fuel:
         - - woodFragments: 10
           - stickShort: 6
+          - stickHeavy: 3
           - softwood: 3
           - hardwood: 2
+          - scrapWood: 3
     output:
       campfire: 1
     timeBase: 30m
@@ -34,7 +36,7 @@ craftingDefs:
 
   trapGame:
     label: make game trap
-    description: a jury-rigged spring-loaded trap using nails to catch and kill small game such as rabbits
+    description: a jerry-rigged spring-loaded nail-spiking trap to catch and kill small game such as rabbits
     ingredients:
       trigger:
         - - string: 1
@@ -62,9 +64,9 @@ craftingDefs:
         - - string: 1
           - twine: 3
       body:
-        - - scrapMetal: 3
-          - castMetal: 2
-          - forgedMetal: 1
+        - - scrapMetal: 5
+          - castMetal: 3
+          - forgedMetal: 2
       teeth:
         - - nail: 20
           - screw: 20

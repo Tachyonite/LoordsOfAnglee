@@ -179,6 +179,15 @@ itemDefs:
     label: wood fragments
     description: Shards of wood from broken handles, planks or trees. Rather useless.
     weight: 0.01
+    value: 0
+    rarity: common
+
+  scrapWood:
+    label: scrapwood
+    description: Offcuts of timber from times gone past, now it's your challenge to make use of it.
+    weight: 0.01
+    value: 0
+    rarity: common
 
   dirtyPaper:
     label: used paper

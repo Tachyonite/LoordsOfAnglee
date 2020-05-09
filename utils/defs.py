@@ -151,6 +151,7 @@ class Craft():
             setattr(self,k,v)
         self.progress = 0
         self.favourite = False
+        self.rarity = "common"
 
 
     def tryGet(self, attr):

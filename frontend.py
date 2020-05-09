@@ -9,6 +9,7 @@ colorama.init(autoreset=True)
 
 def displayDay(player):
     u()
+    player.inventory.clearNulls()
     print(player.location.vignette)
     print("")
     p(tc.c+"{}".format(player.groupStatus+tc.w))
