@@ -1,7 +1,7 @@
 import pickle
 
 def saveAllInformation(name,player,game):
-    with open('saves/{}.dat'.format(name), 'wb') as f:
+    with open('saves/{}.dat'.format(name), 'wb+') as f:
         pickle.dump([player,game], f, protocol=2)
 
 def loadAllInformation(name):
