@@ -118,8 +118,8 @@ class LoadGameAction(Action):
 class RelocateAction(Action):
     def __init__(self,location):
         self.location = location
-        super().__init__(name=Translate('relocate_action')+"to {}".format(self.location.label),description=Translate('relocate_action'))
-    def perform(self,player):
+        super().__init__(name=Translate('relocate_action')+" to {}".format(self.location.label.title()),description=Translate('relocate_action'))
+    def perform(self,player,game):
         p("You'll be moving to the {}.".format(self.location.label))
         p("Relocating will empty any non-sealed containers, and any items that are not moveable.")
         p("You won't be able to return to this location.")
@@ -510,7 +510,7 @@ class ViewCraftsAction(Action):
 class ViewInventoryAction(Action):
     def __init__(self):
         super().__init__(name=Translate('view_inventory_action'),description=Translate('view_inventory_action'))
-    def perform(self, player):
+    def perform(self, player,game):
         act = True
         page = 0
         while act:
@@ -540,7 +540,7 @@ class ViewInventoryAction(Action):
             act = getch()
             if act == "?":
                 newAct = ViewDetailInventoryAction()
-                r = newAct.perform(player)
+                r = newAct.perform(player,game)
                 if not r:
                     return
             elif act == "d" or act == "M":
@@ -617,7 +617,7 @@ class ViewDetailInventoryAction(Action):
             o = 4
             if act == "?":
                 newAct = ViewInventoryAction()
-                r = newAct.perform(player)
+                r = newAct.perform(player,game)
                 if not r:
                     return
             elif act == "d" or act == "M":

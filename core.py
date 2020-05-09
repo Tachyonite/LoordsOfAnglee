@@ -1005,6 +1005,13 @@ cr.init(autoreset=False)
 tb.PRESERVE_WHITESPACE = True
 cursor.hide()
 
+try:
+    with open('saves/autosave.dat', 'wb+') as f:
+        pass
+except FileNotFoundError:
+    with open('saves/autosave.dat', 'w+') as f:
+        pass
+
 with open("data/names.yaml") as STREAM:
     nameInfo = yaml.safe_load(STREAM)
 
