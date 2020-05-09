@@ -42,7 +42,7 @@ def generateActionList(context,player,game):
         actions.append(SaveGameAction(player=player,game=game))
         actions.append(NextHourAction())
         for i in actions:
-            if hasattr(i,"location"):
+            if hasattr(i,"explorer"):
                 i.exploreArea(player=player)
 
     return actions
@@ -278,6 +278,7 @@ class LumberfoxWorkAction(WorkAction):
 class ExploreWorkAction(WorkAction):
     def __init__(self,location):
         self.location = location
+        self.explorer = True
         super().__init__(Translate('action_explore'), Translate('action_explore_desc'),"explorer")
     def exploreArea(self,player):
         self.name = "{} {}".format(Translate('action_explore'),self.location.label.title())
