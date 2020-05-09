@@ -7,40 +7,34 @@ from core import *
 
 colorama.init(autoreset=True)
 
-def displayDay(day,hour):
+def displayDay(player):
     u()
+    player.inventory.clearNulls()
+    print(player.location.vignette)
+    print("")
+    p(tc.c+"{}".format(player.groupStatus+tc.w))
     p("Day {} | {} (Hour {}/{})".format(player.day,player.formTime(),player.hour,player.dayLength))
-    p("")
-    listAction.perform(actions=generateActionList("nomad_day"), headers=["", ""], player=player)
+    p("{}: {}".format(player.location.label.capitalize(),player.location.description.capitalize()))
+    for i in player.location.linked:
+        p("A {} is close by ({}% scouted).".format(i.label,i.intel))
+    listAction.perform(actions=generateActionList("nomad_day",player=player,game=game), headers=["", ""], player=player,game=game)
 
 u()
 print(Translate("title"))
 print("\n")
 print("  "+ Translate('splash',random=True))
 listAction = ListAction(name="list",desc=None)
-listAction.perform(actions=[
-                            NewGameAction("New Game","Creates a new game.")
+r = listAction.perform(actions=[
+                            NewGameAction("New Game","Creates a new game."),
+                            LoadGameAction()
                             ],
                             headers= [
                             "",""
-                            ]
-                   )
+                            ],
+                   player=player,game=game)
+if r:
+    player, game = r
 input(Translate('choose_string'))
-
-player.SpawnLeeani()
-player.SpawnLeeani()
-player.SpawnLeeani()
-player.SpawnLeeani()
-player.SpawnLeeani()
 player.calcCarryWeight()
-for i in range(100):
-    player.inventory.addItem(random.choice(list(game.itemDefs.keys())), 1)
-player.inventory.addItem('berries',20)
-player.inventory.addItem('plasticBottle',5)
-player.inventory.addItem('plasticJug',2)
-player.inventory.addItem('hacksaw',1)
-player.inventory.addItem('cannedFoodBeans',3)
-player.inventory.addItem('cannedFoodMysteryMeat',3)
-hour = 0
 while True:
-    displayDay(1,hour)
+    displayDay(player)

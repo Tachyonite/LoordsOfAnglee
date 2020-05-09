@@ -38,7 +38,7 @@ def s(spk, text):  # short for speaker, so you can define someone as saying some
     p("".join(spk + ": " + text))
 
 def getAlphas(table):
-    stringy = list("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    stringy = list("123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
     return stringy[0:len(table)]
 
 def a(prompt, table):
@@ -56,10 +56,10 @@ def a(prompt, table):
         if instr == "" or instr == '\r':
             return vmax
         elif instr in alphas:
-            return alphas.index(instr)
+            return alphas.index(instr)-vmin
         else:
             pass
-    inp = input("Press Ctrl+C again to quit.")
+    inp = input("Press Ctrl+C again to quit (or any other key to cancel).")
     if inp != '\x03':
         a(prompt,table)
 
@@ -109,6 +109,13 @@ class tc:  # text colours
         "cyan" : c,
         "red" : f,
         "purple" : h
+    }
+    rarity = {
+        "junk" : lg,
+        "common" : w,
+        "uncommon" : c,
+        "rare" : f,
+        "epic" : h
     }
 
 class dv:

@@ -12,6 +12,12 @@ fluidDefs:
     nutrition:
       water: 1
 
+  saltWater:
+    label: salt water
+    description: must be purified before it can be used
+    weight: 1 #weight is per litre
+    value: 0.5
+
   juice:
     label: fruit juice
     weight: 1.1
@@ -43,16 +49,17 @@ fluidDefs:
     sealed: True
     fillPriority: smallest
 
-  wineRed:
-    label: red wine
-    description: a rich red alcoholic beverage, it's very fancy and some leeani may like it a lot.
-    weight: 0.9
-    value: 20
-    nutrition:
-      water: -0.1 #dehydrating
-      alcohol: 10%
-    morale: 10 #out of 100
-
+#
+#  wineRed:
+#    label: red wine
+#    description: a rich red alcoholic beverage, it's very fancy and some leeani may like it a lot.
+#    weight: 0.9
+#    value: 20
+#    nutrition:
+#      water: -0.1 #dehydrating
+#      alcohol: 10%
+#    morale: 10 #out of 100
+#
   sodaLemonade:
     label: lemonade
     description: a fizzy drink made from lemons and lots of sugar that leaves a tingle on the tongue

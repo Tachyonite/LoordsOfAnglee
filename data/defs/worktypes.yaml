@@ -8,8 +8,8 @@ workDefs:
   scavenger:
     label: scavenger
     labelDo: scavenging
-    timeBase: 5h #hours
-    description: "Scavengers are responsible for finding scrap, old machines, toolboxes and crates, and very carefully taking them apart. Scavenging takes 5 hours."
+    timeBase: 8h #hours
+    description: "Scavengers are responsible for finding scrap, old machines, toolboxes and crates, and very carefully taking them apart. Scavenging takes 8 hours."
     skills:
       utility: 2
       strength: 1
@@ -19,13 +19,13 @@ workDefs:
   forager:
     label: forager
     labelDo: foraging
-    description: "Foragers will find various natural foodstuffs, as well as water for the group. They may find the occasional bit of scrap. Foraging takes 5 hours."
-    timeBase: 5h #hours
+    description: "Foragers will find various natural foodstuffs, as well as water for the group. They may find the occasional bit of scrap. Foraging takes 4 hours."
+    timeBase: 4h #hours
     skills:
       learning: 2
       perception: 1
     outputTables:
-      forager: 3
+      forager: 2
 
   explorer:
     label: explorer
@@ -51,6 +51,7 @@ workDefs:
     label: researcher
     labelDo: researching
     description: "Researchers examine scrap, put it back together, or come up with new ways to build things -- and then record their findings. This takes 8 hours."
+    goesAfk: False
     timeBase: 8h #hours
     skills:
       learning: 2
@@ -59,20 +60,80 @@ workDefs:
   crafter:
     label: crafter
     labelDo: crafting
-    description: "Crafters take scrap and natural resources and make known items out of them. Crafters work for 8 hours, where they spend time building things that are queued. More crafters do not speed up production, but they can craft multiple things at once."
-    timeBase: 8h #hours
+    description: "Crafters take scrap and natural resources and make known items out of them. Crafters work for 12 hours, where they spend time building things that are queued. More crafters do not speed up production, but they can craft multiple things at once. Since crafters don't leave the campsite, they can be reassigned at any time."
+    timeBase: 12h #hours
     goesAfk: False
     skills:
       utility: 2
       learning: 1
+    effectiveItems:
+      toolBelt: 0.3
 
   hunter:
     label: hunter
     labelDo: hunting
-    description: "Hunters kill small and large animals, can fish at rivers, and set traps. Hunting takes 8 hours."
+    description: "Hunters kill small and large animals, and set traps. Hunting takes 8 hours."
     timeBase: 8h #hours
+    toolsRequired:
+      hunting: 1
     skills:
       strength: 2
       perecption: 1
     outputTables:
-      - hunter
+      hunter: 2
+    effectiveItems:
+      stoneSpear: 0.2
+
+  fisher:
+    label: fisher
+    labelDo: fishing
+    description: "Fishers...can fish at rivers. Fishing takes 8 hours."
+    toolsRequired:
+      fishing: 1
+    timeBase: 8h #hours
+    skills:
+      utility: 2
+      vitality: 1
+    outputTables:
+      fisher: 2
+    effectiveItems:
+      fishingRod: 0.5
+
+  lumberfox:
+    label: lumberfoxe
+    labelDo: woodcutting
+    description: "Lumberfoxes cut wood and bring it back to the group. Woodcutting takes 4 hours."
+    timeBase: 4h #hours
+    skills:
+      strength: 2
+      vitality: 1
+    outputTables:
+      woodcutter: 2
+    effectiveItems: #measured in percent, these tools boost the resources gained, but costs durability of the item.
+      scrapAxe: 0.1 #a 10% bonus
+
+  rockhunter:
+    label: rockfoxe
+    labelDo: rockhunting
+    description: "Rockfoxes look for useful rocks and shinies to work with. Rockhunting takes 4 hours."
+    timeBase: 4h #hours
+    skills:
+      perception: 2
+      strength: 1
+    outputTables:
+      woodcutter: 2
+    effectiveItems:
+      scrapPick: 0.2
+      scrapShovel: 0.1
+
+  looter:
+    label: looter
+    labelDo: looting
+    description: "Looters enter buildings forcefully and take whatever isn't bolted down. It's risky, as it will deplete resources in an area quickly, and is not very subtle. It takes 4 hours."
+    timeBase: 4h #hours
+    destructive: True
+    skills:
+      utility: 2
+      perception: 1
+    outputTables:
+      looter: 6

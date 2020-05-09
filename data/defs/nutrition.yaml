@@ -9,7 +9,7 @@ itemDefs:
       - raw
       - vegetarian
     nutrition:
-      water: 0.05
+      water: 0.1
       food: 0.1
 
   nuts:
@@ -49,37 +49,150 @@ itemDefs:
     label: canned beans
     description: a can of beans, sealed in a tin can -- uncooked and probably kinda slimy
     weight: 0.1
+    rarity: uncommon
     categories:
       - food
       - raw
       - vegetarian
       - manmade
     nutrition:
-      food: 1
+      food: 2
     litter:
       - tinCan
 
   cannedFoodMysteryMeat:
-    label: canned mystery meat
-    description: a can of unidentified meat, sealed in a tin can. kinda gross but whatever.
+    label: canned Spummo
+    description: a can of unidentified, possibly-pork-based meat, sealed in a tin can. kinda gross but whatever.
     weight: 0.1
+    rarity: uncommon
     categories:
       - food
       - raw
       - meat
       - manmade
     nutrition:
-      food: 1
+      food: 2
     litter:
       - tinCan
 
-  rawFishSmall:
-    label: small raw fish
+  cannedFoodColaSoda:
+    label: Cola-Soda
+    description: a soda can full of delicious, super-sugary drink. kinda gross but whatever.
+    weight: 0.1
+    rarity: uncommon
+    categories:
+      - drink
+      - manmade
+    nutrition:
+      water: 1
+    litter:
+      - tinCan
+      - canTag
+
+  rawFish:
+    label: raw fish (m)
     description: floppy fish freshly finangled from fluvial flows.
-    weight: 0.2
+    weight: 0.5
     categories:
       - food
       - raw
       - fish
     nutrition:
-      food: 0.5
+      food: 1
+
+  rawRabbit:
+    label: raw rabbit
+    description: a small prey beast of the fields
+    weight: 1
+    categories:
+      - food
+      - raw
+      - meat
+    nutrition:
+      food: 1
+
+  rawPoultry:
+    label: raw poultry
+    description: a hunted bird, plucked and ready to be cooked. inedible raw, due to pathogen concerns.
+    weight: 1
+    categories:
+      - food
+      - raw
+      - meat
+      - dangerous
+
+  rawVenison:
+    label: raw venison
+    description: meat from a deer or
+    weight: 1
+    categories:
+      - food
+      - raw
+      - meat
+    nutrition:
+      food: 1
+
+
+  cookedFish:
+    label: cooked fish
+    description: floppy fish freshly finangled from fluvial flows, flamed.
+    weight: 0.5
+    categories:
+      - food
+      - cooked
+      - fish
+    nutrition:
+      food: 1
+
+
+  cookedRabbit:
+    label: cooked rabbit
+    description: a small prey beast of the fields, skinned and cooked
+    weight: 0.5
+    categories:
+      - food
+      - cooked
+      - meat
+    nutrition:
+      food: 1
+
+  cookedPoultry:
+    label: cooked poultry
+    description: a portion of delectable bird meat
+    weight: 0.5
+    categories:
+      - food
+      - cooked
+      - meat
+    nutrition:
+      food: 1
+
+  cookedVenison:
+    label: cooked venison
+    description: meat from a stag or deer, cooked and gamey.
+    weight: 0.5
+    rarity: uncommon
+    categories:
+      - food
+      - cooked
+      - meat
+    nutrition:
+      food: 1
+
+  leftovers:
+    label: leftovers
+    description: leftover bits of meat or vegetables from someone's eyes being bigger than their stomach.
+    weight: 0.1
+    categories:
+      - food
+    nutrition:
+      food: 0.2
+
+  leftoverMeal:
+    label: vuffelsqueek
+    description: leftover bits of meat or vegetables from someone's eyes being bigger than their stomach, cooked into a whole meal.
+    weight: 0.5
+    categories:
+      - food
+    nutrition:
+      food: 1

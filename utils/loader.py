@@ -1,5 +1,6 @@
 from core import *
 import utils.translator as translator
+import glob
 
 #######################################################################################################################
 
@@ -13,6 +14,8 @@ attrs = {
     'fluidDefs' : "Fluid",
     'workDefs' : "Work",
     'tableDefs' : "Table",
+    "locationDefs" : "Location",
+    "setDefs" : "Set"
 }
 
 def loadDef(itemloader,properties):
@@ -33,14 +36,13 @@ def loadDef(itemloader,properties):
 
 ################################################
 
-with open("dictcalls.txt") as f:
-    dictcalls = [x.strip("\n") for x in f.readlines()]
+dictcalls = glob.glob("data/**/*.yaml")
 
 for file in dictcalls:
-    if file.startswith("#"):
-        continue
-    with open("{}.yaml".format(file)) as STREAM:
+    with open(file) as STREAM:
         itemLoader = yaml.safe_load(STREAM)
+        if not itemLoader:
+            continue
         loadDef(itemLoader,game)
 
 ## REPLACE WITH ACTUAL SEARCHER LATER

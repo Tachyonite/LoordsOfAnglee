@@ -1,25 +1,49 @@
 import tabulate as tb
+import random
+import glob
 
 from utils.helpers import *
 from utils.translator import Translate
-from core import Find, Player, Leeani, game
+from core import Find, Player, Leeani
+
+from utils.saveLoad import saveAllInformation
+from utils.saveLoad import loadAllInformation
 
 from math import ceil
 
-def generateActionList(context):
+def generateActionList(context,player,game):
 
     actions = []
+
+    actionsToWork = {
+        "fisher":"FisherWorkAction()",
+        "hunter":"HunterWorkAction()",
+        "scavenger":"ScavengerWorkAction()",
+        "looter":"LooterWorkAction()",
+        "lumberfox":"LumberfoxWorkAction()"
+    }
+
 
     if context == "nomad_day":
 
         actions.append(ForageWorkAction())
-        actions.append(ExploreWorkAction())
+        for i in player.location.linked:
+            actions.append(ExploreWorkAction(i))
+        if hasattr(player.location,'enableWork'):
+            for i in player.location.enableWork:
+                if player.inventory.collateTools(i):
+                    actions.append(eval(actionsToWork[i]))
         actions.append(ViewDetailInventoryAction())
         actions.append(ViewCraftsAction())
         actions.append(ViewCharAction())
-
-
+        for i in player.location.linked:
+            if i.intel == 100:
+                actions.append(RelocateAction(i))
+        actions.append(SaveGameAction(player=player,game=game))
         actions.append(NextHourAction())
+        for i in actions:
+            if hasattr(i,"explorer"):
+                i.exploreArea(player=player)
 
     return actions
 
@@ -39,26 +63,117 @@ class BlankAction(Action):
     def perform(self):
         pass
 
+class NewGameAction(Action):
+    def __init__(self, name, desc):
+        super().__init__(name, desc)
+
+    def perform(self, player, game):
+        u()
+        print(Find.ChapterDef("nomad").getVignette())
+        print()
+        p(Find.ChapterDef("nomad").getDescription())
+        player.SpawnLeeani()
+        player.SpawnLeeani()
+        player.SpawnLeeani()
+        player.SpawnLeeani()
+        player.SpawnLeeani()
+        # for i in range(300):
+        #     player.inventory.addItem(random.choice(list(game.itemDefs.keys())), 1)
+        game.setDefs["normal"].add(player)
+        player.location = random.choice(list(game.locationDefs.values()))
+        player.location.generateLinked(game)
+
+class SaveGameAction(Action):
+    def __init__(self,player,game):
+        super().__init__(name="Save Game", description="Save Game")
+
+    def perform(self,player,game):
+        u()
+        p(Translate("save_game_prompt"))
+        savename  = input("  ")
+        saveAllInformation(savename,player,game)
+
+    def performAuto(self,player,game):
+        saveAllInformation("autosave",player,game)
+
+
+class LoadGameAction(Action):
+    def __init__(self):
+        super().__init__(name="Load Game", description="Load Game")
+
+    def perform(self,playerold,gameold):
+        global player
+        global game
+        table = glob.glob("saves/*.dat")
+        print(tb.tabulate([[i+1,x.replace(".dat","")] for i,x in enumerate(table)],headers=["#","filename"], tablefmt="simple"))
+        print("--")
+        gamesave = a(Translate("load_game_prompt"),table)+1
+        player, game = loadAllInformation(table[gamesave-1])
+        print(game.chapterDefs[player.chapter].getVignette())
+        print()
+        p(game.chapterDefs[player.chapter].getDescription())
+        return player, game
+
+
+class RelocateAction(Action):
+    def __init__(self,location):
+        self.location = location
+        super().__init__(name=Translate('relocate_action')+"to {}".format(self.location.label),description=Translate('relocate_action'))
+    def perform(self,player):
+        p("You'll be moving to the {}.".format(self.location.label))
+        p("Relocating will empty any non-sealed containers, and any items that are not moveable.")
+        p("You won't be able to return to this location.")
+        p("These things will be left behind:")
+        for k, v in player.inventory.contents.items():
+            if not game.itemDefs[k].moveable:
+                p(" - " + v[0].label)
+        p("Proceed? y/n")
+        act = getch()
+        if act == "y":
+            p("Everyone is packing up and getting ready to move to the {}.".format(self.location.label))
+            self.checkWorldEvents()
+            p("Press any key to continue.")
+            msvcrt.getch()
+            player.location = self.location
+            player.location.generateLinked(game)
+    def checkWorldEvents(self):
+        pass
+
 class NextHourAction(Action):
     def __init__(self):
         super().__init__(name=Translate('next_hour_action'),description=Translate('next_hour_action'))
-    def perform(self,player):
+    def perform(self,player,game):
+        p("...")
         if not player.addTime(): # THE DAY IS OVER
             p("Everyone's back for the night. They will keep their assigned jobs and do them as many times as they can in the day unless you change them when they next come back.")
             for lee in player.group.values():
                 if lee.afk:
-                    if lee.jobTimeLeft == 0:
-
-                        p("{} returned from {}".format(lee.fullName, lee.job.labelDo))
-                        lee.rollWorkResults()
+                    if lee.jobTimeLeft <= 2:
+                        p(tc.c+"{} returned from {}".format(lee.fullName, lee.job.labelDo)+tc.w)
+                        if lee.job.defName == "explorer":
+                            gainedIntel = lee.stats.learning + random.randint(0,5)
+                            player.location.linked[lee.exploreLinkedIndex].intel += gainedIntel
+                            if player.location.linked[lee.exploreLinkedIndex].intel > 100: player.location.linked[lee.exploreLinkedIndex].intel = 100
+                            p("+ Scouted {}% on the  {}".format(gainedIntel,player.location.linked[lee.exploreLinkedIndex].label))
+                        lee.rollWorkResults(player,game)
                         lee.afk = False
 
                     else:
-                        p("{} returned from {}".format(lee.fullName, lee.job.labelDo))
+                        p(tc.y+"{} returned early from {} {}".format(lee.fullName, lee.job.labelDo,lee.jobTimeLeft)+tc.w)
                         lee.afk = False
+                else:
+                    if lee.job != Find.WorkTypeByName("idle"):
+                        p(tc.c + "{} stopped {} for tonight".format(lee.fullName, lee.job.labelDo) + tc.w)
+                lee.satisfyNutrition()
+            SaveGameAction(player,game).performAuto(player,game)
             msvcrt.getch()
         else: # AN HOUR PASSES
+            textDisp = False
             for lee in player.group.values():
+
+                if lee.job == Find.WorkTypeByName("crafter"):
+                    lee.calculateCrafts()
+
                 if not lee.afk:
                     if lee.job == Find.WorkTypeByName("idle"):
                         pass
@@ -68,13 +183,20 @@ class NextHourAction(Action):
                             lee.afk = True
 
                 else:
+                    lee.jobTimeLeft -= 1
                     if lee.jobTimeLeft == 0:
-                        p("{} returned from {}".format(lee.fullName, lee.job.labelDo))
-                        lee.rollWorkResults()
+                        textDisp = True
+                        p(tc.c+"{} returned from {}".format(lee.fullName, lee.job.labelDo)+tc.w)
+                        if lee.job.defName == "explorer":
+                            gainedIntel = lee.stats.learning + random.randint(0,5)
+                            lee.location.intel += gainedIntel
+                            if lee.location.intel > 100: lee.location.intel = 100
+                            p("+ Scouted {}% on the {}".format(gainedIntel,lee.location.label))
+                        lee.rollWorkResults(player,game)
                         lee.afk = False
-                        msvcrt.getch()
-                    else:
-                        lee.jobTimeLeft -= 1
+            if textDisp:
+                msvcrt.getch()
+
 
 
 
@@ -93,7 +215,7 @@ class ListAction(Action):
     def __init__(self, name, desc):
         super().__init__(name, desc)
 
-    def perform(self, actions, headers, player=False):
+    def perform(self, actions, headers, player=False,game=False):
         alphas = getAlphas(actions)
         table = [[alphas[i],x.name] for i,x in enumerate(actions)]
         print(tb.tabulate(table, headers, "simple"))
@@ -101,11 +223,15 @@ class ListAction(Action):
         ac = a(Translate('choose_string'),table)
         acTodo = actions[ac]
         if 'group' in acTodo.perform.__code__.co_varnames:
-            acTodo.perform(player.group)
+            return acTodo.perform(player.group)
+        elif 'player' in acTodo.perform.__code__.co_varnames and 'game' in acTodo.perform.__code__.co_varnames:
+            return acTodo.perform(player,game)
+        elif 'playerold' in acTodo.perform.__code__.co_varnames and 'gameold' in acTodo.perform.__code__.co_varnames:
+            return acTodo.perform(player,game)
         elif 'player' in acTodo.perform.__code__.co_varnames:
-            acTodo.perform(player)
+            return acTodo.perform(player)
         else:
-            acTodo.perform()
+            return acTodo.perform()
 
 class WorkAction(Action):
     def __init__(self, name, description, workName):
@@ -126,15 +252,37 @@ class WorkAction(Action):
                 lee.job = self.workType
                 lee.jobAssignedHour = player.hour
                 lee.jobTimeLeft = self.workType.timeCost() - 1
-
+                print(lee.job)
+                if lee.job.label == "explorer" and hasattr(self,"location"):
+                    lee.location = self.location
 
 class ForageWorkAction(WorkAction):
     def __init__(self):
         super().__init__(Translate('action_forage'), Translate('action_forage_desc'),"forager")
+class FisherWorkAction(WorkAction):
+    def __init__(self):
+        super().__init__(Translate('action_fisher'), Translate('action_fisher_desc'),"fisher")
+class HunterWorkAction(WorkAction):
+    def __init__(self):
+        super().__init__(Translate('action_hunter'), Translate('action_hunter_desc'),"hunter")
+class ScavengerWorkAction(WorkAction):
+    def __init__(self):
+        super().__init__(Translate('action_scavenger'), Translate('action_scavenger_desc'),"scavenger")
+class LooterWorkAction(WorkAction):
+    def __init__(self):
+        super().__init__(Translate('action_looter'), Translate('action_looter_desc'),"looter")
+class LumberfoxWorkAction(WorkAction):
+    def __init__(self):
+        super().__init__(Translate('action_lumberfox'), Translate('action_lumberfox_desc'),"lumberfox")
 
 class ExploreWorkAction(WorkAction):
-    def __init__(self):
+    def __init__(self,location):
+        self.location = location
+        self.explorer = True
         super().__init__(Translate('action_explore'), Translate('action_explore_desc'),"explorer")
+    def exploreArea(self,player):
+        self.name = "{} {}".format(Translate('action_explore'),self.location.label.title())
+
 
 class CraftingWorkAction(WorkAction):
     def __init__(self):
@@ -174,14 +322,14 @@ class ListJobAssignAction(Action):
             p("There are {} hours left in the day.{}".format(tc.f + str(player.dayLength - player.hour) if player.dayLength - player.hour < workType.timeCost() else tc.w + str(player.dayLength - player.hour),tc.w))
             if 8 - player.hour < workType.timeCost():
                 p("They may return with less resources than expected.")
-            p("{0} favours {1}»» and {2}»".format(workType.labelDo.title(),tc.y + f2.title() + tc.w,tc.y + f1.title() + tc.w))
+            p("{0} favours {1}» and {2}›".format(workType.labelDo.title(),tc.y + f2.title() + tc.w,tc.y + f1.title() + tc.w))
             p(Translate('assignment_suggestion'))
 
             for i,skill in enumerate(iter(favoured)):
                 if skill == f1:
-                    headers[i + 3] = tc.y + headers[i + 3] + tc.w + "»"
+                    headers[i + 3] = tc.y + headers[i + 3] + tc.w + "›"
                 if skill == f2:
-                    headers[i + 3] = tc.y + headers[i + 3] + tc.w + "»»"
+                    headers[i + 3] = tc.y + headers[i + 3] + tc.w + "»"
         table = [[
             value.fullName,
             value.hp
@@ -193,7 +341,7 @@ class ListJobAssignAction(Action):
         ] + value.stats.getWorkFormatted(workType) + [value.job.labelDo] for key,value in group.items()]
         tableView.append(["[[BACK]]"])
         for i,x in enumerate(iter(tableView)): #type: int, list
-            x.insert(0,i)
+            x.insert(0,i+1)
             if "idling" not in x and i != len(tableView)-1:
                 for z in x:
                     zz = x[x.index(z)]
@@ -221,15 +369,6 @@ class ListJobAssignAction(Action):
             return False
         return lee
 
-class NewGameAction(Action):
-    def __init__(self, name, desc):
-        super().__init__(name, desc)
-    def perform(self):
-        u()
-        print(Find.ChapterDef("nomad").getVignette())
-        print()
-        p(Find.ChapterDef("nomad").getDescription())
-
 class ViewCraftsAction(Action):
     def __init__(self):
         super().__init__(name=Translate('view_craft_action'), description=Translate('view_craft_action'))
@@ -245,10 +384,10 @@ class ViewCraftsAction(Action):
         p("s | {}".format(Translate('down_item')))
         p("d | {}".format(Translate('next_page')))
         p("a | {}".format(Translate('prev_page')))
+        p("f | {}".format(Translate('favourite_item')))
         p("# | {}".format(Translate('page_number')))
         p("+ | {}".format(Translate('add_craft')))
         p("- | {}".format(Translate('remove_craft')))
-        print(selectedItemIndex)
         print()
         p(tc.c+"e | {}".format(Translate('assign_crafter'))+tc.w)
         print()
@@ -265,7 +404,7 @@ class ViewCraftsAction(Action):
         act = True
         page = 0
         selectedItemIndex = 0
-        tab = player.inventory.craftTabulate(selectedItemIndex,page=page)
+        tab = player.inventory.craftTabulate(player, selectedItemIndex,page=page)
         if not tab:
             print("No recipes available yet. Find more resources or research more.")
             print("Press any key to continue.")
@@ -331,24 +470,32 @@ class ViewCraftsAction(Action):
                     offset = selectedItemIndex + o
                     print(tc.bg_w + "\033[{};{}H>".format(len(tab[3][page]) + o - 1, 1) + tc.bg_b)
                     print("\033[{};{}H|".format(o, 1))
+            elif act == "f":
+                isfav = tab[4][page][selectedItemIndex].favourite
+                tab[4][page][selectedItemIndex].favourite = not isfav
+                u()
+                tab = player.inventory.craftTabulate(player, selectedItemIndex, page=page)
+                offset = selectedItemIndex + o
+                print(tab[0], "\n")
+                print(tc.bg_w + "\033[{};{}H>".format(offset, 1) + tc.bg_b)
             elif act == "+":
 
                 try:
-                    player.queuedCrafts[tab[2][page][selectedItemIndex][2].defName] += 1
+                    player.queuedCrafts[tab[4][page][selectedItemIndex].defName] += 1
                 except KeyError:
-                    player.queuedCrafts[tab[2][page][selectedItemIndex][2].defName] = 1
+                    player.queuedCrafts[tab[4][page][selectedItemIndex].defName] = 1
                 u()
-                tab = player.inventory.craftTabulate(selectedItemIndex, page=page)
+                tab = player.inventory.craftTabulate(player, selectedItemIndex, page=page)
                 offset = selectedItemIndex + o
                 print(tab[0], "\n")
                 print(tc.bg_w +"\033[{};{}H>".format(offset, 1) + tc.bg_b)
             elif act == "-":
 
-                if tab[3][page][selectedItemIndex][3] > 0:
-                    player.queuedCrafts[tab[2][page][selectedItemIndex][2].defName] -= 1
+                if player.queuedCrafts[tab[4][page][selectedItemIndex].defName] > 0:
+                    player.queuedCrafts[tab[4][page][selectedItemIndex].defName] -= 1
                     u()
                     offset = selectedItemIndex + o
-                    tab = player.inventory.craftTabulate(selectedItemIndex, page=page)
+                    tab = player.inventory.craftTabulate(player, selectedItemIndex, page=page)
                     print(tab[0], "\n")
                     print(tc.bg_w + "\033[{};{}H>".format(offset, 1) + tc.bg_b)
             else:
@@ -378,6 +525,8 @@ class ViewInventoryAction(Action):
             else:
                 p("{}: {}/{}kg".format(Translate('carry_weight'), str(round(tab[2])), player.carryWeight))
             print()
+            p("Days of food: {}".format(player.inventory.calcFoodDays(player.group)))
+            p("Days of water: {}".format(player.inventory.calcWaterDays(player.group)))
             print()
             p("{} {}/{}".format(Translate('page'), page + 1, maxpage + 1))
             p("d | {}".format(Translate('next_page')))
@@ -420,11 +569,15 @@ class ViewDetailInventoryAction(Action):
         else:
             p("{}: {}/{}kg".format(Translate('carry_weight'), str(round(tab[4])), player.carryWeight))
         print()
+        p("Days of food: {}".format(player.inventory.calcFoodDays(player.group)))
+        p("Days of water: {}".format(player.inventory.calcWaterDays(player.group)))
+        print()
         p("{} {}/{}".format(Translate('page'), page + 1, maxpage + 1))
         p("w | {}".format(Translate('up_item')))
         p("s | {}".format(Translate('down_item')))
         p("d | {}".format(Translate('next_page')))
         p("a | {}".format(Translate('prev_page')))
+        p(tc.f+"x | {}".format(Translate('drop_item'))+tc.w)
         p("# | {}".format(Translate('page_number')))
         p("? | {}".format(Translate('simple_mode')))
         print()
@@ -432,22 +585,33 @@ class ViewDetailInventoryAction(Action):
         print()
         print("..|")
         maxwidth = max([len(i.labelResolved()) for i in tab[2][page]]) + 18
-        player.inventory.displayItemDetailsXY(tab[2][page][selectedItemIndex], tab[3][page][selectedItemIndex][1], 1, maxwidth)
+        try:
+            player.inventory.displayItemDetailsXY(tab[2][page][selectedItemIndex], tab[3][page][selectedItemIndex][1], 1, maxwidth)
+        except IndexError:
+            player.inventory.displayItemDetailsXY(tab[2][page][-1], tab[3][page][-1][1],
+                                                  1, maxwidth)
+            selectedItemIndex = len(tab[2][page]) - 1
+        print("\033[{};{}H ".format(len(tab[2][page]) + 4, 1))
         print("\033[{};{}H".format(len(tab[2][page]) + 15, 1))
+        return selectedItemIndex
 
-
-    def perform(self,player):
+    def perform(self,player,game):
         u()
         act = True
         page = 0
         selectedItemIndex = 0
         tab = player.inventory.nameTabulate(selectedItemIndex, page=page, sort="rarity")
+        if not tab:
+            u()
+            p("Nothing in the inventory! Maybe get some items and then come back.")
+            msvcrt.getch()
+            return
         minpage = 0
         maxpage = ceil(tab[1] / player.tableLength) - 1
 
         print(tab[0])
         while act:
-            self.inv(player,tab,page,selectedItemIndex,maxpage)
+            selectedItemIndex = self.inv(player,tab,page,selectedItemIndex,maxpage)
             print(tc.bg_w + "\033[{};{}H>".format(selectedItemIndex+ 2 + 2, 1) + tc.bg_b)
             act = getch()
             o = 4
@@ -462,7 +626,6 @@ class ViewDetailInventoryAction(Action):
                     if selectedItemIndex > len(tab[3][page]) - 1:
                         selectedItemIndex = len(tab[3][page]) - 1
                     offset = selectedItemIndex + o
-
                     tab = player.inventory.nameTabulate(selectedItemIndex, page=page, sort="rarity")
                     u()
                     print(tab[0], "\n")
@@ -500,11 +663,28 @@ class ViewDetailInventoryAction(Action):
                     offset = selectedItemIndex + o
                     print(tc.bg_w + "\033[{};{}H>".format(len(tab[3][page]) + o-1, 1) + tc.bg_b)
                     print("\033[{};{}H|".format(o, 1))
+            elif act == "x":
+                player.inventory.removeItem(tab[2][page][selectedItemIndex].defName,1)
+                offset = selectedItemIndex + o
+                tab = player.inventory.nameTabulate(selectedItemIndex, page=page, sort="rarity")
+                if not tab:
+                    u()
+                    p("Nothing in the inventory! Maybe get some items and then come back.")
+                    msvcrt.getch()
+                    return
+                u()
+                print(tab[0], "\n")
+                print(tc.bg_w + "\033[{};{}H>".format(offset, 1) + tc.bg_b)
             elif act == "u" and hasattr(tab[2][page][selectedItemIndex],'openable'):
                 selItem = tab[2][page][selectedItemIndex]
-                player.inventory.removeItem(selItem.defName,1)
                 for k,v in selItem.openable['contents'].items():
-                    player.inventory.addItem(k,v)
+                    if k.startswith("$"):
+                        for vv in range(v):
+                            player.inventory.openCrate(selItem)
+                            player.inventory.removeItem(game.crateDefs[k[1:]].crateItemDef,1)
+                    else:
+                        player.inventory.addItem(k,v)
+                        player.inventory.removeItem(selItem.defName, 1)
                 tab = player.inventory.nameTabulate(selectedItemIndex, page=page, sort="rarity")
                 u()
                 print(tab[0], "\n")

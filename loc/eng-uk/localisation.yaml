@@ -1,13 +1,13 @@
 opening_title: "LOORDS OF ANGLEE"
 title: |-1
   XX::::::::::::::::::::::::::::::::::::::::::::::::::::XX
-  ::                                                    ::
-  ::                  _   _   _   _   __                ::
-  ::              |  / \ / \ |_] | \ [_                 ::
-  ::              |_ \_/ \_/ | \ |_/ __]                ::
-  ::                                                    ::
-  ::                  OF       ANGLEE                   ::
-  ::                                                    ::
+  ::====================================================::
+  ::||                _   _   _   _   __              ||::
+  ::||            |  / \ / \ |_] | \ [_               ||::
+  ::||            |_ \_/ \_/ | \ |_/ __]              ||::
+  ::||                                                ||::
+  ::||                OF       ANGLEE                 ||::
+  ::====================================================::
   XX::::::::::::::::::::::::::::::::::::::::::::::::::::XX
 
 splash:
@@ -33,12 +33,12 @@ learning: "Learning"
 perception: "Perception"
 eloquence: "Eloquence"
 strength: "Strength"
-vitality_short: "Vtl"
-utility_short: "Utl"
-learning_short: "Lrn"
-perception_short: "Per"
-eloquence_short: "Elo"
-strength_short: "Str"
+vitality_short: "VIT"
+utility_short: "UTL"
+learning_short: "LRN"
+perception_short: "PER"
+eloquence_short: "ELO"
+strength_short: "STR"
 
 work_header: "Work"
 job_choose_string: "ASSIGN YOUR {}S"
@@ -51,12 +51,30 @@ elsewhere_key: "assigned elsewhere"
 bonus_key: "work bonus"
 penalty_key: "work penalty"
 
+# Saveload ####################
+
+save_game_prompt: "Choose a name for the save file."
+load_game_prompt: "Choose the load file."
+
 # Actions ################
 
 action_forage: "Forage"
 action_forage_desc: "Forage"
 action_explore: "Explore"
 action_explore_desc: "Explore"
+action_fisher: "Fish"
+action_fisher_desc: "Fish"
+action_hunter: "Hunt"
+action_hunter_desc: "Hunt"
+action_scavenger: "Scavenge"
+action_scavenger_desc: "Scavenge"
+action_looter: "Loot"
+action_looter_desc: "Loot"
+action_lumberfox: "Logging"
+action_lumberfox_desc: "Logging"
+
+relocate_action: "Relocate"
+relocate_action_desc: "Relocate"
 
 view_character_action: "Group Info"
 view_inventory_action: "Inventory"
@@ -72,6 +90,9 @@ page: "Page"
 page_number: "Page Number"
 detail_mode: "Detail Mode"
 simple_mode: "Simple Mode"
+drop_item: "Drop Item"
+add_craft: "Queue Craft"
+remove_craft: "Unqueue Craft"
 up_item: "Item Up"
 down_item: "Item Down"
 escape: "Back"

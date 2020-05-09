@@ -1,5 +1,22 @@
 craftingDefs:
 
+  campfire:
+    label: build campfire
+    description: arrange some rocks around a hole and fill it with fuel
+    ingredients:
+      rocks:
+        - - rock: 5
+      fuel:
+        - - woodFragments: 10
+          - stickShort: 6
+          - stickHeavy: 3
+          - softwood: 3
+          - hardwood: 2
+          - scrapWood: 3
+    output:
+      campfire: 1
+    timeBase: 30m
+
   rainCatcher:
     label: build rain catcher
     description: using a tarp and some sticks, set up a catcher to passively collect water
@@ -19,7 +36,7 @@ craftingDefs:
 
   trapGame:
     label: make game trap
-    description: a jury-rigged spring-loaded trap using nails to catch and kill small game such as rabbits
+    description: a jerry-rigged spring-loaded nail-spiking trap to catch and kill small game such as rabbits
     ingredients:
       trigger:
         - - string: 1
@@ -47,9 +64,9 @@ craftingDefs:
         - - string: 1
           - twine: 3
       body:
-        - - scrapMetal: 3
-          - castMetal: 2
-          - forgedMetal: 1
+        - - scrapMetal: 5
+          - castMetal: 3
+          - forgedMetal: 2
       teeth:
         - - nail: 20
           - screw: 20
@@ -60,4 +77,3 @@ craftingDefs:
     tool:
       hammering: 2
     timeBase: 2h
-

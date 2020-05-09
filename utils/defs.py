@@ -1,6 +1,7 @@
 import random
 
 from utils.helpers import p
+from utils.helpers import tc
 
 class Item():
     def __init__(self, defName, object):
@@ -11,8 +12,10 @@ class Item():
         self.weight = 0
         self.rarity = 'common'
         self.property = None
+        self.moveable = True
         self.nutrition = None
         self.object = dict(object)
+
         for k, v in self.object.items():
             setattr(self, k, v)
         if hasattr(self,'storage'):
@@ -22,8 +25,7 @@ class Item():
         if hasattr(self, 'durability'):
             self.durability['uses'] = self.durability['maxUses']
 
-
-
+        self.rarityLabel = tc.rarity[self.rarity] + self.labelResolved() + tc.w
         '''
         try:
             self.t = rarity(self.rarity) + self.label + rarity("reset")
@@ -40,16 +42,20 @@ class Item():
         self.value = int(self.value * unpackAmount)
         self.weight = int(self.weight * unpackAmount)
 
-    def labelResolved(self):
+    def labelResolved(self,invamt=1):
         if hasattr(self, 'diffprop'):
             props = self.getDiffprop()
+
             if hasattr(self,'tool'):
                 return "{} ({}%)".format(self.label, round(props[0]/props[1] * 100))
             if len(props) == 3 and props[2]:
-                return "{} ({})({}/{})".format(self.label, props[2].label, props[0], props[1])
+                return "{} of {} ({}/{})".format(self.label, props[2].label, props[0], props[1])
             else:
                 return "{} ({}/{})".format(self.label,props[0],props[1])
-
+        if hasattr(self, 'isCrate') and self.isCrate:
+            return "{}□{} ".format(tc.y,tc.rarity[self.rarity])+ self.label
+        if hasattr(self, 'moveable') and not self.moveable:
+            return self.label + " {}▼{}".format(tc.f,tc.rarity[self.rarity])
         else:
             return self.label
 
@@ -60,7 +66,7 @@ class Item():
             if len(self.diffprop) == 2:
                 return self.label + "({}/{})".format(eval(self.diffprop[0]),eval(self.diffprop[1]))
             elif len(self.diffprop) == 3:
-                return self.label + "({})({}/{})".format(eval(self.diffprop[2]),eval(self.diffprop[0]),eval(self.diffprop[1]))
+                return self.label + "({} {}/{})".format(eval(self.diffprop[2]),eval(self.diffprop[0]),eval(self.diffprop[1]))
         else:
             return self.label
 
@@ -127,11 +133,26 @@ class Item():
         except AttributeError:
             return False
 
+class Set():
+    def __init__(self, defName, object):
+        self.defName = defName
+        self.object = dict(object)
+        for k, v in self.object.items():
+            setattr(self, k, v)
+    def add(self,player):
+        for k,v in self.contents.items():
+            player.inventory.addItem(k,v)
+
 class Craft():
     def __init__(self, defName, object):
         self.defName = defName
-        for k, v in object.items():
+        self.object = dict(object)
+        for k, v in self.object.items():
             setattr(self,k,v)
+        self.progress = 0
+        self.favourite = False
+        self.rarity = "common"
+
 
     def tryGet(self, attr):
         try:
@@ -196,6 +217,20 @@ class Rarity():
     def getColor(self):
         return self.color
 
+
+class Location():
+    def __init__(self, defName, object):
+        self.defName = defName
+        self.linked = []
+        self.looted = False
+        self.intel = 0
+        for k, v in object.items():
+            setattr(self,k,v)
+
+    def generateLinked(self,game):
+        self.linked = set(game.locationDefs[i] for i in random.choices(population=list(self.connects.keys()),weights=list(self.connects.values()),k=random.randint(2,3)))
+
+
 class Chapter():
     def __init__(self, defName, object):
         self.defName = defName
@@ -212,10 +247,15 @@ class Crate():
         self.defName = defName
         for k, v in object.items():
             setattr(self,k,v)
-    def generateContents(self):
-        self.contents = random.choices(population=self.possibleContents,weights=self.weights,k=random.randrange(3,5))
-    def provideContents(self):
-        self.generateContents()
+    def generateContents(self,game):
+        self.contents = {}
+        for k,v in self.items.items():
+            pop = [[kk,1/1+game.itemDefs[kk].value] for kk in game.itemDefs.keys() if game.itemDefs[kk].moveable and game.itemDefs[kk].rarity == k and not hasattr(game.itemDefs[kk],'isCrate') and game.itemDefs[kk].weight < self.maxContentsWeight]
+            if pop:
+                self.contents[k] = random.choices(population=[i[0] for i in pop],weights=[i[1] for i in pop],k=v)
+        return self.contents
+    def provideContents(self,game):
+        self.generateContents(game)
         return self.contents
 
 class Work():
@@ -250,7 +290,7 @@ class Table():
             item = random.choice(list(self.contents.keys()))
             vals = self.contents[item].split("~")
             amt = random.randint(int(vals[0]),int(vals[1]))
-            return (item,amt)
+            return [item,amt]
 
 
 class Fluid():
@@ -273,6 +313,9 @@ class Fluid():
                 return 0
         else:
             return 0
+
+    def getWeight(self):
+        return self.weight
 
     def fillContainer(self,container,litres):
         '''

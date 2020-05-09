@@ -1,79 +1,228 @@
-river:
-  label: river
-  description: a flowing stream of water, which can be used for fishing, farming or power generation
-  workMultipliers:
-    scavenger: 1.1
-    forager: 1.2
-    explorer: 0.8
-    fisher: 1.5
-  enableWork:
-    - fisher
-  enableBuildings:
-    - waterWheel
-    - washingArea
-    - irrigator
-  connects: #Probabilities of spawning a connection
-    forest: 0.8
-    river: 1
-    dam: 0.05
-    lake: 0.3
-    #coast: 0.1
-    #town: 0.1
+locationDefs:
 
-dam:
-  label: dam
-  description: the river here is blocked by a manmade dam that controls the flow downstream. with some work, it could be used as a power generator.
-  workMultipliers:
-    scavenger: 1
-    forager: 0.8
-    explorer: 1.2
-    fisher: 1.3
-  enableWork:
-    - fisher
-  enableBuildings:
-    - damTurbine
-    - washingArea
-    - waterWheel
-    - irrigator
-  connects:
-    river: 1
-    lake: 0.3
-    #coast: 0.1
-    #industrialBuildings: 0.1
-    #town: 0.1
+  river:
+    label: river
+    description: a flowing stream of water, which can be used for fishing, farming or power generation
+    workMultipliers:
+      scavenger: 1.1
+      forager: 1.2
+      explorer: 0.8
+      fisher: 1.5
+    enableWork:
+      - fisher
+    enableBuildings:
+      - waterWheel
+      - washingArea
+      - irrigator
+    exploreNext: The river continues
+    connects: #Probabilities of spawning a connection
+      forest: 0.8
+      river: 1
+      dam: 0.05
+      lake: 0.3
+      #coast: 0.1
+      town: 0.1
+      field: 0.2
+    vignette: |-1
+                                              \
+                                             //\
+        \                                   ///\
+       //\                                  ///\
+       //\                              ,____||__##__
+      __|#,_                   ____,###,//
+      \\\___\~~~~~~~~~~~~~~~~///
+      \~~~~~~~~~~~~~~~~~~~///
 
-lake:
-  label: lake
-  description: the small waves lap at the rocky shore. this is a good place to fish and get fresh water.
-  workMultipliers:
-    scavenger: 0.5
-    forager: 1.2
-    explorer: 0.8
-    fisher: 1.5
-  enableBuildings:
-    - washingArea
-    - irrigator
-  connects:
-    river: 0.8
-    lake: 0.8
-    #town: 0.1
-    forest: 0.7
 
-forest:
-  label: forest
-  workMultipliers:
-    scavenger: 0.8
-    forager: 1.4
-    explorer: 0.8
-    woodcutter: 1.5
-  enableWork:
-    - lumberfox
-  enableBuildings:
-    - treeHouse
-    - woodCutter
-  connects:
-    forest: 0.7
-    river: 0.3
-    town: 0.1
-    #field: 0.2
 
+  dam:
+    label: dam
+    description: the river here is blocked by a manmade dam that controls the flow downstream. with some work, it could be used as a power generator.
+    workMultipliers:
+      scavenger: 1
+      forager: 0.8
+      explorer: 1.2
+      fisher: 1.3
+    enableWork:
+      - fisher
+    enableBuildings:
+      - damTurbine
+      - washingArea
+      - waterWheel
+      - irrigator
+    connects:
+      river: 1
+      lake: 0.3
+      #coast: 0.1
+      #industrialBuildings: 0.1
+      town: 0.1
+    vignette: |-1
+
+        \                                  ].[
+       //\                                 _|____
+       //\                                 |_|_||
+      __|#,_         ___         ____,###,_|E|_||_
+      \\\___\========[O]========///  "' """"" '""
+      \~~~~~~~~~~~~~~~~~~~~~~///      // "''"'\\
+
+  lake:
+    label: lake
+    description: the small waves lap at the rocky shore. this is a good place to fish and get fresh water.
+    workMultipliers:
+      scavenger: 0.5
+      forager: 1.2
+      explorer: 0.8
+      fisher: 1.5
+    enableBuildings:
+      - washingArea
+      - irrigator
+    enableWork:
+      - fisher
+    connects:
+      river: 0.8
+      lake: 0.8
+      town: 0.1
+      forest: 0.7
+      field: 0.2
+    vignette: |-1
+
+        \
+       //\
+       //\                               ..,,_,##,,..___
+      __|#,_                              \\//""'"'''""
+      \\\___\~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/ //"'''\\  \
+
+  coast:
+    label: coast
+    description: waves crash along the sandy beaches. doing anything other than fishing here might be difficult, as will be finding freshwater which is limited to small streams that flow to the ocean.
+    workMultipliers:
+      scavenger: 0.5
+      forager: 0.5
+      explorer: 0.5
+      fisher: 2
+    enableBuildings:
+      - washingArea
+      - fishingPier
+    enableWork:
+      - fisher
+    connects:
+      river: 0.3
+      coast: 0.8
+      town: 0.2
+      forest: 0.7
+      field: 0.2
+    vignette: |-1
+
+        \
+       //\
+       //\
+      __|#,_
+      \\\___\\`=..,.,.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  forest:
+    label: forest
+    description: A dense conglomeration of trees, shrubs and rocks make for a shaded space to forage in.
+    workMultipliers:
+      scavenger: 0.8
+      forager: 1.4
+      explorer: 0.8
+      woodcutter: 1.5
+    enableWork:
+      - lumberfox
+    enableBuildings:
+      - treeHouse
+      - woodCutter
+    connects:
+      forest: 0.3
+      river: 0.3
+      town: 0.1
+      field: 0.5
+    vignette: |-1
+                                           /
+                          \       \       //\
+                 /       //\     //\     ///\
+                //\     ///\     //\     ///\
+        _##     //\     ///\    __|##,,___||__     ##
+      __####...__|##,,___||__##//_  ""''"''" \\\__/###..
+       ..,,"''"'"" .," "'" ''"''  .//,,.\\.,, ""''" "'
+  field:
+    label: field
+    description: Wild grains and dense grasses grow where crops once used to. Even so, there is an abundance of wild food and pockets of water from watering holes and silos to be had.
+    workMultipliers:
+      forager: 2
+      explorer: 0.8
+    enableWork:
+      - lumberfox
+    enableBuildings:
+      - grainFarm
+      - vegeFarm
+      - chickenFarm
+    connects:
+      forest: 0.5
+      river: 0.3
+      town: 0.3
+      field: 0.2
+    vignette: |-1
+         /                                                  \
+        //\                                                //\
+        //\                                    #,,         //\
+      ,.,|##..,o..,o,.\_=|==|==|==|==@@=|==|==|####|==|==\,_|,.,.
+      o  .    ..    """'"'""""'''"'"@@@@"''"""@@""'"""'"""'""
+                      """""""'"'""'"''''''''""'""''""''""'"
+
+
+  town:
+    label: town
+    description: Rows of houses along overgrown roads, many of them may still contain useful items.
+    workMultipliers:
+      scavenger: 1.5
+      forager: 0.8
+      explorer: 1.3
+      looter: 2
+    enableWork:
+      - scavenger
+      - looter
+    enableBuildings:
+      - refurbHome
+      - refurbWorkshop
+    connects:
+      townCenter: 0.5
+      town: 0.5
+      forest: 0.3
+      field: 0.2
+    vignette: |-1
+                                             ####
+                    _____[]__              #######     _____[]__
+            \      /__^_^___/\  _____[]_    #####     /__^_^___/\
+           //      | |_| |_| | /___^___/\     \|      | |_| |_|\_\___
+         __.|##..__|_|[|_|_|_|_|_|[_|_|_|__._.||#._.__|_|[|_|_||==| |
+       //   -  -  -  -  -  -  -  -  -  ---//       //---  -  -  -  -
+        ""'''''"''"""''""'""'''""'''''''"/===/   /"''"'''''"""''''""
+
+  townCenter:
+    label: town center
+    description: A denser area of apartments and offices, home to a number of quaint shops.
+    workMultipliers:
+      scavenger: 2
+      forager: 0.6
+      explorer: 2
+      looter: 3
+    enableWork:
+      - scavenger
+      - looter
+    enableBuildings:
+      - refurbHome
+      - refurbWorkshop
+      - refurbOffice
+    connects:
+      town: 0.5
+      river: 0.2
+      forest: 0.3
+    vignette: |-1
+
+                    _=_=_____                        __=_=____
+            \      |__YAPS__||  ___=_=______________|__VVCO_||
+           //      |_|_|_|_|_| /___^___[[[___^___/  |_|_|_|_|\_\___
+         __.|##..__|_|[|_|_|_|_|[][][][][][][][]|___|_|[|_|_||___| |
+       //   -  -  -  -  -  -  -  -  -  ---//   O   //---  -  -  -  -
+        "''''''"''"''""'"'""""''"""''"'''"/===/   /"''""'""''""''""'"

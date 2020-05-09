@@ -1,5 +1,19 @@
 itemDefs:
 
+  hardwood:
+    label: hardwood
+    description: a heavy wood that has been growing for possibly hundreds of years, now it's been cut down and can be used for sturdy construction
+    weight: 0.5
+    value: 2
+    rarity: common
+
+  softwood:
+    label: softwood
+    description: wood from a fast-growing three that's easier to shape but not as durable as hardwood
+    weight: 0.3
+    value: 1
+    rarity: common
+
   plantFibres:
     label: plant fibres
     description: small pieces of fibrous plant that can be twisted together to make thread or string
@@ -27,6 +41,16 @@ itemDefs:
       label: spool of twine
       amount: 20
 
+  fishingWire:
+    label: fishing wire
+    description: thin, translucent plastic thread that's strong enough to reel in heavy fish and won't wear out as easily.
+    weight: 0.005
+    value: 0.05
+    rarity: common
+    packable:
+      label: reel of fishing wire
+      amount: 20
+
   rope:
     label: rope
     description: thick cordage made of many interwoven strings and fibers. very tough and immensely useful.
@@ -48,8 +72,11 @@ itemDefs:
     label: cloth
     description: a woven sheet of string, it's very, very useful for many, many things.
     weight: 0.05
-    value: 0.3
+    value: 1
     rarity: uncommon
+    packable:
+      label: bolt of cloth
+      amount: 10
 
   tarpaulin:
     label: tarpaulin
@@ -152,6 +179,15 @@ itemDefs:
     label: wood fragments
     description: Shards of wood from broken handles, planks or trees. Rather useless.
     weight: 0.01
+    value: 0
+    rarity: common
+
+  scrapWood:
+    label: scrapwood
+    description: Offcuts of timber from times gone past, now it's your challenge to make use of it.
+    weight: 0.01
+    value: 0
+    rarity: common
 
   dirtyPaper:
     label: used paper
@@ -182,4 +218,13 @@ itemDefs:
       - manmade
     tool:
       bandaging: 1
+
+  canTag:
+    label: can tag
+    description: the bit on a soda can that you press down to open it with. in neo-society, a popular sub-currency.
+    value: 1
+    weight: 0.1
+    rarity: common
+    categories:
+      - currency
 

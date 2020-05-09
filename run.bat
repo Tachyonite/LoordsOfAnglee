@@ -1,3 +1,2 @@
-@echo off
-python frontend.py
+start /max python frontend.py
 pause

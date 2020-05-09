@@ -1,0 +1,12 @@
+craftingDefs:
+
+  ragCloth:
+    label: rag (cloth)
+    description: rip up sheets of cloth into strips of rags, useful to tie things together in a pinch
+    ingredients:
+      cloth:
+        - - cloth: 1
+    output:
+      rag: 3
+    tool:
+      cutting: 1

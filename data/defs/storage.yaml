@@ -24,6 +24,25 @@ itemDefs:
       items:
         scrapMetal: 1
 
+  pillBottle:
+    label: pill bottle
+    description: a small bottle usually meant for holding pills or other small commodities.
+    value: 0.3
+    weight: 0.01
+    rarity: junk
+    diffprop:
+      - "storage['filled']"
+      - "storage['volume']"
+      - "storage['fluid']"
+    categories:
+      - junk
+      - liquid storage
+      - manmade
+    storage:
+      volume: 0.3
+      quality: 1
+      sealable: True
+
   plasticBottle:
     label: plastic bottle
     description: a shaped plastic bottle with a lid for sealability.
@@ -104,7 +123,7 @@ itemDefs:
     label: 200L drum
     description: a few of these will end any liquid storage issues you have. with a massive capacity, ability to be sealed and high-quality storage rating, drums are perfect for long-term storage.
     value: 20
-    weight: 12
+    weight: 10
     rarity: rare
     diffprop:
       - "storage['filled']"
@@ -118,5 +137,28 @@ itemDefs:
       volume: 200
       quality: 2
       sealable: True
+
+  schoolbag:
+    label: schoolbag
+    description: a canvas backpack often used for carrying books, stationery and school supplies. in this case, it'll do for carrying some extra weight. increases carry weight by 10kg.
+    value: 20
+    weight: 0.2
+    rarity: common
+    carryweight: 10 #kg
+    categories:
+      - carry capacity
+      - manmade
+
+  dufflebag:
+    label: duffle bag
+    description: a canvas shoulder-slung bag used for carrying clothes and in some cases weapons. in this case, it'll do for carrying some extra weight. increases carry weight by 30kg.
+    value: 40
+    weight: 0.8
+    rarity: uncommon
+    carryweight: 30 #kg
+    categories:
+      - carry capacity
+      - manmade
+
 
 

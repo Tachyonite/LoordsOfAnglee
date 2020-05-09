@@ -41,3 +41,50 @@ itemDefs:
       - weapon
     weapon:
       stab: 2
+
+  scrapAxe:
+    label: scrap axe
+    description: a shoddy pile of scrap loosely resembling an axe
+    value: 2
+    weight: 1
+    rarity: common
+    categories:
+      - tool
+      - primitive
+      - weapon
+    tool:
+      cutting: 1
+      logging: 1
+      butchering: 1
+    weapon:
+      cut: 2
+
+  scrapMallet:
+    label: scrap mallet
+    description: a block of wood on top of a handle, not very strong, but it's a hammer nonetheless.
+    value: 2
+    weight: 1
+    rarity: common
+    categories:
+      - tool
+      - primitive
+      - weapon
+    tool:
+      hammering: 2
+    weapon:
+      blunt: 2
+
+  scrapPick:
+    label: scrap pick
+    description: a shoddy pile of scrap loosely resembling a pickaxe
+    value: 2
+    weight: 1
+    rarity: common
+    categories:
+      - tool
+      - primitive
+      - weapon
+    tool:
+      mining: 1
+    weapon:
+      stab: 2
