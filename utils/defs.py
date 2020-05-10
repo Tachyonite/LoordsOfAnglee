@@ -233,6 +233,7 @@ class Rarity():
 class Location():
     def __init__(self, defName, object):
         self.defName = defName
+        self.object = object
         self.linked = []
         self.looted = False
         self.intel = 0
@@ -240,7 +241,7 @@ class Location():
             setattr(self,k,v)
 
     def generateLinked(self,game):
-        self.linked = set(game.locationDefs[i] for i in random.choices(population=list(self.connects.keys()),weights=list(self.connects.values()),k=random.randint(2,3)))
+        self.linked = set(game.locationDefs[i].__class__(self.defName,self.object) for i in random.choices(population=list(self.connects.keys()),weights=list(self.connects.values()),k=random.randint(2,3)))
 
 
 class Chapter():

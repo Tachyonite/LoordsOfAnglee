@@ -730,6 +730,8 @@ class Inventory():
                     caps.append(True)
                 else:
                     caps.append(False)
+        if not caps:
+            return [True]
         return caps
 
     def openCrate(self, crate, player):
