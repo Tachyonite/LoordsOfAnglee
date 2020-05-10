@@ -61,8 +61,12 @@ craftingDefs:
       head:
         - - scrapWood: 2
       handle:
-        - - heavyStick: 1
+        - - stickHeavy: 1
       binding:
         - - tape: 3
           - glue: 1
+    output:
+      scrapMallet: 1
+    tool:
+      wood sawing: 1
     timeBase: 30m
