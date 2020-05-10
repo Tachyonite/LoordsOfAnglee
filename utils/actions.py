@@ -109,6 +109,7 @@ class LoadGameAction(Action):
         print("--")
         gamesave = a(Translate("load_game_prompt"),table)+1
         player, game = loadAllInformation(table[gamesave-1])
+        u()
         print(game.chapterDefs[player.chapter].getVignette())
         print()
         p(game.chapterDefs[player.chapter].getDescription())
@@ -220,9 +221,9 @@ class ListAction(Action):
 
     def perform(self, actions, headers, player=False,game=False):
         alphas = getAlphas(actions)
-        table = [[alphas[i],x.name] for i,x in enumerate(actions)]
-        print(tb.tabulate(table, headers, "simple"))
-        print("--")
+        table = [["\xa0\xa0"+alphas[i],x.name] for i,x in enumerate(actions)]
+        print((tb.tabulate(table, headers, "simple",colalign=("right","left"))))
+        print()
         ac = a(Translate('choose_string'),table)
         acTodo = actions[ac]
         if 'group' in acTodo.perform.__code__.co_varnames:
