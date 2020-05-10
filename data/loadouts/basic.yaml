@@ -2,8 +2,8 @@ setDefs:
   normal:
     contents:
       berries: 20
-      plasticBottle: 5
-      plasticJug3L: 2
+      plasticBottle: 10
+      plasticJug3L: 1
       hacksaw: 1
       cannedFoodBeans: 3
       cannedFoodMysteryMeat: 3

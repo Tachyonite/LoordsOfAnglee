@@ -29,7 +29,7 @@ workDefs:
 
   explorer:
     label: explorer
-    labelDo: exploring
+    labelDo: exploring {}
     description: "Explorers track the way ahead, looking for hideouts, foxholes and most importantly, rare loot. Exploring takes 8 hours."
     timeBase: 8h #hours
     skills:

@@ -73,7 +73,7 @@ class Item():
     def getWeight(self):
         if hasattr(self,'storage'):
             if self.storage['filled'] > 0:
-                return self.storage['fluid'].weight * self.storage['filled']
+                return self.storage['fluid'].weight * self.storage['filled'] + self.weight
         return self.weight
 
     def getNutrition(self,key):
@@ -92,6 +92,18 @@ class Item():
         if hasattr(self,'diffprop'):
             props = [eval("self.{}".format(i),{"self":self}) for i in self.diffprop]
             return props
+        else:
+            return
+
+    def matchDiffprop(self,itemset):
+        if hasattr(self,'diffprop'):
+            selfprops = [eval("self.{}".format(i),{"self":self}) for i in self.diffprop]
+            itemprops = [[eval("self.{}".format(i), {"item": item}) for i in item.diffprop] for item in itemset]
+            print(itemprops)
+            input()
+            for it in itemprops:
+                if it == selfprops:
+                    return it
         else:
             return
 
@@ -261,6 +273,7 @@ class Crate():
 class Work():
     def __init__(self, defName, object):
         self.defName = defName
+        self.object = object
         for k, v in object.items():
             setattr(self,k,v)
     def getLabel(self):

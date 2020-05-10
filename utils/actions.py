@@ -135,7 +135,10 @@ class RelocateAction(Action):
             p("Press any key to continue.")
             msvcrt.getch()
             player.location = self.location
+            player.location.linked = []
             player.location.generateLinked(game)
+            for k,lee in player.group.items():
+                lee.job = Find.WorkTypeByName('idle')
     def checkWorldEvents(self):
         pass
 
@@ -152,9 +155,9 @@ class NextHourAction(Action):
                         p(tc.c+"{} returned from {}".format(lee.fullName, lee.job.labelDo)+tc.w)
                         if lee.job.defName == "explorer":
                             gainedIntel = lee.stats.learning + random.randint(0,5)
-                            player.location.linked[lee.exploreLinkedIndex].intel += gainedIntel
-                            if player.location.linked[lee.exploreLinkedIndex].intel > 100: player.location.linked[lee.exploreLinkedIndex].intel = 100
-                            p("+ Scouted {}% on the  {}".format(gainedIntel,player.location.linked[lee.exploreLinkedIndex].label))
+                            lee.location.intel += gainedIntel
+                            if lee.location.intel > 100: lee.location.intel = 100
+                            p("+ Scouted {}% on the  {}".format(gainedIntel,lee.location.label))
                         lee.rollWorkResults(player,game)
                         lee.afk = False
 
@@ -162,7 +165,7 @@ class NextHourAction(Action):
                         p(tc.y+"{} returned early from {} {}".format(lee.fullName, lee.job.labelDo,lee.jobTimeLeft)+tc.w)
                         lee.afk = False
                 else:
-                    if lee.job != Find.WorkTypeByName("idle"):
+                    if lee.job.defName != Find.WorkTypeByName("idle").defName:
                         p(tc.c + "{} stopped {} for tonight".format(lee.fullName, lee.job.labelDo) + tc.w)
                 lee.satisfyNutrition()
             SaveGameAction(player,game).performAuto(player,game)
@@ -171,11 +174,11 @@ class NextHourAction(Action):
             textDisp = False
             for lee in player.group.values():
 
-                if lee.job == Find.WorkTypeByName("crafter"):
-                    lee.calculateCrafts()
+                if lee.job.defName == Find.WorkTypeByName("crafter").defName:
+                    lee.calculateCrafts(player)
 
                 if not lee.afk:
-                    if lee.job == Find.WorkTypeByName("idle"):
+                    if lee.job.defName == Find.WorkTypeByName("idle").defName:
                         pass
                     else:
                         lee.jobTimeLeft = lee.job.timeCost() - 1
@@ -237,6 +240,7 @@ class WorkAction(Action):
     def __init__(self, name, description, workName):
         super().__init__(name, description)
         self.workType = Find.WorkTypeByName(workName)
+        self.workType = self.workType.__class__(self.workType.defName,self.workType.object)
 
     def perform(self,player):
         act = ListJobAssignAction()
@@ -252,9 +256,10 @@ class WorkAction(Action):
                 lee.job = self.workType
                 lee.jobAssignedHour = player.hour
                 lee.jobTimeLeft = self.workType.timeCost() - 1
-                print(lee.job)
                 if lee.job.label == "explorer" and hasattr(self,"location"):
                     lee.location = self.location
+                    print(player.group[lee.fullName].location.label)
+                    lee.job.labelDo = lee.job.labelDo.format(self.location.label.title())
 
 class ForageWorkAction(WorkAction):
     def __init__(self):
@@ -520,10 +525,10 @@ class ViewInventoryAction(Action):
             maxpage = ceil(tab[1]/player.tableLength)-1
             print(tab[0],"\n")
             if tab[2] >= player.carryWeight:
-                p("{}: {}/{}kg".format(Translate('carry_weight'), tc.f + str(round(tab[2])),
-                                       str(player.carryWeight)) + tc.w)
+                p("{}: {}/{}kg".format(Translate('carry_weight'), tc.f + str(round(tab[2],2)),
+                                       str(round(player.carryWeight,2))) + tc.w)
             else:
-                p("{}: {}/{}kg".format(Translate('carry_weight'), str(round(tab[2])), player.carryWeight))
+                p("{}: {}/{}kg".format(Translate('carry_weight'), str(round(tab[2],2)), str(round(player.carryWeight,2))))
             print()
             p("Days of food: {}".format(player.inventory.calcFoodDays(player.group)))
             p("Days of water: {}".format(player.inventory.calcWaterDays(player.group)))
@@ -564,10 +569,10 @@ class ViewDetailInventoryAction(Action):
     def inv(self,player,tab,page,selectedItemIndex,maxpage):
         print("\033[{};{}H".format(len(tab[2][page]) + 5, 1))
         if tab[4] >= player.carryWeight:
-            p("{}: {}/{}kg".format(Translate('carry_weight'), tc.f + str(round(tab[4])),
-                                   str(player.carryWeight)) + tc.w)
+            p("{}: {}/{}kg".format(Translate('carry_weight'), tc.f + str(round(tab[4],2)),
+                                   str(round(player.carryWeight,2))) + tc.w)
         else:
-            p("{}: {}/{}kg".format(Translate('carry_weight'), str(round(tab[4])), player.carryWeight))
+            p("{}: {}/{}kg".format(Translate('carry_weight'), str(round(tab[4],2)), str(round(player.carryWeight,2))))
         print()
         p("Days of food: {}".format(player.inventory.calcFoodDays(player.group)))
         p("Days of water: {}".format(player.inventory.calcWaterDays(player.group)))
@@ -664,7 +669,7 @@ class ViewDetailInventoryAction(Action):
                     print(tc.bg_w + "\033[{};{}H>".format(len(tab[3][page]) + o-1, 1) + tc.bg_b)
                     print("\033[{};{}H|".format(o, 1))
             elif act == "x":
-                player.inventory.removeItem(tab[2][page][selectedItemIndex].defName,1)
+                player.inventory.removeItemDiff(tab[2][page][selectedItemIndex],1)
                 offset = selectedItemIndex + o
                 tab = player.inventory.nameTabulate(selectedItemIndex, page=page, sort="rarity")
                 if not tab:
@@ -680,7 +685,7 @@ class ViewDetailInventoryAction(Action):
                 for k,v in selItem.openable['contents'].items():
                     if k.startswith("$"):
                         for vv in range(v):
-                            player.inventory.openCrate(selItem)
+                            player.inventory.openCrate(selItem,player)
                             player.inventory.removeItem(game.crateDefs[k[1:]].crateItemDef,1)
                     else:
                         player.inventory.addItem(k,v)

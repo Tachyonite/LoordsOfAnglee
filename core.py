@@ -291,13 +291,13 @@ class Leeani(Creature):
         self.craftWorkingOn = None
         self.location = None
 
-    def calculateCrafts(self, wwO=None, madeThisHour=None, done=False, dontshort=False, makeableQueue=None):
+    def calculateCrafts(self, player, wwO=None, madeThisHour=None, done=False, dontshort=False, makeableQueue=None):
         if not madeThisHour:
             madeThisHour = {}
         if not makeableQueue:
             makeableQueue = {}
-        inv = self.player.inventory
-        qcrafts = self.player.queuedCrafts
+        inv = player.inventory
+        qcrafts = player.queuedCrafts
         makeable = {}
         if not self.craftWorkingOn and not done:
             if not qcrafts: return
@@ -323,22 +323,22 @@ class Leeani(Creature):
                 key = random.choice(list(makeable.keys()))
             else:
                 key = wwO.defName
-            self.player.queuedCrafts[key] -= 1
-            if self.player.queuedCrafts[key] == 0:
-                self.player.queuedCrafts.pop(key)
+            player.queuedCrafts[key] -= 1
+            if player.queuedCrafts[key] == 0:
+                player.queuedCrafts.pop(key)
             iMake = game.craftingDefs[key]
             iMC = iMake.__class__
             try:
-                self.player.craftsInProgress[key] += 1
+                player.craftsInProgress[key] += 1
             except KeyError:
-                self.player.craftsInProgress[key] = 1
+                player.craftsInProgress[key] = 1
             self.craftWorkingOn = iMC(iMake.defName, dict(iMake.object))
-            self.calculateCrafts(wwO=self.craftWorkingOn, madeThisHour=madeThisHour, dontshort=True,
+            self.calculateCrafts(player, wwO=self.craftWorkingOn, madeThisHour=madeThisHour, dontshort=True,
                                  makeableQueue=makeable)
         elif not done:
             if not makeableQueue:
                 self.craftWorkingOn = None
-                self.calculateCrafts(wwO=self.craftWorkingOn, madeThisHour=madeThisHour, done=True, dontshort=False,
+                self.calculateCrafts(player, wwO=self.craftWorkingOn, madeThisHour=madeThisHour, done=True, dontshort=False,
                                      makeableQueue=makeableQueue)
             else:
                 makePerHour = self.craftWorkingOn.timeCost()
@@ -347,14 +347,14 @@ class Leeani(Creature):
                         madeThisHour[self.craftWorkingOn.defName] += 1
                     except KeyError:
                         madeThisHour[self.craftWorkingOn.defName] = 1
-                    self.finishCraft(self.craftWorkingOn)
+                    self.finishCraft(player,self.craftWorkingOn)
                     self.craftWorkingOn = None
                 elif makePerHour < 1:
                     try:
                         madeThisHour[self.craftWorkingOn.defName] += 1
                     except KeyError:
                         madeThisHour[self.craftWorkingOn.defName] = 1
-                    self.finishCraft(self.craftWorkingOn)
+                    self.finishCraft(player,self.craftWorkingOn)
                     done2 = False
 
                     makeableQueue[wwO.defName] -= 1
@@ -363,29 +363,29 @@ class Leeani(Creature):
 
                     if not dontshort:
                         try:
-                            self.player.queuedCrafts[wwO.defName] -= 1
+                            player.queuedCrafts[wwO.defName] -= 1
                         except:
                             pass
                     try:
-                        if self.player.queuedCrafts[wwO.defName] == 0:
-                            self.player.queuedCrafts.pop(wwO.defName)
+                        if player.queuedCrafts[wwO.defName] == 0:
+                            player.queuedCrafts.pop(wwO.defName)
                             self.craftWorkingOn = None
                             done2 = True
                     except:
                         self.craftWorkingOn = None
                         done2 = True
                     if qcrafts:
-                        self.calculateCrafts(wwO=self.craftWorkingOn, madeThisHour=madeThisHour, done=False,
+                        self.calculateCrafts(player, wwO=self.craftWorkingOn, madeThisHour=madeThisHour, done=False,
                                              dontshort=False, makeableQueue=makeableQueue)
                     else:
-                        self.calculateCrafts(wwO=self.craftWorkingOn, madeThisHour=madeThisHour, done=done2,
+                        self.calculateCrafts(player, wwO=self.craftWorkingOn, madeThisHour=madeThisHour, done=done2,
                                              dontshort=False, makeableQueue=makeableQueue)
                 elif makePerHour == 1:
                     try:
                         madeThisHour[self.craftWorkingOn.defName] += 1
                     except KeyError:
                         madeThisHour[self.craftWorkingOn.defName] = 1
-                    self.finishCraft(self.craftWorkingOn)
+                    self.finishCraft(player, self.craftWorkingOn)
                     self.craftWorkingOn = None
                 else:
                     self.craftWorkingOn.progress += (1 / 1 + makePerHour) - 1
@@ -395,8 +395,8 @@ class Leeani(Creature):
                     p("{} made {} x{}".format(self.fn, game.itemDefs[k].labelResolved(), v))
             msvcrt.getch()
 
-    def finishCraft(self, craft):
-        inv = self.player.inventory
+    def finishCraft(self, player, craft):
+        inv = player.inventory
         for k, v in craft.ingredients.items():
             for andInput in v:
                 try:
@@ -585,6 +585,7 @@ class Leeani(Creature):
             self.checkDeath()
 
 
+
 class Inventory():
     def __init__(self):
         self.contents = {}
@@ -598,6 +599,9 @@ class Inventory():
                 self.contents[item].extend([c(itemToAdd.defName, dict(itemToAdd.object)) for x in range(round(amount))])
             except KeyError:
                 self.contents[item] = [c(itemToAdd.defName, dict(itemToAdd.object)) for x in range(round(amount))]
+        else:
+            print(item.defName)
+            input()
 
     def addFluid(self, fluid, amount):
         containers = []
@@ -660,6 +664,20 @@ class Inventory():
         if self.contents[item] == []:
             self.contents.pop(item)
 
+    def removeItemDiff(self, item, amount):
+        if hasattr(item,"diffprop"):
+            evalDiffprop = item.getDiffprop()
+            for i in range(amount):
+                for v in self.contents[item.defName]:
+                    if v.getDiffprop() == evalDiffprop:
+                        self.contents[item.defName].remove(v)
+                        break
+        else:
+            for i in range(amount):
+                self.contents[item.defName].pop()
+        if self.contents[item.defName] == []:
+            self.contents.pop(item.defName)
+
     def findToolCapacity(self, capacity, level):
 
         toolDefs = Find.DefsByToolUtility(capacity)
@@ -714,7 +732,7 @@ class Inventory():
                     caps.append(False)
         return caps
 
-    def openCrate(self, crate):
+    def openCrate(self, crate, player):
         u()
         for k, v in crate.openable['contents'].items():
             cc = game.crateDefs[k[1:]]
@@ -932,7 +950,7 @@ class Inventory():
                 tp = {
                     'tbLabel': Find.ColorByRarity(tabItem.rarity) + tabItem.labelResolved(len(v)) + tc.w,
                     'amt': len(v),
-                    'weight': "{0:.2f}".format(tabItem.weight * len(v)),
+                    'weight': "{0:.2f}".format(tabItem.getWeight() * len(v)),
                     'value': "{0:.2f}".format(tabItem.value * len(v)),
                     'nutFood': "{0:.2f}".format(
                         tabItem.getNutrition('food') * len(v)),
@@ -944,13 +962,13 @@ class Inventory():
                         table.append([tabItem.rarity] + [x for x in tp.values()])
                     else:
                         table.append([x for x in tp.values()])
-                totalWeight += int(tabItem.getWeight() * len(v))
+                totalWeight += tabItem.getWeight() * len(v)
         for kk, vv in preloadLabels.items():
             i = vv[0]
             tp = {
                 'tbLabel': kk,
                 'amt': len(vv),
-                'weight': "{0:.2f}".format(i.weight * len(vv)),
+                'weight': "{0:.2f}".format(i.getWeight() * len(vv)),
                 'value': "{0:.2f}".format(i.value * len(vv)),
                 'nutFood': "{0:.2f}".format(
                     i.getNutrition('food') * len(vv)),
@@ -962,7 +980,7 @@ class Inventory():
                     table.append([i.rarity] + [x for x in tp.values()])
                 else:
                     table.append([x for x in tp.values()])
-            totalWeight += int(i.getWeight() * len(vv))
+            totalWeight += i.getWeight() * len(vv)
         if sort:
             if sort == 'rarity':
                 headers[0] = tc.y + headers[0] + " *" + tc.w

@@ -16,7 +16,7 @@ value: {}¤ (total: {}¤)
 weight: {}kg (total: {}kg)
 rarity: {}""".format(item.labelResolved() + tc.w,
                      "\n".join(tw.wrap(itemDef.description.lower(), 40)), amount, itemDef.value,
-                     round(itemDef.value * amount, 3), itemDef.getWeight(), round(itemDef.getWeight() * amount, 3),
+                     round(itemDef.value * amount, 3), item.getWeight(), round(item.getWeight() * amount, 3),
                      itemDef.rarity)
     if hasattr(item, 'storage'):
         if item.storage['filled'] > 0:
