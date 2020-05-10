@@ -392,7 +392,8 @@ class Leeani(Creature):
         if done:
             if madeThisHour:
                 for k, v in madeThisHour.items():
-                    p("{} made {} x{}".format(self.fn, game.itemDefs[k].labelResolved(), v))
+                    for kk,vv in game.craftingDefs[k].output.items():
+                        p("{} made {} x{}".format(self.fn, game.itemDefs[kk].labelResolved(), vv * v))
             msvcrt.getch()
 
     def finishCraft(self, player, craft):
