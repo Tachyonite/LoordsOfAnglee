@@ -49,7 +49,7 @@ craftingDefs:
           - tape: 2
           - rag: 2
     output:
-      scrapAxe: 1
+      scrapPick: 1
     tool:
       hammering: 1
     timeBase: 30m
