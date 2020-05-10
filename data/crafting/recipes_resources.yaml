@@ -10,3 +10,4 @@ craftingDefs:
       rag: 3
     tool:
       cutting: 1
+    timeBase: 5m
