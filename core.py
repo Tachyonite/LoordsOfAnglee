@@ -139,7 +139,7 @@ class Player():
     def calcCarryWeight(self):
         cw = 0
         for i in self.group.values():
-            cw += round(i.stats.strength * 1.5)
+            cw += round(i.stats.strength * 2)
             cw += round(i.stats.vitality)
         self.inventory.clearNulls()
         for k, v in self.inventory.contents.items():
