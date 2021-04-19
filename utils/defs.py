@@ -302,10 +302,13 @@ class Table():
 
     def rollTable(self,rolls):
         for i in range(rolls):
+            capFlag = False
             item = random.choice(list(self.contents.keys()))
+            if self.contents[item].endswith("*"):
+                capFlag= True
             vals = self.contents[item].split("~")
             amt = random.randint(int(vals[0]),int(vals[1]))
-            return [item,amt]
+            return [item,amt,capFlag]
 
 
 class Fluid():
@@ -379,6 +382,31 @@ class Fluid():
                 cs['fluid'] = self
                 p(" └ Filled {}L into {}".format(litres, container.labelResolved()))
                 return litres
+        return litres
+
+    def emptyContainer(self,container,litres):
+        '''
+        This function tries to remove liquids from containers, and returns the amount removed.
+        '''
+        if not hasattr(container,'storage'): return 0
+        if hasattr(self,'sealed') and self.sealed \
+                and 'sealable' in  container.storage \
+                and not container.storage['sealable']:
+                    return
+        cs = container.storage
+        if 'fluid' in cs and cs['fluid']:
+            if cs['fluid'] == self:
+                if cs['filled'] >= litres:
+                    cs['filled'] = cs['filled'] - litres
+                    return litres
+                elif cs['filled'] < litres:
+                    diff = litres - cs['filled']
+                    cs['filled'] = 0
+                    return diff
+            else:
+                return 0
+        else:
+            return litres
         return litres
 
 

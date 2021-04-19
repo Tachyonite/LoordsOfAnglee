@@ -18,8 +18,8 @@ itemDefs:
       stab: 1
       cut: 1
 
-  pointyStick:
-    label: pointy stick
+  pointedStick:
+    label: pointed stick
     description: use this if someone attacks you with a banana
     value: 0.6
     weight: 0.9
@@ -27,8 +27,10 @@ itemDefs:
     categories:
       - primitive
       - weapon
+    categories:
+      - equippable
     weapon:
-      stab: 2
+      stab: 1
 
   stoneSpear:
     label: stone spear
@@ -39,6 +41,8 @@ itemDefs:
     categories:
       - primitive
       - weapon
+    categories:
+      - equippable
     weapon:
       stab: 2
 
@@ -52,6 +56,8 @@ itemDefs:
       - tool
       - primitive
       - weapon
+    categories:
+      - equippable
     tool:
       cutting: 1
       logging: 1
@@ -84,6 +90,8 @@ itemDefs:
       - tool
       - primitive
       - weapon
+    categories:
+      - equippable
     tool:
       mining: 1
     weapon:

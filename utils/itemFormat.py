@@ -83,8 +83,14 @@ as tool:
 """ * 18
     return details
 
-def craftFormat(craft,formText,outItem,canDo=0,canTool=()):
-    amount = list(craft.output.values())[0]
+def craftFormat(craft,formText,game,canDo=0,canTool=()):
+    outputs = craft.output.items()
+    opString = []
+    for k,v in outputs:
+        if k.startswith("~"):
+            opString.append("{} {}L".format(game.fluidDefs[k[1:]].label,v))
+        else:
+            opString.append("{} x{}".format(game.itemDefs[k].label, v))
     details = \
 """
 {}
@@ -93,9 +99,10 @@ def craftFormat(craft,formText,outItem,canDo=0,canTool=()):
 --------------
 costs:                                                                                                                                                                    
 {}                                                             
-makes: {}                                                                                                             
+makes:                                                                                                            
+{}                                                                                                                             
 """.format(craft.label,
-                     "\n".join(tw.wrap(craft.description.lower(), 40)), formText,amount)
+                     "\n".join(tw.wrap(craft.description.lower(), 40)), formText,"\n └ ".join(opString))
     if hasattr(craft, 'tools'):
         details += \
 """                                                                                                        

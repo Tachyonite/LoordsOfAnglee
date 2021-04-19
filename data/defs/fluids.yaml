@@ -49,6 +49,14 @@ fluidDefs:
     sealed: True
     fillPriority: smallest
 
+  glueWood:
+    label: wood glue
+    description: a strong binding agent that works especially well for...glueing pieces of wood together. Who'd have thought?
+    weight: 1.2 #kg/L, g/L doesn't matter. praise the metric system
+    value: 10
+    sealed: True
+    fillPriority: smallest
+
 #
 #  wineRed:
 #    label: red wine

@@ -60,8 +60,8 @@ tableDefs: #Values are multiplied by a formula using the skill of the character
       scrapPlastic: 0~3
       scrapWood: 0~3
       plasticJug3L: -2~1
-      plasticJug5L: -4~1
-      plasticJug18L: -8~1
+      plasticJug5L: -4~1*
+      plasticJug18L: -8~1* #indicates the max amount this item could ever drop. ignores multipliers, you won't get more
       cloth: -3~2
       tarpaulin: -4~1
       screw: -2~2

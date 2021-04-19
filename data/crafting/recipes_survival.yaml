@@ -77,3 +77,17 @@ craftingDefs:
     tool:
       hammering: 2
     timeBase: 2h
+
+  testGizmo:
+    label: build gizmo
+    description: a test item that uses a bunch of random materials as a baseblock for testing crafting.
+    ingredients:
+      whatchamacallit:
+        - - ~water: 1
+        - - rockSmall: 1
+      doohickey:
+        - - stickLong: 1
+          - stickHeavy: 1
+    output:
+      ~water: 2
+    timeBase: 1m

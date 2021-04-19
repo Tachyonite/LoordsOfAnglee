@@ -383,7 +383,7 @@ class ViewCraftsAction(Action):
             print()
 
 
-    def inv(self, player, tab, page, selectedItemIndex, maxpage):
+    def inv(self, player, tab, page, selectedItemIndex, maxpage, game):
         print("\033[{};{}H".format(len(tab[4][page]) + 4, 1))
         p("{} {}/{}".format(Translate('page'), page + 1, maxpage + 1))
         p("w | {}".format(Translate('up_item')))
@@ -402,10 +402,10 @@ class ViewCraftsAction(Action):
         print("..|")
         maxwidth = max([len(i.label) for i in tab[4][page]]) + 45
         player.inventory.displayCraftDetailsXY(tab[4][page][selectedItemIndex],player.inventory.makeCraft(tab[4][page][selectedItemIndex]),
-                                              1, maxwidth,tab[2][page][selectedItemIndex][3],tab[2][page][selectedItemIndex][4])
+                                              1, maxwidth,tab[2][page][selectedItemIndex][3],tab[2][page][selectedItemIndex][4],game)
         print("\033[{};{}H".format(len(tab[4][page]) + 15, 1))
 
-    def perform(self, player):
+    def perform(self, player, game):
         u()
         act = True
         page = 0
@@ -421,7 +421,7 @@ class ViewCraftsAction(Action):
 
         print(tab[0], "\n")
         while act:
-            self.inv(player, tab, page, selectedItemIndex, maxpage)
+            self.inv(player, tab, page, selectedItemIndex, maxpage, game)
             print(tc.bg_w + "\033[{};{}H>".format(selectedItemIndex + 2 + 2, 1) + tc.bg_b)
             act = getch()
             o = 4
@@ -733,3 +733,10 @@ class ViewCharAction(Action):
         ac = a(Translate('choose_string'), table)
         if ac < len(group):
             self.perform(group,ac)
+
+class EquipCharAction(Action):
+    def __init__(self):
+        super().__init__(name=Translate('view_character_action'), description=Translate('view_character_action'))
+
+    def perform(self,character):
+

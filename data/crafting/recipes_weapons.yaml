@@ -24,14 +24,14 @@ craftingDefs:
       knapping: 1
     timeBase: 5m
 
-  pointyStick:
-    label: pointy stick
+  pointedStick:
+    label: pointed stick
     description: sharpen a stick to a fine point
     ingredients:
       stick:
         - - stickLong: 1
     output:
-      pointyStick: 1
+      pointedStick: 1
     tools:
       cutting: 1
     timeBase: 5m

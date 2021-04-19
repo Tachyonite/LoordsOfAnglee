@@ -444,7 +444,10 @@ class Leeani(Creature):
                                 print("However, it was too heavy for your leeani to carry!")
                         elif found[0].startswith("~"):
                             item = game.fluidDefs[found[0][1:]]
-                            amt = math.ceil(found[1] * mult)
+                            if not found[2]:
+                                amt = math.ceil(found[1] * mult)
+                            else:
+                                amt = found[1]
                             p("- Found {}L of {} ({}x)".format(amt, item.label, mult))
                             if player.calcCarriable(item.getWeight() * amt):
                                 remainder = player.inventory.addFluid(item, amt)
@@ -459,7 +462,10 @@ class Leeani(Creature):
                         else:
                             item = found[0]
                             idef = game.itemDefs[item]
-                            amt = math.ceil(found[1] * mult)
+                            if not found[2]:
+                                amt = math.ceil(found[1] * mult)
+                            else:
+                                amt = found[1]
                             p("- Found {} x{} ({}x)".format(idef.labelResolved(), int(amt), mult))
                             if player.calcCarriable(idef.getWeight() * amt):
                                 player.inventory.addItem(item, amt)
@@ -604,6 +610,19 @@ class Inventory():
             print(item.defName)
             input()
 
+    def getContainersWithFluid(self,fluid,amount=0):
+        containers = []
+        for k, v in self.contents.items():
+            for vv in v:
+                if hasattr(vv, 'categories') and 'liquid storage' in vv.categories and hasattr(vv, 'storage') and (
+                                    'filled' in vv.storage and 'fluid' in vv.storage and vv.storage['fluid'] == game.fluidDefs[fluid].label):
+                    if amount:
+                        if vv.storage['filled'] >= amount:
+                            containers.append(vv)
+                    else:
+                        containers.append(vv)
+        return containers
+
     def addFluid(self, fluid, amount):
         containers = []
         for k, v in self.contents.items():
@@ -627,6 +646,27 @@ class Inventory():
                 return amount
         return amount
 
+    def removeFluid(self, fluid, amount):
+        containers = []
+        for k, v in self.contents.items():
+            for vv in v:
+                if hasattr(vv, 'categories') and 'liquid storage' in vv.categories and hasattr(vv, 'storage') and (
+                            ('filled' in vv.storage and 'fluid' in vv.storage and vv.storage['fluid'] == fluid.label) or
+                            ('filled' in vv.storage and vv.storage['filled'] > 0)):
+                    containers.append(vv)
+        if hasattr(fluid, 'fillPriority') and fluid.fillPriority == 'smallest':
+            containers = sorted(containers, key=lambda x: x.storage['volume'])
+        else:
+            containers = sorted(containers, key=lambda x: x.storage['volume'], reverse=True)
+        if len(containers) == 0:
+            return amount
+        for i in containers:
+            if amount != 0:
+                amount -= fluid.emptyContainer(i, amount)
+            else:
+                return amount
+        return amount
+
     def clearNulls(self):
         keys = list(self.contents.keys())
         for k in keys:
@@ -635,6 +675,18 @@ class Inventory():
 
     def testAmount(self, item, amount, returnAmt=False):
         try:
+            if item.startswith("~"):
+                containers = self.getContainersWithFluid(item[1:],amount)
+                if not containers:
+                    if returnAmt:
+                        return 0
+                    else:
+                        return False
+                else:
+                    if returnAmt:
+                        return sum([i.storage['filled'] for i in containers])
+                    else:
+                        return True
             if len(self.contents[item]) >= amount:
                 if returnAmt:
                     return len(self.contents[item])
@@ -657,6 +709,8 @@ class Inventory():
                     self.removeItem(item, amount)
                 return True
         except KeyError:
+            fluids = self.getContainersWithFluid(item)
+
             return False
 
     def removeItem(self, item, amount):
@@ -693,9 +747,8 @@ class Inventory():
         for dY, i in enumerate(details.splitlines()):
             print("\033[{};{}H {}".format(y + dY, x, i.ljust(50)))
 
-    def displayCraftDetailsXY(self, craft, formText, y, x, craftable, tools):
-        itemDef = game.craftingDefs[craft.defName]
-        details = craftFormat(craft, formText, itemDef, craftable, tools)
+    def displayCraftDetailsXY(self, craft, formText, y, x, craftable, tools, game):
+        details = craftFormat(craft, formText, game=game, canDo=craftable, canTool=tools)
 
         for dY, i in enumerate(details.splitlines()):
             print("\033[{};{}H {}".format(y + dY, x, i.ljust(50)))
@@ -785,8 +838,15 @@ class Inventory():
                     canDo = self.testAmount(key, amount, returnAmt=False)
                     if canDo:
                         color = tc.c
-
-                    outStr = color + "{}".format(game.itemDefs[key].label.replace(" ","\xa0")) + tc.w + "\xa0x{}\xa0({})".format(amount,
+                    if key.startswith("~"):
+                        outStr = color + "{}".format(
+                            game.fluidDefs[key[1:]].label.replace(" ", "\xa0")) + tc.w + "\xa0{}L\xa0({}L)".format(amount,
+                                                                                                             self.testAmount(
+                                                                                                                 key,
+                                                                                                                 amount,
+                                                                                                                 returnAmt=True))
+                    else:
+                        outStr = color + "{}".format(game.itemDefs[key].label.replace(" ","\xa0")) + tc.w + "\xa0x{}\xa0({})".format(amount,
                                                                                                       self.testAmount(
                                                                                                           key, amount,
                                                                                                           returnAmt=True))

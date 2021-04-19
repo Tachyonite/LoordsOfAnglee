@@ -143,6 +143,8 @@ itemDefs:
     tool:
       prying: 3
       hammering: 1
+    categories:
+      - equippable
     durability:
       maxUses: 50
       repair:
@@ -174,6 +176,7 @@ itemDefs:
     <<: *chargeBase
     tool:
       drilling: 1
+      piercing: 1
     durability:
       maxUses: 100
       repair: False
@@ -187,9 +190,13 @@ itemDefs:
     <<: *chargeBase
     tool:
       drilling: 1
+      piercing: 2
+    categories:
+      - equippable
     durability:
       maxUses: 100
       repair: False
+      powered: True
 
 
   hammer:
@@ -199,16 +206,12 @@ itemDefs:
     weight: 0.8
     rarity: uncommon
     <<: *chargeBase
-    durability:
-      maxUses: 100
-      repair: False
-    categories:
-      - tool
-      - manmade
     tool:
       hammering: 2
       fine hammering: 1
       nail pulling: 2
+    categories:
+      - equippable
     disassemble:
       time: 10 #in minutes
       tool:
@@ -312,6 +315,8 @@ itemDefs:
     durability:
       maxUses: 100
       repair: False
+    categories:
+      - equippable
     tool:
       piercing: 2
       cutting: 2
@@ -327,6 +332,8 @@ itemDefs:
     durability:
       maxUses: 200
       repair: False
+    categories:
+      - equippable
     tool:
       cutting: 3
       butchering: 4
@@ -388,6 +395,8 @@ itemDefs:
     <<: *chargeBase
     tool:
       fishing: 2
+    categories:
+      - equippable
     durability:
       maxUses: 70
       repair:

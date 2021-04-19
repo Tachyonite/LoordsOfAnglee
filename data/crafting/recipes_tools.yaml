@@ -64,7 +64,8 @@ craftingDefs:
         - - stickHeavy: 1
       binding:
         - - tape: 3
-          - glue: 1
+          - ~glue: 0.1
+          - ~glueWood: 0.05
     output:
       scrapMallet: 1
     tool:
