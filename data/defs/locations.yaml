@@ -7,9 +7,6 @@ locationDefs:
       scavenger: 1.1
       forager: 1.2
       explorer: 0.8
-      fisher: 1.5
-    enableWork:
-      - fisher
     enableBuildings:
       - waterWheel
       - washingArea
@@ -72,12 +69,11 @@ locationDefs:
       scavenger: 0.5
       forager: 1.2
       explorer: 0.8
-      fisher: 1.5
     enableBuildings:
       - washingArea
       - irrigator
     enableWork:
-      - fisher
+      - waterworker
     connects:
       river: 0.8
       lake: 0.8
@@ -94,17 +90,16 @@ locationDefs:
 
   coast:
     label: coast
-    description: waves crash along the sandy beaches. doing anything other than fishing here might be difficult, as will be finding freshwater which is limited to small streams that flow to the ocean.
+    description: waves crash along the sandy beaches. there is plenty of seaweed to be harvested, but finding freshwater is limited to small streams that flow to the ocean.
     workMultipliers:
       scavenger: 0.5
       forager: 0.5
       explorer: 0.5
-      fisher: 2
     enableBuildings:
       - washingArea
-      - fishingPier
+      - saltPier
     enableWork:
-      - fisher
+      - seaweeder
     connects:
       river: 0.3
       coast: 0.8
@@ -128,7 +123,7 @@ locationDefs:
       explorer: 0.8
       woodcutter: 1.5
     enableWork:
-      - lumberfox
+      - lumberjack
     enableBuildings:
       - treeHouse
       - woodCutter
@@ -152,11 +147,11 @@ locationDefs:
       forager: 2
       explorer: 0.8
     enableWork:
-      - lumberfox
+      - lumberjack
+      - grasspicker
     enableBuildings:
       - grainFarm
       - vegeFarm
-      - chickenFarm
     connects:
       forest: 0.5
       river: 0.3

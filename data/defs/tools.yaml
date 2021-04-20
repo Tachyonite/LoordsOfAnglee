@@ -219,6 +219,10 @@ itemDefs:
       items:
         shortStick: 1
         scrapMetal: 1
+    durability:
+      maxUses: 200
+      repair: False
+      powered: False
 
   hammerSmall:
     label: ball-peen hammer

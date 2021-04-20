@@ -4,7 +4,7 @@ import glob
 
 from utils.helpers import *
 from utils.translator import Translate
-from core import Find, Player, Leeani
+from core import Find, Player, Provani
 
 from utils.saveLoad import saveAllInformation
 from utils.saveLoad import loadAllInformation
@@ -16,11 +16,9 @@ def generateActionList(context,player,game):
     actions = []
 
     actionsToWork = {
-        "fisher":"FisherWorkAction()",
-        "hunter":"HunterWorkAction()",
         "scavenger":"ScavengerWorkAction()",
         "looter":"LooterWorkAction()",
-        "lumberfox":"LumberfoxWorkAction()"
+        "lumberjack":"LumberjackWorkAction()"
     }
 
 
@@ -155,7 +153,7 @@ class NextHourAction(Action):
                     if lee.jobTimeLeft <= 2:
                         p(tc.c+"{} returned from {}".format(lee.fullName, lee.job.labelDo)+tc.w)
                         if lee.job.defName == "explorer":
-                            gainedIntel = lee.stats.learning + random.randint(0,5)
+                            gainedIntel = lee.stats.intuition + random.randint(0,5)
                             lee.location.intel += gainedIntel
                             if lee.location.intel > 100: lee.location.intel = 100
                             p("+ Scouted {}% on the  {}".format(gainedIntel,lee.location.label))
@@ -192,7 +190,7 @@ class NextHourAction(Action):
                         textDisp = True
                         p(tc.c+"{} returned from {}".format(lee.fullName, lee.job.labelDo)+tc.w)
                         if lee.job.defName == "explorer":
-                            gainedIntel = lee.stats.learning + random.randint(0,5)
+                            gainedIntel = lee.stats.intuition + random.randint(0,5)
                             lee.location.intel += gainedIntel
                             if lee.location.intel > 100: lee.location.intel = 100
                             p("+ Scouted {}% on the {}".format(gainedIntel,lee.location.label))
@@ -200,20 +198,6 @@ class NextHourAction(Action):
                         lee.afk = False
             if textDisp:
                 msvcrt.getch()
-
-
-
-
-class ListStatsAction(Action):
-    def __init__(self, name, desc):
-        super().__init__(name, desc)
-
-    def perform(self,chars):
-        table = []
-        for i in range(len(chars)):
-            table.append(
-                [tc.w + str(i), chars[i].fn, chars[i].vigour, chars[i].utility, chars[i].logic, chars[i].perception,
-                 chars[i].eloquence, chars[i].strength, chars[i].job + tc.y])
 
 class ListAction(Action):
     def __init__(self, name, desc):
@@ -245,29 +229,29 @@ class WorkAction(Action):
 
     def perform(self,player):
         act = ListJobAssignAction()
-        lee = True
-        while lee != False:
+        person = True
+        while person != False:
             u()
-            lee = act.perform(player, workType=self.workType, returnLeeani=True) #type: Leeani
-            if not lee: break
-            if lee.afk: lee = True
-            elif lee.job == self.workType:
-                lee.job = Find.WorkTypeByName("idle")
+            person = act.perform(player, workType=self.workType, returnPerson=True) #type: Provani
+            if not person: break
+            if person.afk: person = True
+            elif person.job == self.workType:
+                person.job = Find.WorkTypeByName("idle")
             else:
-                lee.job = self.workType
-                lee.jobAssignedHour = player.hour
-                lee.jobTimeLeft = self.workType.timeCost() - 1
-                if lee.job.label == "explorer" and hasattr(self,"location"):
-                    lee.location = self.location
-                    print(player.group[lee.fullName].location.label)
-                    lee.job.labelDo = lee.job.labelDo.format(self.location.label.title())
+                person.job = self.workType
+                person.jobAssignedHour = player.hour
+                person.jobTimeLeft = self.workType.timeCost() - 1
+                if person.job.label == "explorer" and hasattr(self, "location"):
+                    person.location = self.location
+                    print(player.group[person.fullName].location.label)
+                    person.job.labelDo = person.job.labelDo.format(self.location.label.title())
 
 class ForageWorkAction(WorkAction):
     def __init__(self):
         super().__init__(Translate('action_forage'), Translate('action_forage_desc'),"forager")
-class FisherWorkAction(WorkAction):
+class SeaweederWorkAction(WorkAction):
     def __init__(self):
-        super().__init__(Translate('action_fisher'), Translate('action_fisher_desc'),"fisher")
+        super().__init__(Translate('action_seaweeder'), Translate('action_seaweeder_desc'),"seaweeder")
 class HunterWorkAction(WorkAction):
     def __init__(self):
         super().__init__(Translate('action_hunter'), Translate('action_hunter_desc'),"hunter")
@@ -277,9 +261,9 @@ class ScavengerWorkAction(WorkAction):
 class LooterWorkAction(WorkAction):
     def __init__(self):
         super().__init__(Translate('action_looter'), Translate('action_looter_desc'),"looter")
-class LumberfoxWorkAction(WorkAction):
+class LumberjackWorkAction(WorkAction):
     def __init__(self):
-        super().__init__(Translate('action_lumberfox'), Translate('action_lumberfox_desc'),"lumberfox")
+        super().__init__(Translate('action_lumberjack'), Translate('action_lumberjack_desc'),"lumberjack")
 
 class ExploreWorkAction(WorkAction):
     def __init__(self,location):
@@ -297,25 +281,23 @@ class CraftingWorkAction(WorkAction):
 class ListJobAssignAction(Action):
     def __init__(self):
         super().__init__('listjob', 'lists jobs for assignment')
-    def perform(self,player,workType,returnLeeani=True):
+    def perform(self, player, workType, returnPerson=True):
         u()
         group = player.group
         headers = ["#",
             Translate('fullname'),
             Translate('hitpoints'),
-            Translate('vitality_short'),
-            Translate('utility_short'),
-            Translate('learning_short'),
-            Translate('perception_short'),
+            Translate('agility_short'),
+            Translate('resource_short'),
+            Translate('intuition_short'),
             Translate('eloquence_short'),
             Translate('strength_short'),
             Translate('work_header')
         ]
         favoured = [
-            "vitality",
-            "utility",
-            "learning",
-            "perception",
+            "agility",
+            "resource",
+            "intuition",
             "eloquence",
             "strength"
         ]
@@ -339,7 +321,7 @@ class ListJobAssignAction(Action):
         table = [[
             value.fullName,
             value.hp
-        ] + value.stats.getWorkFormatted(workType) + [value.job.labelDo] for key,value in group.items()] #type: str, Leeani
+        ] + value.stats.getWorkFormatted(workType) + [value.job.labelDo] for key,value in group.items()] #type: str, Provani
         table.append(["[[BACK]]"])
         tableView = [[
             value.fullName if not value.afk else value.fullName + " (away)",
@@ -365,7 +347,7 @@ class ListJobAssignAction(Action):
             tc.b + tc.bg_w + "X" + tc.bg_b + tc.w,Translate("assigned_key"),
             tc.b + "X" + tc.w,Translate("elsewhere_key")
         ),wrap=False,gap=True)
-        p("Select a leeani for this job:",gap=True)
+        p("Select a provani for this job:",gap=True)
         sel = a(Translate('choose_string'),table)
         if sel == len(table) or sel == "":
             return False
@@ -726,7 +708,7 @@ class ViewCharAction(Action):
         headers = ["#", ""]
         table = []
         for i in range(len(group)):
-            table.append([i, group[i].fullName])
+            table.append([i+1, group[i].fullName])
         table.append(["\n", ""])
         table.append([tc.w + str(len(group)), "["+Translate('back_string')+"]" + tc.w])
         print(tb.tabulate(table, headers) + "\n")
@@ -737,6 +719,3 @@ class ViewCharAction(Action):
 class EquipCharAction(Action):
     def __init__(self):
         super().__init__(name=Translate('view_character_action'), description=Translate('view_character_action'))
-
-    def perform(self,character):
-

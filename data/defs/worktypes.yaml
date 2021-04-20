@@ -2,7 +2,7 @@ workDefs:
   idle:
     label: idle
     labelDo: idling
-    description: "Idle leeani are not currently doing anything. They do, however, keep an eye out for dangers approaching the group."
+    description: "Idle provani are not currently doing anything. They do, however, keep an eye out for dangers approaching the group."
     timeBase: 1h #hours
 
   scavenger:
@@ -11,7 +11,7 @@ workDefs:
     timeBase: 8h #hours
     description: "Scavengers are responsible for finding scrap, old machines, toolboxes and crates, and very carefully taking them apart. Scavenging takes 8 hours."
     skills:
-      utility: 2
+      resource: 2
       strength: 1
     outputTables:
       scavenger: 3
@@ -22,8 +22,8 @@ workDefs:
     description: "Foragers will find various natural foodstuffs, as well as water for the group. They may find the occasional bit of scrap. Foraging takes 4 hours."
     timeBase: 4h #hours
     skills:
-      learning: 2
-      perception: 1
+      intuition: 2
+      resource: 1
     outputTables:
       forager: 2
 
@@ -33,8 +33,8 @@ workDefs:
     description: "Explorers track the way ahead, looking for hideouts, foxholes and most importantly, rare loot. Exploring takes 8 hours."
     timeBase: 8h #hours
     skills:
-      vitality: 2
-      perception: 1
+      strength: 2
+      resource: 1
     outputTables:
       explorer: 2
 
@@ -45,7 +45,7 @@ workDefs:
     timeBase: 2h #hours
     skills:
       eloquence: 2
-      learning: 1
+      intuition: 1
 
   researcher:
     label: researcher
@@ -54,7 +54,7 @@ workDefs:
     goesAfk: False
     timeBase: 8h #hours
     skills:
-      learning: 2
+      intuition: 2
       eloquence: 1
 
   crafter:
@@ -64,61 +64,50 @@ workDefs:
     timeBase: 12h #hours
     goesAfk: False
     skills:
-      utility: 2
-      learning: 1
+      resource: 2
+      intuition: 1
     effectiveItems:
       toolBelt: 0.3
 
-  hunter:
-    label: hunter
-    labelDo: hunting
-    description: "Hunters kill small and large animals, and set traps. Hunting takes 8 hours."
-    timeBase: 8h #hours
-    toolsRequired:
-      hunting: 1
-    skills:
-      strength: 2
-      perecption: 1
-    outputTables:
-      hunter: 2
-    effectiveItems:
-      stoneSpear: 0.2
-
-  fisher:
-    label: fisher
-    labelDo: fishing
-    description: "Fishers...can fish at rivers. Fishing takes 8 hours."
-    toolsRequired:
-      fishing: 1
+  seaweeder:
+    label: seaweeder
+    labelDo: seaweeding
+    description: "Seaweeders pick seaweed from the coast at low tide. Seaweeding takes 8 hours."
     timeBase: 8h #hours
     skills:
-      utility: 2
-      vitality: 1
+      resource: 2
+      agility: 1
     outputTables:
-      fisher: 2
-    effectiveItems:
-      fishingRod: 0.5
+      seaweeder: 2
 
-  lumberfox:
-    label: lumberfoxe
+  grasspicker:
+    label: grasspicker
+    labelDo: grasspicking
+    description: "Grasspickers look for clumps of ripe grass, to be collected for either eating as a last resort, or making into a flour. Grasspicking takes 4 hours, and is unskilled."
+    timeBase: 8h #hours
+    outputTables:
+      seaweeder: 2
+
+  lumberjack:
+    label: lumberjack
     labelDo: woodcutting
-    description: "Lumberfoxes cut wood and bring it back to the group. Woodcutting takes 4 hours."
+    description: "Lumberjacks cut wood and bring it back to the group. Woodcutting takes 4 hours."
     timeBase: 4h #hours
     skills:
       strength: 2
-      vitality: 1
+      resource: 1
     outputTables:
       woodcutter: 2
     effectiveItems: #measured in percent, these tools boost the resources gained, but costs durability of the item.
       scrapAxe: 0.1 #a 10% bonus
 
   rockhunter:
-    label: rockfoxe
-    labelDo: rockhunting
-    description: "Rockfoxes look for useful rocks and shinies to work with. Rockhunting takes 4 hours."
+    label: rockram
+    labelDo: rockramming
+    description: "Rockrams look for useful rocks and shiny things to work with. Rockramming takes 4 hours."
     timeBase: 4h #hours
     skills:
-      perception: 2
+      intuition: 2
       strength: 1
     outputTables:
       woodcutter: 2
@@ -133,7 +122,7 @@ workDefs:
     timeBase: 4h #hours
     destructive: True
     skills:
-      utility: 2
-      perception: 1
+      resource: 2
+      strength: 1
     outputTables:
       looter: 6

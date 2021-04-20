@@ -90,8 +90,11 @@ class Item():
 
     def getDiffprop(self):
         if hasattr(self,'diffprop'):
-            props = [eval("self.{}".format(i),{"self":self}) for i in self.diffprop]
-            return props
+            try:
+                props = [eval("self.{}".format(i),{"self":self}) for i in self.diffprop]
+                return props
+            except:
+                print(self.defName)
         else:
             return
 

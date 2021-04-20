@@ -1,5 +1,17 @@
 itemDefs:
 
+  grass:
+    label: wild grass
+    description: a fistful of grasses. not appealing, but digestible.
+    weight: 0.05
+    categories:
+      - food
+      - raw
+      - vegetarian
+    nutrition:
+      water: 0.05
+      food: 0.2
+
   berries:
     label: wild berries
     description: a handful of berries, safely edible
@@ -10,7 +22,7 @@ itemDefs:
       - vegetarian
     nutrition:
       water: 0.1
-      food: 0.1
+      food: 0.2
 
   nuts:
     label: wild nuts
@@ -21,7 +33,7 @@ itemDefs:
       - raw
       - vegetarian
     nutrition:
-      food: 0.2
+      food: 0.3
 
   fruits:
     label: wild fruits
@@ -32,7 +44,7 @@ itemDefs:
       - raw
       - vegetarian
     nutrition:
-      food: 0.5
+      food: 0.7
 
   vegetables:
     label: wild vegetables
@@ -43,7 +55,7 @@ itemDefs:
       - raw
       - vegetarian
     nutrition:
-      food: 0.5
+      food: 0.8
 
   cannedFoodBeans:
     label: canned beans
@@ -60,15 +72,15 @@ itemDefs:
     litter:
       - tinCan
 
-  cannedFoodMysteryMeat:
-    label: canned Spummo
-    description: a can of unidentified, possibly-pork-based meat, sealed in a tin can. kinda gross but whatever.
+  cannedFoodMysteryVeg:
+    label: canned Vego-meat
+    description: a can of plant-based meat, sealed in a tin can. exactly what kind of plant it's made from is unclear. possibly made from a disturbingly fleshy plant.
     weight: 0.1
     rarity: uncommon
     categories:
       - food
       - raw
-      - meat
+      - vegetarian
       - manmade
     nutrition:
       food: 2
@@ -89,99 +101,29 @@ itemDefs:
       - tinCan
       - canTag
 
-  rawFish:
-    label: raw fish (m)
-    description: floppy fish freshly finangled from fluvial flows.
+  kelp:
+    label: kelp
+    description: a squiggly bit of seaweed to supplement a sheepy diet.
     weight: 0.5
     categories:
       - food
       - raw
-      - fish
     nutrition:
-      food: 1
+      food: 0.5
 
-  rawRabbit:
-    label: raw rabbit
-    description: a small prey beast of the fields
-    weight: 1
+  cookedKelp:
+    label: kelp
+    description: a squiggly bit of seaweed to supplement a sheepy diet.
+    weight: 0.5
     categories:
       - food
       - raw
-      - meat
     nutrition:
-      food: 1
-
-  rawPoultry:
-    label: raw poultry
-    description: a hunted bird, plucked and ready to be cooked. inedible raw, due to pathogen concerns.
-    weight: 1
-    categories:
-      - food
-      - raw
-      - meat
-      - dangerous
-
-  rawVenison:
-    label: raw venison
-    description: meat from a deer or
-    weight: 1
-    categories:
-      - food
-      - raw
-      - meat
-    nutrition:
-      food: 1
-
-
-  cookedFish:
-    label: cooked fish
-    description: floppy fish freshly finangled from fluvial flows, flamed.
-    weight: 0.5
-    categories:
-      - food
-      - cooked
-      - fish
-    nutrition:
-      food: 1
-
-
-  cookedRabbit:
-    label: cooked rabbit
-    description: a small prey beast of the fields, skinned and cooked
-    weight: 0.5
-    categories:
-      - food
-      - cooked
-      - meat
-    nutrition:
-      food: 1
-
-  cookedPoultry:
-    label: cooked poultry
-    description: a portion of delectable bird meat
-    weight: 0.5
-    categories:
-      - food
-      - cooked
-      - meat
-    nutrition:
-      food: 1
-
-  cookedVenison:
-    label: cooked venison
-    description: meat from a stag or deer, cooked and gamey.
-    weight: 0.5
-    rarity: uncommon
-    categories:
-      - food
-      - cooked
-      - meat
-    nutrition:
-      food: 1
+      food: 0.5
 
   leftovers:
     label: leftovers
-    description: leftover bits of meat or vegetables from someone's eyes being bigger than their stomach.
+    description: leftover bits of vegetables, fruit or grains from someone's eyes being bigger than their stomach.
     weight: 0.1
     categories:
       - food
@@ -189,8 +131,8 @@ itemDefs:
       food: 0.2
 
   leftoverMeal:
-    label: vuffelsqueek
-    description: leftover bits of meat or vegetables from someone's eyes being bigger than their stomach, cooked into a whole meal.
+    label: potluck porridge
+    description: leftover bits of vegetables, fruit or grains from someone's eyes being bigger than their stomach, cooked into a whole meal.
     weight: 0.5
     categories:
       - food

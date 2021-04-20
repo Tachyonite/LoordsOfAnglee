@@ -1,21 +1,20 @@
-opening_title: "LOORDS OF ANGLEE"
+opening_title: "LORDS OF PROVA"
 title: |-1
   XX::::::::::::::::::::::::::::::::::::::::::::::::::::XX
   ::====================================================::
-  ::||                _   _   _   _   __              ||::
-  ::||            |  / \ / \ |_] | \ [_               ||::
-  ::||            |_ \_/ \_/ | \ |_/ __]              ||::
+  ::||                   _   _   _   __               ||::
+  ::||               |  / \ |_] | \ [_                ||::
+  ::||               |_ \_/ | \ |_/ __]               ||::
   ::||                                                ||::
-  ::||                OF       ANGLEE                 ||::
+  ::||                 OF       PROVA                 ||::
   ::====================================================::
   XX::::::::::::::::::::::::::::::::::::::::::::::::::::XX
 
 splash:
-  - "2020 sends its regards."
+  - "2021 sends its regards."
   - "2050 was an inside job."
-  - "'The sleek will inherit the earth' - Foxen 2:45"
   - "Made by Yap."
-  - "Certified Gold Sticker Cider"
+  - "Certified Gold Sticker Grass"
   - "test splash please ignore"
   - "Rule a kingdom...once you build it."
   - "You could make a novel out of this."
@@ -27,18 +26,26 @@ back_string: "Back"
 # Stats ##################
 fullname: "Full Name"
 hitpoints: "HP"
-vitality: "Vitality"
-utility: "Utility"
-learning: "Learning"
-perception: "Perception"
+#vitality: "Vitality"
+#utility: "Utility"
+#learning: "Learning"
+#perception: "Perception"
+agility: "Agility"
+resource: "Resource"
+intuition: "Intuition"
 eloquence: "Eloquence"
 strength: "Strength"
-vitality_short: "VIT"
-utility_short: "UTL"
-learning_short: "LRN"
-perception_short: "PER"
+#vitality_short: "VIT"
+#utility_short: "UTL"
+#learning_short: "LRN"
+#perception_short: "PER"
+agility_short: "AGI"
+resource_short: "RES"
+intuition_short: "INT"
 eloquence_short: "ELO"
 strength_short: "STR"
+
+
 
 work_header: "Work"
 job_choose_string: "ASSIGN YOUR {}S"
@@ -62,16 +69,16 @@ action_forage: "Forage"
 action_forage_desc: "Forage"
 action_explore: "Explore"
 action_explore_desc: "Explore"
-action_fisher: "Fish"
-action_fisher_desc: "Fish"
+action_seaweeder: "Seaweeder"
+action_seaweeder_desc: "Seaweeding"
 action_hunter: "Hunt"
 action_hunter_desc: "Hunt"
 action_scavenger: "Scavenge"
 action_scavenger_desc: "Scavenge"
 action_looter: "Loot"
 action_looter_desc: "Loot"
-action_lumberfox: "Logging"
-action_lumberfox_desc: "Logging"
+action_lumberjack: "Logging"
+action_lumberjack_desc: "Logging"
 
 relocate_action: "Relocate"
 relocate_action_desc: "Relocate"

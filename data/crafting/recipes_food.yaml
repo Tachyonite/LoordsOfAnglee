@@ -1,60 +1,20 @@
 craftingDefs:
 
-  cookedFish:
-    label: cook fish
-    description: cut a fish into fillets and cook over a fire, more efficient than eating a raw fish
+  cookedKelp:
+    label: cook kelp
+    description: put kelp on a stick and roast it, couldn't be easier.
     ingredients:
-      meat:
-        - - rawFish: 1
+      kelp:
+        - - kelp: 1
     output:
-      cookedFish: 2
+      cookedKelp: 1
     tools:
       cooking: 1
-      cutting: 1
-    timeBase: 10m
-
-  cookedRabbit:
-    label: cook rabbit
-    description: cut rabbit meat into smaller parts and cook over a fire, more efficient than eating a whole rabbit at once
-    ingredients:
-      meat:
-        - - rawRabbit: 1
-    output:
-      cookedRabbit: 2
-    tools:
-      cooking: 1
-      cutting: 1
-    timeBase: 10m
-
-  cookedPoultry:
-    label: cook poultry
-    description: cut bird meat into smaller parts and cook over a fire, more efficient than eating a whole bird at once
-    ingredients:
-      meat:
-        - - rawPoultry: 1
-    output:
-      cookedPoultry: 2
-    tools:
-      cooking: 1
-      cutting: 1
-    timeBase: 20m
-
-  cookedVenison:
-    label: cook venison
-    description: cut venison into smaller bits and cook over a fire, more efficient than eating a whole steak
-    ingredients:
-      meat:
-        - - rawVenison: 1
-    output:
-      cookedVenison: 2
-    tools:
-      cooking: 1
-      cutting: 1
-    timeBase: 15m
+    timeBase: 5m
 
   leftoverMeal:
-    label: make vuffelsqueek
-    description: combine a bunch of leftovers into a single meal and reheat them. based on a traditional British meal
+    label: make potluck porridge
+    description: combine a bunch of leftovers into a single meal and reheat them. an abberant British breakfast.
     ingredients:
       leftovers:
         - - leftovers: 5

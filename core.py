@@ -117,7 +117,7 @@ class Player():
         self.chapter = "nomad"
 
     def SpawnLeeani(self):
-        temp = Leeani(self)
+        temp = Provani(self)
         self.group[temp.fullName] = temp
         del temp
 
@@ -140,7 +140,7 @@ class Player():
         cw = 0
         for i in self.group.values():
             cw += round(i.stats.strength * 2)
-            cw += round(i.stats.vitality)
+            cw += round(i.stats.resource)
         self.inventory.clearNulls()
         for k, v in self.inventory.contents.items():
             if hasattr(v[0], 'carryweight'):
@@ -163,19 +163,17 @@ class Player():
 class StatBlock():
     def __init__(self, statlist):
         self.statlist = statlist
-        self.vitality = statlist[0]
-        self.utility = statlist[1]
-        self.learning = statlist[2]
-        self.perception = statlist[3]
-        self.eloquence = statlist[4]
-        self.strength = statlist[5]
+        self.agility = statlist[0]
+        self.resource = statlist[1]
+        self.intuition = statlist[2]
+        self.eloquence = statlist[3]
+        self.strength = statlist[4]
         self.dictFormat = {
-            "vitality": statlist[0],
-            "utility": statlist[1],
-            "learning": statlist[2],
-            "perception": statlist[3],
-            "eloquence": statlist[4],
-            "strength": statlist[5]
+            "agility": statlist[0],
+            "resource": statlist[1],
+            "intuition": statlist[2],
+            "eloquence": statlist[3],
+            "strength": statlist[4]
         }
 
     def getPreformatted(self):
@@ -209,16 +207,16 @@ class StatBlock():
 
 
 class Creature():
-    def __init__(self, race, points):
+    def __init__(self, race, points, genderSpecific = False):
         self.hp = 10
         self.race = race
         statlist = self.generateStats(points)
         self.stats = StatBlock(statlist)
 
         self.gender = random.choice(["Male", "Female"])  # TaKe ThAt LiBeRaLs!11!
-        self.face = self.genFace()
+        self.face = self.genFace(race, genderSpecific)
 
-        name = self.generateName(self.gender)
+        name = self.generateName(self.race,self.gender)
         self.fn = name[0]
         self.ln = name[1]
         self.fullName = " ".join(name)
@@ -247,41 +245,46 @@ class Creature():
         print(tw.indent(tb.tabulate(table), " " * 5))
         preForm = self.stats.getPreformatted()
         table = [
-            [Translate('vitality'), preForm[0]],
-            [Translate('utility'), preForm[1]],
-            [Translate('learning'), preForm[2]],
-            [Translate('perception'), preForm[3]],
-            [Translate('eloquence'), preForm[4]],
-            [Translate('strength'), preForm[5]],
+            [Translate('agility'), preForm[0]],
+            [Translate('resource'), preForm[1]],
+            [Translate('intuition'), preForm[2]],
+            [Translate('eloquence'), preForm[3]],
+            [Translate('strength'), preForm[4]],
         ]
 
         print(tw.indent(tb.tabulate(table), " " * 5))
 
-    def generateName(self, gender):
+    def generateName(self, race, gender, mashNames = False):
 
         if gender == "Male":
-            first = random.choice(nameInfo["maleFirst"])
-            last = random.choice(nameInfo["last"])[:3] + random.choice(nameInfo["maleFirst"] + nameInfo["femaleFirst"])[
-                                                         3:]
+            first = random.choice(nameInfo[race]["maleFirst"])
+            if mashNames:
+                last = random.choice(nameInfo[race]["last"])[:3] + random.choice(nameInfo[race]["maleFirst"] + nameInfo[race]["femaleFirst"])[3:]
+            else:
+                last = random.choice(nameInfo[race]["last"])
         else:
-            first = random.choice(nameInfo["femaleFirst"])
-            last = random.choice(nameInfo["last"])[:3] + random.choice(nameInfo["maleFirst"] + nameInfo["femaleFirst"])[
-                                                         3:]
+            first = random.choice(nameInfo[race]["femaleFirst"])
+            if mashNames:
+                last = random.choice(nameInfo[race]["last"])[:3] + random.choice(nameInfo[race]["maleFirst"] + nameInfo[race]["femaleFirst"])[3:]
+            else:
+                last = random.choice(nameInfo[race]["last"])
 
         return [first, last]
 
-    def genFace(self):
-        return "".join(random.choice(list(faceInfo[x])) + "\n" for x in
-                       ["ears", "eyes", "cheeks", "nose", "expressions", "necks"])
+    def genFace(self,race,genderSpecific = False):
+        if genderSpecific:
+            return "".join(random.choice(list(faceInfo[race][self.gender.lower()][x])) + "\n" for x in faceInfo[race][self.gender.lower()].keys())
+        else:
+            return "".join(random.choice(list(faceInfo[race][x])) + "\n" for x in faceInfo[race].keys())
 
 
 class GetOutOfLoop(Exception):
     pass
 
 
-class Leeani(Creature):
+class Provani(Creature):
     def __init__(self, player):
-        super().__init__("leeani", 35)
+        super().__init__("provani", 35, genderSpecific=True)
         self.hp = 10
         self.job = Find.WorkTypeByName("idle")
         self.afk = False
