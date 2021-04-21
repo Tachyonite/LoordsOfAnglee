@@ -80,13 +80,21 @@ workDefs:
     outputTables:
       seaweeder: 2
 
+  waterworker:
+    label: waterworker
+    labelDo: waterworking
+    description: "Waterworkers source fresh water from flowing streams. Waterworking takes 2 hours and is unskilled."
+    timeBase: 2h #hours
+    outputTables:
+      waterworker: 2
+
   grasspicker:
     label: grasspicker
     labelDo: grasspicking
     description: "Grasspickers look for clumps of ripe grass, to be collected for either eating as a last resort, or making into a flour. Grasspicking takes 4 hours, and is unskilled."
-    timeBase: 8h #hours
+    timeBase: 4h #hours
     outputTables:
-      seaweeder: 2
+      grasspicker: 2
 
   lumberjack:
     label: lumberjack

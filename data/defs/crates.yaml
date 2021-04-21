@@ -45,7 +45,7 @@ crateDefs:
 
   junk:
     label: cardboard box
-    weight: 150
+    weight: 5
     crateItemDef: junkCrate
     maxContentsWeight: 1
     items:
@@ -56,7 +56,7 @@ crateDefs:
       junk: 5
   common:
     label: wooden crate
-    weight: 50
+    weight: 10
     crateItemDef: commonCrate
     maxContentsWeight: 2
     items:
@@ -67,7 +67,7 @@ crateDefs:
       junk: 3
   uncommon:
     label: metal lockbox
-    weight: 50
+    weight: 15
     crateItemDef: uncommonCrate
     maxContentsWeight: 5
     items:

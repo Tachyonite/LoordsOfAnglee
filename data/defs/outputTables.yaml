@@ -27,7 +27,7 @@ tableDefs: #Values are multiplied by a formula using the skill of the character
   explorer:
     contents:
       cannedFoodBeans: -1~1
-      cannedFoodMysteryMeat: -1~1
+      cannedFoodMysteryVeg: -1~1
       scrapMetal: 0~3
       scrapPlastic: 0~5
       plasticJug3L: -2~1
@@ -37,7 +37,7 @@ tableDefs: #Values are multiplied by a formula using the skill of the character
     contents:
       $crate: 1~1
       cannedFoodBeans: -1~3
-      cannedFoodMysteryMeat: -1~3
+      cannedFoodMysteryVeg: -1~3
       scrapMetal: 0~8
       scrapPlastic: 0~5
       plasticJug3L: -2~2
@@ -54,9 +54,9 @@ tableDefs: #Values are multiplied by a formula using the skill of the character
       rag: 0~3
   scavenger:
     contents:
-      $crate: 1~1
+      $crate: 1~1*
       cannedFoodBeans: -1~1
-      cannedFoodMysteryMeat: -1~1
+      cannedFoodMysteryVeg: -1~1
       scrapMetal: 0~3
       scrapPlastic: 0~3
       scrapWood: 0~3
@@ -75,6 +75,12 @@ tableDefs: #Values are multiplied by a formula using the skill of the character
   seaweeder:
     contents:
       kelp: -1~6
+  grasspicker:
+    contents:
+      grass: 1~20
+  waterworker:
+    contents:
+      ~water: 1~10
   woodcutter:
     contents:
       hardwood: -1~2

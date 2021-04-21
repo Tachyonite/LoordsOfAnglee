@@ -18,7 +18,10 @@ def generateActionList(context,player,game):
     actionsToWork = {
         "scavenger":"ScavengerWorkAction()",
         "looter":"LooterWorkAction()",
-        "lumberjack":"LumberjackWorkAction()"
+        "lumberjack":"LumberjackWorkAction()",
+        "waterworker":"WaterworkerWorkAction()",
+        "seaweeder":"SeaweederWorkAction()",
+        "grasspicker":"GrasspickerWorkAction()"
     }
 
 
@@ -248,19 +251,22 @@ class WorkAction(Action):
 
 class ForageWorkAction(WorkAction):
     def __init__(self):
-        super().__init__(Translate('action_forage'), Translate('action_forage_desc'),"forager")
+        super().__init__(tc.c+Translate('action_forage')+tc.w, Translate('action_forage_desc'),"forager")
 class SeaweederWorkAction(WorkAction):
     def __init__(self):
         super().__init__(Translate('action_seaweeder'), Translate('action_seaweeder_desc'),"seaweeder")
-class HunterWorkAction(WorkAction):
+class GrasspickerWorkAction(WorkAction):
     def __init__(self):
-        super().__init__(Translate('action_hunter'), Translate('action_hunter_desc'),"hunter")
+        super().__init__(Translate('action_grasspicker'), Translate('action_grasspicker_desc'),"grasspicker")
 class ScavengerWorkAction(WorkAction):
     def __init__(self):
         super().__init__(Translate('action_scavenger'), Translate('action_scavenger_desc'),"scavenger")
+class WaterworkerWorkAction(WorkAction):
+    def __init__(self):
+        super().__init__(Translate('action_waterworker'), Translate('action_waterworker_desc'),"waterworker")
 class LooterWorkAction(WorkAction):
     def __init__(self):
-        super().__init__(Translate('action_looter'), Translate('action_looter_desc'),"looter")
+        super().__init__(tc.f+Translate('action_looter')+tc.w, Translate('action_looter_desc'),"looter")
 class LumberjackWorkAction(WorkAction):
     def __init__(self):
         super().__init__(Translate('action_lumberjack'), Translate('action_lumberjack_desc'),"lumberjack")
@@ -318,6 +324,17 @@ class ListJobAssignAction(Action):
                     headers[i + 3] = tc.y + headers[i + 3] + tc.w + "›"
                 if skill == f2:
                     headers[i + 3] = tc.y + headers[i + 3] + tc.w + "»"
+        else:
+            p(dv.header(Translate('job_choose_string').format(workType.label.upper())))
+            print()
+            p(workType.description)
+            p("There are {} hours left in the day.{}".format(tc.f + str(
+                player.dayLength - player.hour) if player.dayLength - player.hour < workType.timeCost() else tc.w + str(
+                player.dayLength - player.hour), tc.w))
+            if 8 - player.hour < workType.timeCost():
+                p("They may return with less resources than expected.")
+            p("This job is unskilled, no bonuses apply.")
+            p(Translate('assignment_suggestion'))
         table = [[
             value.fullName,
             value.hp
@@ -710,7 +727,7 @@ class ViewCharAction(Action):
         for i in range(len(group)):
             table.append([i+1, group[i].fullName])
         table.append(["\n", ""])
-        table.append([tc.w + str(len(group)), "["+Translate('back_string')+"]" + tc.w])
+        table.append([tc.w + str(len(group)+1), "["+Translate('back_string')+"]" + tc.w])
         print(tb.tabulate(table, headers) + "\n")
         ac = a(Translate('choose_string'), table)
         if ac < len(group):

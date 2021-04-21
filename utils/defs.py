@@ -309,8 +309,11 @@ class Table():
             item = random.choice(list(self.contents.keys()))
             if self.contents[item].endswith("*"):
                 capFlag= True
-            vals = self.contents[item].split("~")
-            amt = random.randint(int(vals[0]),int(vals[1]))
+                vals = self.contents[item].split("~")
+                amt = random.randint(int(vals[0]), int(vals[1][:-1]))
+            else:
+                vals = self.contents[item].split("~")
+                amt = random.randint(int(vals[0]),int(vals[1]))
             return [item,amt,capFlag]
 
 

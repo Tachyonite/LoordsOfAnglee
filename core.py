@@ -72,17 +72,17 @@ class Find():
 
 
 class Sort():
-    def ByRarity(sort, reverse=True):
-        raritySorted = [game.itemDefs[x] for x in sort]
+    def ByRarity(sorts, reverse=True):
+        raritySorted = [game.itemDefs[x] for x in sorts]
         rarityList = list(game.rarityDefs.keys())
         raritySorted = sorted(raritySorted, key=lambda x: (rarityList.index(x.rarity), x.label), reverse=reverse)
         # reverses the order of rarity, as we can't reverse order by strings
         return raritySorted
 
-    def ListByRarity(sort, rarityIndex, reverse=False):
+    def ListByRarity(sorts, rarityIndex, reverse=False):
         outsort = []
         rarityList = {key: [] for key in reversed(list(game.rarityDefs.keys()))}
-        for i in sort:
+        for i in sorts:
             rarityList[i[rarityIndex]].append(i)
         for k, v in rarityList.items():
             v = sorted(v, key=lambda x: x[1])
@@ -442,7 +442,7 @@ class Provani(Creature):
                             crate = game.crateDefs[random.choices(items, weights)[0]]
                             p("- Found a {}!".format(crate.label))
                             if player.calcCarriable(game.itemDefs[crate.crateItemDef].weight):
-                                player.inventory.addItem(game.itemDefs[crate.crateItemDef], 1)
+                                player.inventory.addItem(game.itemDefs[crate.crateItemDef].defName, 1)
                             else:
                                 print("However, it was too heavy for your leeani to carry!")
                         elif found[0].startswith("~"):
@@ -611,6 +611,8 @@ class Inventory():
                 self.contents[item] = [c(itemToAdd.defName, dict(itemToAdd.object)) for x in range(round(amount))]
         else:
             print(item.defName)
+            for k,v in game.itemDefs.items():
+                print(k,v.defName)
             input()
 
     def getContainersWithFluid(self,fluid,amount=0):
