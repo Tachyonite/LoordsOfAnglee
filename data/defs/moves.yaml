@@ -1,0 +1,13 @@
+moveDefs:
+
+  stab:
+    label: stab
+    requirements:
+      tool:
+        piercing: 1
+
+  deepStab:
+    label: deep stab
+    requirements:
+      tool:
+        piercing: 3
