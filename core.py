@@ -293,6 +293,8 @@ class Provani(Creature):
         self.player = player
         self.craftWorkingOn = None
         self.location = None
+        self.equippedItem = None
+        self.wornItem = None
 
     def calculateCrafts(self, player, wwO=None, madeThisHour=None, done=False, dontshort=False, makeableQueue=None):
         if not madeThisHour:
@@ -421,8 +423,9 @@ class Provani(Creature):
                 mult = self.player.location.workMultipliers[self.job.defName]
             if self.job.defName == "explorer" and self.job.defName in self.location.workMultipliers:
                 mult = self.location.workMultipliers[self.job.defName]
-            mult += (self.stats.dictFormat[list(self.job.skills.keys())[0]] ** list(self.job.skills.values())[0]) / 30
-            mult += (self.stats.dictFormat[list(self.job.skills.keys())[1]] ** list(self.job.skills.values())[1]) / 30
+            if hasattr(self.job,"skills"):
+                mult += (self.stats.dictFormat[list(self.job.skills.keys())[0]] ** list(self.job.skills.values())[0]) / 30
+                mult += (self.stats.dictFormat[list(self.job.skills.keys())[1]] ** list(self.job.skills.values())[1]) / 30
 
             mult /= 2
             if player.location.looted and self.job.defName != "explorer": mult /= 10
