@@ -214,7 +214,7 @@ class ListAction(Action):
         ac = a(Translate('choose_string'),table)
         acTodo = actions[ac]
         if 'group' in acTodo.perform.__code__.co_varnames:
-            return acTodo.perform(player.group)
+            return acTodo.perform(player)
         elif 'player' in acTodo.perform.__code__.co_varnames and 'game' in acTodo.perform.__code__.co_varnames:
             return acTodo.perform(player,game)
         elif 'playerold' in acTodo.perform.__code__.co_varnames and 'gameold' in acTodo.perform.__code__.co_varnames:
@@ -710,7 +710,8 @@ class ViewCharAction(Action):
     def __init__(self):
         super().__init__(name=Translate('view_character_action'),description=Translate('view_character_action'))
 
-    def perform(self, group, *pos):
+    def perform(self, player, *pos):
+        group = player.group
         try:
             group = list(group.values())
         except AttributeError:
@@ -718,9 +719,11 @@ class ViewCharAction(Action):
         u()
         print(dv.header("Character Biography"))
         if pos:
-            group[pos[0]].printOut()
+            person = group[pos[0]]
+            person.printOut()
         else:
             group[0].printOut()
+            person = group[0]
         print("\n\n")
         headers = ["#", ""]
         table = []
@@ -729,9 +732,23 @@ class ViewCharAction(Action):
         table.append(["\n", ""])
         table.append([tc.w + str(len(group)+1), "["+Translate('back_string')+"]" + tc.w])
         print(tb.tabulate(table, headers) + "\n")
-        ac = a(Translate('choose_string'), table)
-        if ac < len(group):
-            self.perform(group,ac)
+        act = getch()
+        p(Translate('choose_string'))
+        try:
+            act = int(act)
+            if act < len(group):
+                self.perform(player, act)
+        except ValueError:
+            if act == "e":
+                u()
+                print(dv.header("Equip Item"))
+                preTable = sorted([vv for k,v in player.inventory.contents.items() for vv in v if hasattr(vv,"categories") and "equippable" in vv.categories],key = lambda x: x.label,reverse=True)
+                table = [[i+1,vv.label] for i,vv in enumerate(preTable)]
+                print(tb.tabulate(table))
+                sel = a(Translate('choose_string'), table)
+                print("{} equipped {}.".format(person.fullName, preTable[sel-1].label))
+                person.equippedItem = preTable[sel-1]
+
 
 class EquipCharAction(Action):
     def __init__(self):
