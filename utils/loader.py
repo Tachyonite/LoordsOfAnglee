@@ -12,6 +12,7 @@ attrs = {
     'rarityDefs' : "Rarity",
     'chapterDefs' : "Chapter",
     'fluidDefs' : "Fluid",
+    'moveDefs' : "Move",
     'workDefs' : "Work",
     'tableDefs' : "Table",
     "locationDefs" : "Location",

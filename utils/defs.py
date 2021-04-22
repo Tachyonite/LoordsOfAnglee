@@ -158,6 +158,13 @@ class Set():
         for k,v in self.contents.items():
             player.inventory.addItem(k,v)
 
+class Move():
+    def __init__(self, defName, object):
+        self.defName = defName
+        self.object = dict(object)
+        for k, v in self.object.items():
+            setattr(self, k, v)
+
 class Craft():
     def __init__(self, defName, object):
         self.defName = defName
